@@ -68,7 +68,7 @@ reg [3:0] rst_cnt = 4'hF;
 reg rst_int = 1'b1;
 
 always @(posedge clk_125) begin
-    if (!pll_locked || !usr_rst_n || !btn[2]) begin
+    if (!pll_locked || !btn[2]) begin
         rst_cnt <= 4'hF;
         rst_int <= 1'b1;
     end else if (rst_cnt != 0) begin
