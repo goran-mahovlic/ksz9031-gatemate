@@ -18,7 +18,7 @@ module fpga (
 
     // GPIO
     input  wire [2:0]  btn,
-    output wire [3:0]  led,
+    output wire [7:0]  led,
 
     // UART
     output wire        uart_tx,
@@ -42,27 +42,16 @@ module fpga (
 wire clk_125;
 wire clk_125_90;
 wire pll_locked;
+wire clk_25;
 
-CC_PLL #(
-    .REF_CLK("25.0"),
-    .OUT_CLK("125.0"),
-    .PERF_MD("SPEED"),
-    .LOW_JITTER(1),
-    .CI_FILTER_CONST(2),
-    .CP_FILTER_CONST(4)
-) pll_inst (
-    .CLK_REF(clk_25mhz),
-    .CLK_FEEDBACK(1'b0),
-    .USR_CLK_REF(1'b0),
-    .USR_LOCKED_STDY_RST(1'b0),
-    //.USR_SET_SEL(1'b0),
-    .CLK0(clk_125),
-    .CLK90(clk_125_90),
-    .CLK180(),
-    .CLK270(),
-    .CLK_REF_OUT(),
-    .USR_PLL_LOCKED_STDY(pll_locked),
-    .USR_PLL_LOCKED()
+/* PLL: 25MHz (pix clock) and 125MHz (hdmi clk rate) */
+wire clk_pix, clk_dvi, lock;
+pll pll_inst (
+	.clock_in(clk_25mhz),       //  50 MHz reference
+	.clock_out(clk_25),    //  25 MHz, 0 deg
+	.clock_5x_out(clk_125), // 125 MHz, 0 deg
+	.clock_5x_90_out(clk_125_90),
+	.lock_out(pll_locked)
 );
 
 // ============================================================
@@ -130,10 +119,10 @@ debounce_switch #(
 // LED[1]: ON when PHY out of reset (phy_rst_n_reg=1)
 // LED[2]: Blinks ON during RX activity (gmii_rx_dv=1)
 // LED[3]: Blinks ON during TX activity (gmii_tx_en=1)
-assign led[0] = rst_int;            // active-low: rst_int=0 → LED ON
-assign led[1] = ~phy_rst_n_reg;     // active-low: phy_rst_n_reg=1 → LED ON
-assign led[2] = ~gmii_rx_dv;        // active-low: gmii_rx_dv=1 → LED ON
-assign led[3] = ~gmii_tx_en;        // active-low: gmii_tx_en=1 → LED ON
+//assign led[0] = rst_int;            // active-low: rst_int=0 → LED ON
+//assign led[1] = ~phy_rst_n_reg;     // active-low: phy_rst_n_reg=1 → LED ON
+//assign led[2] = ~gmii_rx_dv;        // active-low: gmii_rx_dv=1 → LED ON
+//assign led[3] = ~gmii_tx_en;        // active-low: gmii_tx_en=1 → LED ON
 
 // ============================================================
 // RGMII ↔ GMII conversion (GateMate CC_ODDR/CC_IDDR)
@@ -184,7 +173,7 @@ fpga_core core_inst (
     // GPIO
     .push(btn_int),
     .sw(8'hFF),
-    //.led(led_int),
+    .led(led),
 
     // PHY control
     .MDC(eth_mdc),

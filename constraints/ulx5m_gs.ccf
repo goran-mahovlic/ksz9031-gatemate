@@ -3,40 +3,44 @@
 ## Device: CCGM1A1
 
 ## Clock — 25 MHz oscillator
-Pin_in "clk_25mhz" Loc = "IO_SB_A8" | SCHMITT_TRIGGER=true;
+Net "clk_25mhz" Loc = "IO_SB_A8" | SCHMITT_TRIGGER=true;
 
 ## Buttons (active-low on ULX5M-GS)
-Pin_in "btn[0]" Loc = "IO_EA_B4";
-Pin_in "btn[1]" Loc = "IO_EA_A4";
-Pin_in "btn[2]" Loc = "IO_EA_B3";
+Net "btn[0]" Loc = "IO_EA_B4";
+Net "btn[1]" Loc = "IO_EA_A4";
+Net "btn[2]" Loc = "IO_EA_B3";
 
 ## LEDs (active-low on ULX5M-GS)
-Pin_out "led[0]" Loc = "IO_SB_A0";
-Pin_out "led[1]" Loc = "IO_SB_B0";
-Pin_out "led[2]" Loc = "IO_SB_A1";
-Pin_out "led[3]" Loc = "IO_SB_B1";
+Net "led[0]" Loc = "IO_SB_A0";
+Net "led[1]" Loc = "IO_SB_B0";
+Net "led[2]" Loc = "IO_SB_A1";
+Net "led[3]" Loc = "IO_SB_B1";
+Net "led[4]" Loc = "IO_SB_B2";
+Net "led[5]" Loc = "IO_SB_A2";
+Net "led[6]" Loc = "IO_SB_B3";
+Net "led[7]" Loc = "IO_SB_A3";
 
 ## UART (v0.3 pinout)
-Pin_out "uart_tx" Loc = "IO_NA_A4";
-Pin_in  "uart_rx" Loc = "IO_NA_B4";
+Net "uart_tx" Loc = "IO_NA_A4";
+Net  "uart_rx" Loc = "IO_NA_B4";
 
-## Ethernet RGMII — TX
-Pin_out "eth_txd[0]" Loc = "IO_EB_B5" | SLEW=fast;
-Pin_out "eth_txd[1]" Loc = "IO_EB_A5" | SLEW=fast;
-Pin_out "eth_txd[2]" Loc = "IO_EB_B4" | SLEW=fast;
-Pin_out "eth_txd[3]" Loc = "IO_EB_A4" | SLEW=fast;
-Pin_out "eth_tx_ctl"  Loc = "IO_EB_A2" | SLEW=fast;
-Pin_out "eth_tx_clk"  Loc = "IO_EB_B2" | SLEW=fast;
+## EtherNet RGMII — TX
+Net "eth_txd[0]" Loc = "IO_EB_B5" | SLEW=fast;
+Net "eth_txd[1]" Loc = "IO_EB_A5" | SLEW=fast;
+Net "eth_txd[2]" Loc = "IO_EB_B4" | SLEW=fast;
+Net "eth_txd[3]" Loc = "IO_EB_A4" | SLEW=fast;
+Net "eth_tx_ctl"  Loc = "IO_EB_A2" | SLEW=fast;
+Net "eth_tx_clk"  Loc = "IO_EB_B2" | SLEW=fast;
 
-## Ethernet RGMII — RX
-Pin_in "eth_rxd[0]" Loc = "IO_EB_A0" | PULLUP=true | SLEW=fast;
-Pin_in "eth_rxd[1]" Loc = "IO_EB_B0" | PULLUP=true | SLEW=fast;
-Pin_in "eth_rxd[2]" Loc = "IO_EB_A1" | PULLUP=true | SLEW=fast;
-Pin_in "eth_rxd[3]" Loc = "IO_EB_B1" | PULLUP=true | SLEW=fast;
-Pin_in "eth_rx_ctl"  Loc = "IO_EB_A8" | PULLDOWN=true | SLEW=fast;
-Pin_in "eth_rx_clk"  Loc = "IO_EB_A7";
+## EtherNet RGMII — RX
+Net "eth_rxd[0]" Loc = "IO_EB_A0" | PULLUP=true | SLEW=fast;
+Net "eth_rxd[1]" Loc = "IO_EB_B0" | PULLUP=true | SLEW=fast;
+Net "eth_rxd[2]" Loc = "IO_EB_A1" | PULLUP=true | SLEW=fast;
+Net "eth_rxd[3]" Loc = "IO_EB_B1" | PULLUP=true | SLEW=fast;
+Net "eth_rx_ctl"  Loc = "IO_EB_A8" | PULLDOWN=true | SLEW=fast;
+Net "eth_rx_clk"  Loc = "IO_EB_A7";
 
-## Ethernet Control
-Pin_out   "eth_rst_n" Loc = "IO_EB_B3";
-Pin_out   "eth_mdc"   Loc = "IO_EB_B6";
-Pin_inout "eth_mdio"  Loc = "IO_EB_A6" | PULLUP=true | SLEW=fast;
+## EtherNet Control
+Net "eth_rst_n" Loc = "IO_EB_B3";
+Net "eth_mdc"   Loc = "IO_EB_B6";
+Net "eth_mdio"  Loc = "IO_EB_A6" | PULLUP=true | SLEW=fast;

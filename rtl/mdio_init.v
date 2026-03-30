@@ -13,7 +13,7 @@
 `timescale 1ns / 1ps
 
 module mdio_init #(
-    parameter [4:0] PHY_ADDR       = 5'd7,
+    parameter [4:0] PHY_ADDR       = 5'd0,
     parameter [22:0] SETTLE_CYCLES = 23'd6_250_000,  // 50ms @ 125MHz
     parameter [22:0] RETRY_CYCLES  = 23'd1_250_000   // 10ms @ 125MHz
 )(

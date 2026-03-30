@@ -918,7 +918,7 @@ wire        init_error;
 wire [15:0] phy_id_debug;
 
 mdio_init #(
-    .PHY_ADDR(5'd7)
+    .PHY_ADDR(5'd0)
 ) mdio_init_inst (
     .clk(clk),
     .rst(rst),

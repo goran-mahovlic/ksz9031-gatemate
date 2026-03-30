@@ -21,6 +21,7 @@ mkdir -p "$BUILD_DIR"
 echo "=== [1/3] Synthesis (Yosys) ==="
 yosys -l "$BUILD_DIR/synth.log" -p "
     read_verilog $RTL_DIR/fpga.v
+    read_verilog $RTL_DIR/gatemate_25MHz_125MHz_pll.v
     read_verilog $RTL_DIR/fpga_core.v
     read_verilog $RTL_DIR/gatemate_rgmii_if.v
     read_verilog $RTL_DIR/uart.v
@@ -70,7 +71,7 @@ nextpnr-himbaechel \
     --json "$BUILD_DIR/$TOP.json" \
     --vopt "ccf=$CCF" \
     --vopt "out=$BUILD_DIR/${TOP}.cfg" \
-    --router default \
+    --router router2 \
     --seed "$SEED" \
     --sdc "$SDC" \
     --placer-heap-cell-placement-timeout 20000 \
