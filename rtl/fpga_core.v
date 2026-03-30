@@ -965,7 +965,7 @@ reg [4:0] mdio_phy;
 
 always @(posedge clk) begin
     if (rst) begin
-        mdio_phy <= 5'b00111; // default 7
+        mdio_phy <= 5'b00000; // default 7
     end else begin
         if (rx_data_reg[7:5] == 3'b001) begin //8'b001AAAAA 
 				mdio_phy <= rx_data_reg[4:0];
