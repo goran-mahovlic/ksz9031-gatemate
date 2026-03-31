@@ -16,7 +16,7 @@ module uart #(
     parameter BAUD_RATE = 115_200
 )(
     input  wire       clk,
-    input  wire       reset_n,    // active-high reset (matches original)
+    input  wire       rst,        // active-high synchronous reset
     // TX
     input  wire       tx_ena,
     input  wire [7:0] tx_data,
@@ -47,7 +47,7 @@ localparam TX_DATA  = 3'd2;
 localparam TX_STOP  = 3'd3;
 
 always @(posedge clk) begin
-    if (reset_n) begin
+    if (rst) begin
         tx_state   <= TX_IDLE;
         tx_out     <= 1;
         tx_active  <= 0;
@@ -132,7 +132,7 @@ localparam RX_DATA  = 3'd2;
 localparam RX_STOP  = 3'd3;
 
 always @(posedge clk) begin
-    if (reset_n) begin
+    if (rst) begin
         rx_state    <= RX_IDLE;
         rx_active   <= 0;
         rx_err      <= 0;

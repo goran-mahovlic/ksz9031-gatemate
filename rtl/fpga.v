@@ -114,15 +114,8 @@ debounce_switch #(
     .out(btn_int)
 );
 
-// Debug LEDs (active-low: 0 = ON, 1 = OFF)
-// LED[0]: ON when system running (rst_int=0 after PLL lock)
-// LED[1]: ON when PHY out of reset (phy_rst_n_reg=1)
-// LED[2]: Blinks ON during RX activity (gmii_rx_dv=1)
-// LED[3]: Blinks ON during TX activity (gmii_tx_en=1)
-//assign led[0] = rst_int;            // active-low: rst_int=0 → LED ON
-//assign led[1] = ~phy_rst_n_reg;     // active-low: phy_rst_n_reg=1 → LED ON
-//assign led[2] = ~gmii_rx_dv;        // active-low: gmii_rx_dv=1 → LED ON
-//assign led[3] = ~gmii_tx_en;        // active-low: gmii_tx_en=1 → LED ON
+// Debug LEDs driven by fpga_core (active-high: 1 = ON)
+// See fpga_core.v for LED[0..7] assignments
 
 // ============================================================
 // RGMII ↔ GMII conversion (GateMate CC_ODDR/CC_IDDR)

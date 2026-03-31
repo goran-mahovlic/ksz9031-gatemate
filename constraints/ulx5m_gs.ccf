@@ -6,11 +6,11 @@
 Net "clk_25mhz" Loc = "IO_SB_A8" | SCHMITT_TRIGGER=true;
 
 ## Buttons (active-low on ULX5M-GS)
-Net "btn[0]" Loc = "IO_EA_B4" | PULLUP=true;
-Net "btn[1]" Loc = "IO_EA_A4" | PULLUP=true;
-Net "btn[2]" Loc = "IO_EA_B3" | PULLUP=true;
+Net "btn[0]" Loc = "IO_EA_B4";
+Net "btn[1]" Loc = "IO_EA_A4";
+Net "btn[2]" Loc = "IO_EA_B3";
 
-## LEDs (active-low on ULX5M-GS)
+## LEDs (active-high on ULX5M-GS: 1=ON, 0=OFF)
 Net "led[0]" Loc = "IO_SB_A0";
 Net "led[1]" Loc = "IO_SB_B0";
 Net "led[2]" Loc = "IO_SB_A1";

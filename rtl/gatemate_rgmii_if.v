@@ -63,10 +63,17 @@ reg       tx_ctl_h;    // tx_en on rising edge
 reg       tx_ctl_l;    // tx_en XOR tx_er on falling edge (RGMII spec)
 
 always @(posedge clk_125) begin
-    tx_data_h <= mac_gmii_txd[3:0];
-    tx_data_l <= mac_gmii_txd[7:4];
-    tx_ctl_h  <= mac_gmii_tx_en;
-    tx_ctl_l  <= mac_gmii_tx_en ^ mac_gmii_tx_er;
+    if (rst) begin
+        tx_data_h <= 4'd0;
+        tx_data_l <= 4'd0;
+        tx_ctl_h  <= 1'b0;
+        tx_ctl_l  <= 1'b0;
+    end else begin
+        tx_data_h <= mac_gmii_txd[3:0];
+        tx_data_l <= mac_gmii_txd[7:4];
+        tx_ctl_h  <= mac_gmii_tx_en;
+        tx_ctl_l  <= mac_gmii_tx_en ^ mac_gmii_tx_er;
+    end
 end
 
 // TX Data [3:0] — CC_ODDR + CC_OBUF
@@ -184,10 +191,17 @@ reg       rx_dv_r;
 reg       rx_er_r;
 
 always @(posedge phy_rgmii_rx_clk) begin
-    rx_data_lsb_r <= rx_data_rise;
-    rx_data_msb_r <= rx_data_fall;
-    rx_dv_r       <= rx_ctl_rise;
-    rx_er_r       <= rx_ctl_rise ^ rx_ctl_fall;  // RGMII: ctl_fall = dv XOR er
+    if (rst) begin
+        rx_data_lsb_r <= 4'd0;
+        rx_data_msb_r <= 4'd0;
+        rx_dv_r       <= 1'b0;
+        rx_er_r       <= 1'b0;
+    end else begin
+        rx_data_lsb_r <= rx_data_rise;
+        rx_data_msb_r <= rx_data_fall;
+        rx_dv_r       <= rx_ctl_rise;
+        rx_er_r       <= rx_ctl_rise ^ rx_ctl_fall;  // RGMII: ctl_fall = dv XOR er
+    end
 end
 
 assign mac_gmii_rxd   = {rx_data_msb_r, rx_data_lsb_r};
