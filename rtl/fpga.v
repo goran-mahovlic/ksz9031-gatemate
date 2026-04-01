@@ -54,6 +54,17 @@ pll pll_inst (
 	.lock_out(pll_locked)
 );
 
+reg [31:0] blink_counter;
+
+always @(posedge clk_125) begin
+    if (~rst_int)
+        blink_counter <= 32'd0;
+    else
+        blink_counter <= blink_counter + 1'b1;
+end
+
+assign led[0] = blink_counter;
+
 // ============================================================
 // Reset — device user reset + PLL lock
 // ============================================================
@@ -166,13 +177,13 @@ fpga_core core_inst (
     // GPIO
     .push(btn_int),
     .sw(8'hFF),
-    .led(led),
+    //.led(led),
 
     // PHY control
     .MDC(eth_mdc),
     .MDIO(eth_mdio),
-    .V3_3(1'b1),
-    .CLK_125MHZ(clk_125),
+    //.V3_3(1'b1),
+    //.CLK_125MHZ(clk_125),
 
     // UART
     .txd(uart_tx),

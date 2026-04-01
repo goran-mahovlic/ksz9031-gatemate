@@ -68,7 +68,7 @@ Info:     Constraining '$iopadmap$fpga.btn' to pad 'IO_EA_B4'.
 Info: Insert clocking cells..
 Info: Packing PLLs..
 Info:     PLL fout= 125.0000 MHz (fout error 0.00000% of requested 125.0000 MHz)
-Info: constraining clock net '$auto$clkbufmap.cc:262:execute$82050' to 125.00 MHz
+Info: constraining clock net '$auto$clkbufmap.cc:262:execute$81223' to 125.00 MHz
 Info: constraining clock net 'clk_125_90' to 125.00 MHz
 Info: Sort BUFGs..
 Info: Packing BUFGs..
@@ -83,12 +83,12 @@ Info: Removing unused constants..
 Info:     Removed unused VCC cell.
 Info:     Removed unused GND cell.
 Info: Fix cell assigned regions..
-Info: Checksum: 0x858fdf92
+Info: Checksum: 0xec8144f8
 
 Info: Device utilisation:
 Info: 	            USR_RSTN:       1/      1   100%
 Info: 	            CPE_COMP:       0/  20480     0%
-Info: 	         CPE_CPLINES:      77/  20480     0%
+Info: 	         CPE_CPLINES:      76/  20480     0%
 Info: 	               IOSEL:      29/    162    17%
 Info: 	                GPIO:      29/    162    17%
 Info: 	               CLKIN:       1/      1   100%
@@ -96,9 +96,9 @@ Info: 	              GLBOUT:       1/      1   100%
 Info: 	                 PLL:       1/      4    25%
 Info: 	            CFG_CTRL:       0/      1     0%
 Info: 	              SERDES:       0/      1     0%
-Info: 	              CPE_LT:    8637/  40960    21%
-Info: 	              CPE_FF:    3292/  40960     8%
-Info: 	           CPE_RAMIO:     218/  40960     0%
+Info: 	              CPE_LT:    8514/  40960    20%
+Info: 	              CPE_FF:    3244/  40960     7%
+Info: 	           CPE_RAMIO:     211/  40960     0%
 Info: 	            RAM_HALF:       3/     64     4%
 
 terminate called after throwing an instance of 'std::out_of_range'

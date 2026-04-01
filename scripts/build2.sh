@@ -10,12 +10,12 @@ RTL_DIR="$PROJ_DIR/rtl"
 LIB_DIR="$PROJ_DIR/lib/eth/rtl"
 AXIS_DIR="$PROJ_DIR/lib/eth/lib/axis/rtl"
 CCF="$PROJ_DIR/constraints/ulx5m_gs.ccf"
+SDC="$PROJ_DIR/constraints/timing.sdc"
 
 DEVICE="CCGM1A1"
 TOP="fpga"
-SEED=256
+SEED=1
 
-rm -r "$BUILD_DIR"
 mkdir -p "$BUILD_DIR"
 
 echo "=== [1/3] Synthesis (Yosys) ==="
@@ -73,8 +73,9 @@ nextpnr-himbaechel \
     --vopt "out=$BUILD_DIR/${TOP}.cfg" \
     --router router2 \
     --seed "$SEED" \
+    --sdc "$SDC" \
     --placer-heap-cell-placement-timeout 20000 \
-    --timing-allow-fail \
+#    --timing-allow-fail \
     2>&1 | tee "$BUILD_DIR/pnr.log"
 
 echo "=== [3/3] Pack (gmpack) ==="
