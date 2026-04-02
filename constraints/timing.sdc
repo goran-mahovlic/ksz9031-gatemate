@@ -9,6 +9,8 @@ create_clock -period 40.0 [get_ports clk_25mhz]
 # RX clock from PHY (source-synchronous, 125 MHz)
 create_clock -period 8.0 [get_ports eth_rx_clk]
 
+create_clock -period 8.0 [get_ports clk_125]
+
 # CDC false paths — async FIFOs use Gray code, safe by design.
 # NOTE: nextpnr-himbaechel for GateMate has LIMITED SDC support.
 # set_false_path with get_clocks is NOT reliably supported.
