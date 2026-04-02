@@ -37,8 +37,8 @@ Net "eth_rxd[0]" Loc = "IO_EB_A0" | PULLUP=true | SLEW=fast;
 Net "eth_rxd[1]" Loc = "IO_EB_B0" | PULLUP=true | SLEW=fast;
 Net "eth_rxd[2]" Loc = "IO_EB_A1" | PULLUP=true | SLEW=fast;
 Net "eth_rxd[3]" Loc = "IO_EB_B1" | PULLUP=true | SLEW=fast;
-Net "eth_rx_ctl"  Loc = "IO_EB_A8" | PULLDOWN=true | SLEW=fast;
-Net "eth_rx_clk"  Loc = "IO_EB_A7";
+Net "eth_rx_ctl"  Loc = "IO_EB_A8" | PULLUP=true | SLEW=fast;
+Net "eth_rx_clk"  Loc = "IO_EB_A7" | PULLUP=true | SLEW=fast;
 
 ## EtherNet Control
 Net "eth_rst_n" Loc = "IO_EB_B3";

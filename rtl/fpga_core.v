@@ -499,7 +499,7 @@ assign rx_fifo_udp_payload_axis_tlast = rx_udp_payload_axis_tlast;
 assign rx_fifo_udp_payload_axis_tuser = rx_udp_payload_axis_tuser;
 
 
-assign phy0_reset_n = ~rst; // BTN pullup: not pressed=1 (run), pressed=0 (reset PHY)
+//assign phy0_reset_n = ~rst; // BTN pullup: not pressed=1 (run), pressed=0 (reset PHY)
 
 gm_eth_mac_1g_fifo #(
     .ENABLE_PADDING(1),
@@ -909,12 +909,13 @@ wire        init_done;
 wire        init_error;
 wire [15:0] phy_id_debug;
 
+
 mdio_init #(
     .PHY_ADDR(5'd0)
 ) mdio_init_inst (
     .clk(clk),
     .rst(rst),
-    .phy_ready(phy0_reset_n),
+    .phy_ready(~rst),
     .mdio_start(init_mdio_start),
     .mdio_rw(init_mdio_rw),
     .mdio_phy(init_mdio_phy),

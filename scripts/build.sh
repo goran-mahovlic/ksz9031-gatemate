@@ -77,6 +77,7 @@ nextpnr-himbaechel \
     --placer-heap-cell-placement-timeout 20000 \
     --sdc "$SDC" \
     --timing-allow-fail \
+    --vopt no-cpe-cp \
     2>&1 | tee "$BUILD_DIR/pnr.log"
 
 echo "=== [3/3] Pack (gmpack) ==="

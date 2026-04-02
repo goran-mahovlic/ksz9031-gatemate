@@ -93,6 +93,7 @@ for SEED in $(seq $START_SEED $END_SEED); do
         --sdc "$SDC" \
         --placer-heap-cell-placement-timeout 20000 \
         --timing-allow-fail \
+        --parallel-refine \
         > "$BUILD_DIR/pnr_s${SEED}.log" 2>&1
 
     # Izvuci frekvencije
