@@ -16,7 +16,7 @@ module mdio_controller #(
 )(
     // System Signals
     input             clk,
-    input             rst_n,
+    input             rst,
 
     // User Interface - Inputs
     input             start,      // Start transaction
@@ -87,8 +87,8 @@ assign busy = (current_state != S_IDLE);
 //----------------------------------------------------------------
 
 // MDC Clock Divider Counter
-always @(posedge clk or negedge rst_n) begin
-    if (!rst_n) begin
+always @(posedge clk) begin
+    if (rst) begin
         clk_div_cnt <= 0;
     end else if (clk_div_cnt == DIV_FACTOR - 1) begin
         clk_div_cnt <= 0;
@@ -98,8 +98,8 @@ always @(posedge clk or negedge rst_n) begin
 end
 
 // Main Sequential Block for all control registers
-always @(posedge clk or negedge rst_n) begin
-    if (!rst_n) begin
+always @(posedge clk) begin
+    if (rst) begin
         current_state <= S_IDLE;
         bit_cnt       <= 0;
         mdio_en_reg   <= 1'b0;

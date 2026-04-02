@@ -55,8 +55,6 @@ module fpga_core #
      */
     output wire MDC,
     inout  wire MDIO,
-    //input  wire V3_3,
-    //input  wire CLK_125MHZ,
 
     /*
      * UART
@@ -74,8 +72,7 @@ module fpga_core #
     output wire [7:0] gmii_txd,
     output wire       gmii_tx_en,
     output wire       gmii_tx_er,
-    output wire       phy0_reset_n,
-    input  wire       phy0_int_n
+    output wire       phy0_reset_n
 );
 
 // AXI between MAC and Ethernet modules
@@ -502,7 +499,7 @@ assign rx_fifo_udp_payload_axis_tlast = rx_udp_payload_axis_tlast;
 assign rx_fifo_udp_payload_axis_tuser = rx_udp_payload_axis_tuser;
 
 
-assign phy0_reset_n = ~rst && push[0] && sw[0]; // BTN pullup: not pressed=1 (run), pressed=0 (reset PHY)
+assign phy0_reset_n = ~rst; // BTN pullup: not pressed=1 (run), pressed=0 (reset PHY)
 
 gm_eth_mac_1g_fifo #(
     .ENABLE_PADDING(1),
@@ -800,7 +797,7 @@ wire tx_busy;
 
 uart uart_inst (
 	  .clk(clk),
-	  .rst(rst || ~push[1]),  // BTN pullup: pressed=0, ~0=1 → reset; not pressed=1, ~1=0 → run
+	  .rst(rst),  // BTN pullup: pressed=0, ~0=1 → reset; not pressed=1, ~1=0 → run
 	  .tx_ena(tx_ena),
 	  .tx_data(tx_data),
 	  .rx(rxd),
@@ -1042,7 +1039,7 @@ mdio_controller
 mdio_controller_inst(
     // System Signals
     .clk(clk),
-    .rst_n(~rst && push[1]),  // BTN pullup: not pressed=1 (run), pressed=0 (reset MDIO)
+    .rst(rst),  // BTN pullup: not pressed=1 (run), pressed=0 (reset MDIO)
 
     // User Interface - Inputs (muxed: init FSM or UART)
     .start(muxed_mdio_start),
@@ -1183,12 +1180,15 @@ end
 // Active-HIGH: drive 1 to turn LED ON
 //assign led[0] = ~rst;             // ON when running (rst=0)
 //assign led[1] = phy0_reset_n;     // ON when PHY out of reset
-//assign led[2] = init_done;        // ON when MDIO init complete
-//assign led[3] = init_error;       // ON when MDIO init error
-assign led[0] = rx_activity;      // ON during ETH RX activity
-assign led[7] = tx_activity;      // ON during ETH TX activity
-//assign led[6] = rx_loopb;         // ON when loopback mode active
-//assign led[3] = mdio_busy;        // ON when MDIO busy
+assign led[0] = init_done;        // ON when MDIO init complete
+assign led[1] = init_error;       // ON when MDIO init error
+assign led[2] = rx_activity;      // ON during ETH RX activity
+assign led[3] = tx_activity;      // ON during ETH TX activity
+assign led[4] = rx_loopb;         // ON when loopback mode active
+assign led[5] = mdio_busy;        // ON when MDIO busy
+assign led[6] = blink_counter[24];
+assign led[7] = tx_ena;
+//assign led[7] = rst_int;
 
 endmodule
 `resetall
