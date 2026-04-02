@@ -188,8 +188,7 @@ fpga_core core_inst (
     .gmii_tx_er(gmii_tx_er),
 
     // PHY reset (eth_rst_n driven by top-level timer, ignore core output)
-    .phy0_reset_n(/* unused — overridden by phy_rst_n_reg */),
-    .phy0_int_n(1'b1)
+    .phy0_reset_n(/* unused — overridden by phy_rst_n_reg */)
 );
 
 endmodule
