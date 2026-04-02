@@ -9,6 +9,7 @@ BUILD_DIR="$PROJ_DIR/build"
 RTL_DIR="$PROJ_DIR/rtl"
 LIB_DIR="$PROJ_DIR/lib/eth/rtl"
 AXIS_DIR="$PROJ_DIR/lib/eth/lib/axis/rtl"
+SDC="$PROJ_DIR/constraints/timing.sdc"
 CCF="$PROJ_DIR/constraints/ulx5m_gs.ccf"
 
 DEVICE="CCGM1A1"
@@ -71,9 +72,10 @@ nextpnr-himbaechel \
     --json "$BUILD_DIR/$TOP.json" \
     --vopt "ccf=$CCF" \
     --vopt "out=$BUILD_DIR/${TOP}.cfg" \
-    --router router2 \
+    --router default \
     --seed "$SEED" \
     --placer-heap-cell-placement-timeout 20000 \
+    --sdc "$SDC" \
     --timing-allow-fail \
     2>&1 | tee "$BUILD_DIR/pnr.log"
 

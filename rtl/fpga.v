@@ -48,22 +48,11 @@ wire clk_25;
 wire clk_pix, clk_dvi, lock;
 pll pll_inst (
 	.clock_in(clk_25mhz),       //  50 MHz reference
-	.clock_out(clk_25),    //  25 MHz, 0 deg
+	//.clock_out(clk_25),    //  25 MHz, 0 deg
 	.clock_5x_out(clk_125), // 125 MHz, 0 deg
 	.clock_5x_90_out(clk_125_90),
 	.lock_out(pll_locked)
 );
-
-reg [31:0] blink_counter;
-
-always @(posedge clk_125) begin
-    if (~rst_int)
-        blink_counter <= 32'd0;
-    else
-        blink_counter <= blink_counter + 1'b1;
-end
-
-assign led[0] = blink_counter;
 
 // ============================================================
 // Reset — device user reset + PLL lock
@@ -79,7 +68,7 @@ reg [3:0] rst_cnt = 4'hF;
 reg rst_int = 1'b1;
 
 always @(posedge clk_125) begin
-    if (!pll_locked || !btn[2]) begin
+    if (!btn[2]) begin
         rst_cnt <= 4'hF;
         rst_int <= 1'b1;
     end else if (rst_cnt != 0) begin
@@ -177,7 +166,7 @@ fpga_core core_inst (
     // GPIO
     .push(btn_int),
     .sw(8'hFF),
-    //.led(led),
+    .led(led),
 
     // PHY control
     .MDC(eth_mdc),

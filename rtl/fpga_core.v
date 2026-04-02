@@ -1162,6 +1162,11 @@ always @(posedge clk) begin
     end
 end
 
+//assign led[7] = count[15]; //mdio_busy;        // ON when MDIO busy
+
+wire rx_activity = (rx_activity_cnt != 0);
+wire tx_activity = (tx_activity_cnt != 0);
+
 reg [31:0] blink_counter;
 
 always @(posedge clk) begin
@@ -1171,20 +1176,19 @@ always @(posedge clk) begin
         blink_counter <= blink_counter + 1'b1;
 end
 
-//assign led[7] = count[15]; //mdio_busy;        // ON when MDIO busy
+//assign led[0] = blink_counter[24];
+//assign led[7] = rst_int;
 
-wire rx_activity = (rx_activity_cnt != 0);
-wire tx_activity = (tx_activity_cnt != 0);
 
 // Active-HIGH: drive 1 to turn LED ON
 //assign led[0] = ~rst;             // ON when running (rst=0)
 //assign led[1] = phy0_reset_n;     // ON when PHY out of reset
 //assign led[2] = init_done;        // ON when MDIO init complete
 //assign led[3] = init_error;       // ON when MDIO init error
-//assign led[4] = rx_activity;      // ON during ETH RX activity
-//assign led[5] = tx_activity;      // ON during ETH TX activity
+assign led[0] = rx_activity;      // ON during ETH RX activity
+assign led[7] = tx_activity;      // ON during ETH TX activity
 //assign led[6] = rx_loopb;         // ON when loopback mode active
-//assign led[7] = blink_counter[24]; //mdio_busy;        // ON when MDIO busy
+//assign led[3] = mdio_busy;        // ON when MDIO busy
 
 endmodule
 `resetall
