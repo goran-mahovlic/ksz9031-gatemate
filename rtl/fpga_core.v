@@ -908,11 +908,11 @@ wire [15:0] init_mdio_wdata;
 wire        init_done;
 wire        init_error;
 wire [15:0] phy_id_debug;
+wire [4:0]  phy_addr_found;
+wire [4:0]  init_state_dbg;
 
 
-mdio_init #(
-    .PHY_ADDR(5'd0)
-) mdio_init_inst (
+mdio_init mdio_init_inst (
     .clk(clk),
     .rst(rst),
     .phy_ready(~rst),
@@ -926,7 +926,9 @@ mdio_init #(
     .mdio_rvalid(mdio_rvalid),
     .init_done(init_done),
     .init_error(init_error),
-    .phy_id(phy_id_debug)
+    .phy_id(phy_id_debug),
+    .phy_addr_found(phy_addr_found),
+    .state_dbg(init_state_dbg)
 );
 
 // MDIO bus mux: init FSM has priority until init_done
@@ -1178,18 +1180,24 @@ end
 //assign led[7] = rst_int;
 
 
-// Active-HIGH: drive 1 to turn LED ON
-//assign led[0] = ~rst;             // ON when running (rst=0)
-//assign led[1] = phy0_reset_n;     // ON when PHY out of reset
-assign led[0] = init_done;        // ON when MDIO init complete
-assign led[1] = init_error;       // ON when MDIO init error
-assign led[2] = rx_activity;      // ON during ETH RX activity
-assign led[3] = tx_activity;      // ON during ETH TX activity
-assign led[4] = rx_loopb;         // ON when loopback mode active
-assign led[5] = mdio_busy;        // ON when MDIO busy
-assign led[6] = blink_counter[24];
-assign led[7] = tx_ena;
-//assign led[7] = rst_int;
+// LEDs (active-HIGH, 1=ON):
+//   [0] init_done  — MDIO init finished (ON solid once PHY configured)
+//   [1] init_error — Scanning failed to find KSZ9031 (ON solid, check MDIO wiring)
+//   [2] rx_activity — RGMII RX data pulses
+//   [3] tx_activity — RGMII TX data pulses
+//   [4] phy_addr[0] — LSB of found PHY address (slow-blink if not found yet)
+//   [5] state_dbg[0]
+//   [6] state_dbg[1]
+//   [7] state_dbg[2]  — three LEDs encode the MDIO FSM state % 8, so user sees
+//                        state advance during scan
+assign led[0] = init_done;
+assign led[1] = init_error;
+assign led[2] = rx_activity;
+assign led[3] = tx_activity;
+assign led[4] = init_done ? phy_addr_found[0] : blink_counter[24];
+assign led[5] = init_state_dbg[0];
+assign led[6] = init_state_dbg[1];
+assign led[7] = init_state_dbg[2];
 
 endmodule
 `resetall

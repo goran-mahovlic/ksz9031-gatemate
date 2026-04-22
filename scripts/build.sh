@@ -4,6 +4,8 @@
 
 set -e
 
+export PATH=/home/klaudio/Programs/oss-cad-suite/bin:$PATH
+
 PROJ_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 BUILD_DIR="$PROJ_DIR/build"
 RTL_DIR="$PROJ_DIR/rtl"
@@ -14,7 +16,7 @@ CCF="$PROJ_DIR/constraints/ulx5m_gs.ccf"
 
 DEVICE="CCGM1A1"
 TOP="fpga"
-SEED=256
+SEED=${SEED:-256}
 
 rm -r "$BUILD_DIR"
 mkdir -p "$BUILD_DIR"
