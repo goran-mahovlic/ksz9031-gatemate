@@ -60,7 +60,7 @@ pll pll_inst (
 // Reset — async-assert, sync-release
 // ============================================================
 // Async-low reset source: PLL locked AND btn[2] (active-low) not pressed
-wire async_rst_n = pll_locked & btn[2];
+wire async_rst_n = pll_locked;
 
 wire rst_sync; // active-high, synchronous to clk_125
 reset_sync rst_sync_inst (
@@ -148,7 +148,7 @@ assign eth_mdc    = 1'b0;
 assign eth_mdio   = 1'bz;
 
 // Keep rx signals in use to suppress "unused" warnings
-wire _unused = &{1'b0, eth_rx_clk, eth_rxd, eth_rx_ctl, clk_125_90, btn[1:0], 1'b0};
+wire _unused = &{1'b0, eth_rx_clk, eth_rxd, eth_rx_ctl, clk_125_90, btn[2:0], 1'b0};
 
 endmodule
 
