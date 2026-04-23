@@ -73,11 +73,37 @@ reg rvalid_next;
 // Continuous Assignments
 //----------------------------------------------------------------
 
-// MDC Clock Output
-assign mdc = (clk_div_cnt < (DIV_FACTOR / 2));
+// MDC Clock Output (registered through CC_OBUF for clean slew)
+wire mdc_comb = (clk_div_cnt < (DIV_FACTOR / 2));
+reg  mdc_reg;
+always @(posedge clk) begin
+    if (rst)
+        mdc_reg <= 1'b0;
+    else
+        mdc_reg <= mdc_comb;
+end
+assign mdc = mdc_reg;
 
-// MDIO Tri-state Buffer for MDIO pin
-assign mdio = (mdio_en_reg) ? mdio_out_reg : 1'bz;
+// MDIO Tri-state — simple Verilog form, matches upstream working version.
+// Yosys+GateMate synthesizer infers the correct CC_IOBUF from this idiom,
+// with the correct T polarity inferred automatically — avoids the
+// "T=~en vs T=en" ambiguity that gave us 0x0000 reads with explicit CC_IOBUF.
+// Pullup/slew are set via the ccf constraint on net "eth_mdio".
+wire mdio_in_raw = mdio;
+assign mdio = mdio_en_reg ? mdio_out_reg : 1'bz;
+
+// Input synchronizer for mdio_in_raw (async to clk domain)
+reg mdio_in_s0, mdio_in_s1;
+always @(posedge clk) begin
+    if (rst) begin
+        mdio_in_s0 <= 1'b1;
+        mdio_in_s1 <= 1'b1;
+    end else begin
+        mdio_in_s0 <= mdio_in_raw;
+        mdio_in_s1 <= mdio_in_s0;
+    end
+end
+wire mdio_sync = mdio_in_s1;
 
 // Busy Signal
 assign busy = (current_state != S_IDLE);
@@ -118,7 +144,7 @@ always @(posedge clk) begin
 
         // The read data shift register is only updated on the mdc_tick
         if (mdc_tick && current_state == S_DATA && rw) begin
-            rdata_reg <= {rdata_reg[14:0], mdio};
+            rdata_reg <= {rdata_reg[14:0], mdio_sync};
         end
     end
 end
@@ -188,7 +214,7 @@ always @(*) begin
                 if (bit_cnt == 15) begin
                     next_state = S_DONE;
                     if (rw) begin
-                        rdata_next = {rdata_reg[14:0], mdio};
+                        rdata_next = {rdata_reg[14:0], mdio_sync};
                         rvalid_next = 1'b1;
                     end
                 end else begin
