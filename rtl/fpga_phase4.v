@@ -45,16 +45,12 @@ assign eth_txd    = 4'd0;
 assign eth_tx_ctl = 1'b0;
 
 // ============================================================
-// Clocking
+// Clocking — DIRECTLY off the 25 MHz pad (no PLL).
+// Rules out PLL frequency / lock issues as a source of UART corruption.
+// UART at 25 MHz / 115200 = 217 cycles/bit — exact-enough baud.
 // ============================================================
-wire clk_125, clk_125_90, pll_locked;
-pll pll_inst (
-    .clock_in      (clk_25mhz),
-    .clock_5x_out  (clk_125),
-    .clock_5x_90_out(clk_125_90),
-    .lock_out      (pll_locked)
-);
-wire clk = clk_125;
+wire pll_locked = 1'b1;   // no PLL gate
+wire clk = clk_25mhz;
 
 // ============================================================
 // Reset — CC_USR_RSTN + btn[2] + power-on counter. Matches
@@ -102,40 +98,22 @@ wire [15:0] mdio_rdata;
 wire        mdio_busy;
 wire        mdio_rvalid;
 
-wire mdio_out_w, mdio_oe_w, mdio_in_w;
-
 mdio_controller #(
-    .SYS_CLK_FREQ(125_000_000),
+    .SYS_CLK_FREQ(25_000_000),
     .MDC_FREQ    (2_500_000)
 ) mdio_ctrl_inst (
-    .clk      (clk),
-    .rst      (rst),
-    .start    (mdio_start),
-    .rw       (mdio_rw),
-    .phy_addr (mdio_phy),
-    .reg_addr (mdio_reg),
-    .wdata    (mdio_wdata),
-    .rdata    (mdio_rdata),
-    .busy     (mdio_busy),
-    .rvalid   (mdio_rvalid),
-    .mdc      (eth_mdc),
-    .mdio_out (mdio_out_w),
-    .mdio_oe  (mdio_oe_w),
-    .mdio_i   (mdio_in_w)
-);
-
-// Top-level CC_IOBUF with explicit internal PULLUP=1 (MDIO open-drain).
-CC_IOBUF #(
-    .PIN_NAME("UNPLACED"),
-    .DRIVE("12"),
-    .PULLUP(1'b1),
-    .PULLDOWN(1'b0),
-    .SLEW("FAST")
-) mdio_iobuf (
-    .A (mdio_out_w),
-    .T (~mdio_oe_w),   // GateMate: T=0 drives A, T=1 = Hi-Z
-    .Y (mdio_in_w),
-    .IO(eth_mdio)
+    .clk     (clk),
+    .rst     (rst),
+    .start   (mdio_start),
+    .rw      (mdio_rw),
+    .phy_addr(mdio_phy),
+    .reg_addr(mdio_reg),
+    .wdata   (mdio_wdata),
+    .rdata   (mdio_rdata),
+    .busy    (mdio_busy),
+    .rvalid  (mdio_rvalid),
+    .mdc     (eth_mdc),
+    .mdio    (eth_mdio)
 );
 
 // Latch last successful read (and snap the conditions for the UART print)
@@ -154,11 +132,10 @@ always @(posedge clk) begin
     end
 end
 
-// Expose MDIO line for status print (2-FF sync) — sample from IOBUF output,
-// NOT directly from the inout pad (which would infer a second input buffer).
+// Expose MDIO line for status print (2-FF sync)
 reg mdio_pin_s0, mdio_pin_s1;
 always @(posedge clk) begin
-    mdio_pin_s0 <= mdio_in_w;
+    mdio_pin_s0 <= eth_mdio;
     mdio_pin_s1 <= mdio_pin_s0;
 end
 wire mdio_pin_level = mdio_pin_s1;
@@ -168,7 +145,7 @@ wire mdio_pin_level = mdio_pin_s1;
 // ============================================================
 reg [26:0] sec_cnt = 27'd0;
 reg [15:0] uptime  = 16'd0;
-wire tick_1hz = (sec_cnt == 27'd125_000_000 - 1);
+wire tick_1hz = (sec_cnt == 27'd25_000_000 - 1);
 always @(posedge clk) begin
     if (rst) begin
         sec_cnt <= 27'd0;
@@ -219,7 +196,7 @@ reg  [7:0] uart_wr_d  = 8'd0;
 wire       uart_busy;
 
 uart #(
-    .CLK_FREQ (125_000_000),
+    .CLK_FREQ (25_000_000),
     .BAUD_RATE(115_200)
 ) uart_inst (
     .clk     (clk),

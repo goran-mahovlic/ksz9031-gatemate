@@ -22,7 +22,7 @@ mkdir -p "$BUILD_DIR"
 echo "=== [1/3] Synthesis (Yosys) — Phase 3 MDIO+UART trace ==="
 yosys -l "$BUILD_DIR/synth.log" -p "
     read_verilog $RTL_DIR/fpga_phase4.v
-    read_verilog $RTL_DIR/gatemate_25MHz_125MHz_pll.v
+    
     read_verilog $RTL_DIR/uart.v
     read_verilog $RTL_DIR/mdio_controller.v
     synth_gatemate -top $TOP -luttree -nomx8 -json $BUILD_DIR/$TOP.json
