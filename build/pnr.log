@@ -1,0 +1,441 @@
+Info: Using uarch 'gatemate' for device 'CCGM1A1'
+Info: Using timing mode 'WORST'.
+Info: Using performance mode 'SPEED'.
+Info: constraining clock net 'clk_25mhz' to 25.00 MHz
+Info: constraining clock net 'eth_rx_clk' to 125.00 MHz
+
+Info: Detected regions..
+Info:     top core_inst mdio_controller_inst mdio_iobuf
+Info:     top pll_inst pll125
+Info:     top rgmii_if_inst gen_rx_data[0].rx_data_ibuf
+Info:     top rgmii_if_inst gen_rx_data[0].rx_data_iddr
+Info:     top rgmii_if_inst gen_rx_data[1].rx_data_ibuf
+Info:     top rgmii_if_inst gen_rx_data[1].rx_data_iddr
+Info:     top rgmii_if_inst gen_rx_data[2].rx_data_ibuf
+Info:     top rgmii_if_inst gen_rx_data[2].rx_data_iddr
+Info:     top rgmii_if_inst gen_rx_data[3].rx_data_ibuf
+Info:     top rgmii_if_inst gen_rx_data[3].rx_data_iddr
+Info:     top rgmii_if_inst gen_tx_data[0].tx_data_obuf
+Info:     top rgmii_if_inst gen_tx_data[0].tx_data_oddr
+Info:     top rgmii_if_inst gen_tx_data[1].tx_data_obuf
+Info:     top rgmii_if_inst gen_tx_data[1].tx_data_oddr
+Info:     top rgmii_if_inst gen_tx_data[2].tx_data_obuf
+Info:     top rgmii_if_inst gen_tx_data[2].tx_data_oddr
+Info:     top rgmii_if_inst gen_tx_data[3].tx_data_obuf
+Info:     top rgmii_if_inst gen_tx_data[3].tx_data_oddr
+Info:     top rgmii_if_inst rx_ctl_ibuf
+Info:     top rgmii_if_inst rx_ctl_iddr
+Info:     top rgmii_if_inst tx_clk_obuf
+Info:     top rgmii_if_inst tx_ctl_obuf
+Info:     top rgmii_if_inst tx_ctl_oddr
+Info:     top
+Info: Parsing CCF file..
+Info: Assign cell region based on attributes..
+Info: Packing constants..
+Info: Running cleanups..
+Info: Packing IOs..
+Warning: Overriding parameter 'PULLUP' with value '1' for cell 'core_inst.mdio_controller_inst.mdio_iobuf'.
+Info:     Constraining '$iopadmap$fpga.eth_mdc' to pad 'IO_EB_B6'.
+Info:     Constraining '$iopadmap$fpga.clk_25mhz' to pad 'IO_SB_A8'.
+Info:     Constraining '$iopadmap$fpga.btn_2' to pad 'IO_EA_B3'.
+Info:     Constraining '$iopadmap$fpga.btn_1' to pad 'IO_EA_A4'.
+Info:     Constraining '$iopadmap$fpga.btn' to pad 'IO_EA_B4'.
+Info:     Constraining 'rgmii_if_inst.tx_ctl_obuf' to pad 'IO_EB_A2'.
+Info:     Constraining 'rgmii_if_inst.tx_clk_obuf' to pad 'IO_EB_B2'.
+Warning: Removing unsupported parameter 'SLEW' for type 'CC_IBUF'.
+Info:     Constraining 'rgmii_if_inst.rx_ctl_ibuf' to pad 'IO_EB_A8'.
+Info:     Constraining 'rgmii_if_inst.gen_tx_data[3].tx_data_obuf' to pad 'IO_EB_A4'.
+Info:     Constraining 'rgmii_if_inst.gen_tx_data[2].tx_data_obuf' to pad 'IO_EB_B4'.
+Info:     Constraining 'rgmii_if_inst.gen_tx_data[1].tx_data_obuf' to pad 'IO_EB_A5'.
+Info:     Constraining 'rgmii_if_inst.gen_tx_data[0].tx_data_obuf' to pad 'IO_EB_B5'.
+Info:     Constraining 'core_inst.mdio_controller_inst.mdio_iobuf' to pad 'IO_EB_A6'.
+Warning: Removing unsupported parameter 'SLEW' for type 'CC_IBUF'.
+Info:     Constraining 'rgmii_if_inst.gen_rx_data[3].rx_data_ibuf' to pad 'IO_EB_B1'.
+Warning: Removing unsupported parameter 'SLEW' for type 'CC_IBUF'.
+Info:     Constraining 'rgmii_if_inst.gen_rx_data[2].rx_data_ibuf' to pad 'IO_EB_A1'.
+Warning: Removing unsupported parameter 'SLEW' for type 'CC_IBUF'.
+Info:     Constraining 'rgmii_if_inst.gen_rx_data[1].rx_data_ibuf' to pad 'IO_EB_B0'.
+Warning: Removing unsupported parameter 'SLEW' for type 'CC_IBUF'.
+Info:     Constraining 'rgmii_if_inst.gen_rx_data[0].rx_data_ibuf' to pad 'IO_EB_A0'.
+Warning: Removing unsupported parameter 'SLEW' for type 'CC_IBUF'.
+Info:     Constraining '$iopadmap$fpga.eth_rx_clk' to pad 'IO_EB_A7'.
+Info:     Constraining '$iopadmap$fpga.eth_rst_n' to pad 'IO_EB_B3'.
+Info:     Constraining '$iopadmap$fpga.uart_tx' to pad 'IO_NA_A4'.
+Info:     Constraining '$iopadmap$fpga.uart_rx' to pad 'IO_NA_B4'.
+Info:     Constraining '$iopadmap$fpga.led_7' to pad 'IO_SB_A3'.
+Info:     Constraining '$iopadmap$fpga.led_6' to pad 'IO_SB_B3'.
+Info:     Constraining '$iopadmap$fpga.led_5' to pad 'IO_SB_A2'.
+Info:     Constraining '$iopadmap$fpga.led_4' to pad 'IO_SB_B2'.
+Info:     Constraining '$iopadmap$fpga.led_3' to pad 'IO_SB_B1'.
+Info:     Constraining '$iopadmap$fpga.led_2' to pad 'IO_SB_A1'.
+Info:     Constraining '$iopadmap$fpga.led_1' to pad 'IO_SB_B0'.
+Info:     Constraining '$iopadmap$fpga.led' to pad 'IO_SB_A0'.
+Info: Insert clocking cells..
+Info: Packing PLLs..
+Info:     PLL fout= 125.0000 MHz (fout error 0.00000% of requested 125.0000 MHz)
+Info: constraining clock net '$auto$clkbufmap.cc:262:execute$84459' to 125.00 MHz
+Info: constraining clock net 'clk_125_90' to 125.00 MHz
+Info: Sort BUFGs..
+Info: Packing BUFGs..
+Info: Packing IO SELs..
+Info: Packing misc..
+Info: Packing RAMs..
+Info: Packing SERDES..
+Info: Packing multipliers...
+Info: Packing ADDFs..
+Info: Packing CPEs..
+Info: Removing unused constants..
+Info:     Removed unused VCC cell.
+Info:     Removed unused GND cell.
+Info: Fix cell assigned regions..
+Info: Checksum: 0x81273ca4
+
+Info: Device utilisation:
+Info: 	            USR_RSTN:       1/      1   100%
+Info: 	            CPE_COMP:       0/  20480     0%
+Info: 	         CPE_CPLINES:      78/  20480     0%
+Info: 	               IOSEL:      29/    162    17%
+Info: 	                GPIO:      29/    162    17%
+Info: 	               CLKIN:       1/      1   100%
+Info: 	              GLBOUT:       1/      1   100%
+Info: 	                 PLL:       1/      4    25%
+Info: 	            CFG_CTRL:       0/      1     0%
+Info: 	              SERDES:       0/      1     0%
+Info: 	              CPE_LT:    8669/  40960    21%
+Info: 	              CPE_FF:    3309/  40960     8%
+Info: 	           CPE_RAMIO:     217/  40960     0%
+Info: 	            RAM_HALF:       3/     64     4%
+
+Info: Placed 0 cells based on constraints.
+Info: Creating initial analytic placement for 6394 cells, random placement wirelen = 943107.
+Info:     at initial placer iter 0, wirelen = 8423
+Info:     at initial placer iter 1, wirelen = 6693
+Info:     at initial placer iter 2, wirelen = 6249
+Info:     at initial placer iter 3, wirelen = 5834
+Info: Running main analytical placer, max placement attempts per cell = 10000.
+Info:     at iteration #1, type ALL: wirelen solved = 5863, spread = 112410, legal = 183027; time = 1.73s
+Info:     at iteration #2, type ALL: wirelen solved = 15309, spread = 83375, legal = 116018; time = 0.82s
+Info:     at iteration #3, type ALL: wirelen solved = 19943, spread = 78994, legal = 90571; time = 0.50s
+Info:     at iteration #4, type ALL: wirelen solved = 23895, spread = 71633, legal = 81554; time = 0.42s
+Info:     at iteration #5, type ALL: wirelen solved = 27294, spread = 57619, legal = 73091; time = 0.43s
+Info:     at iteration #6, type ALL: wirelen solved = 27762, spread = 57637, legal = 75279; time = 0.48s
+Info:     at iteration #7, type ALL: wirelen solved = 29691, spread = 56666, legal = 67689; time = 0.36s
+Info:     at iteration #8, type ALL: wirelen solved = 30778, spread = 53518, legal = 65018; time = 0.38s
+Info:     at iteration #9, type ALL: wirelen solved = 31498, spread = 56675, legal = 67842; time = 0.34s
+Info:     at iteration #10, type ALL: wirelen solved = 33938, spread = 52765, legal = 62737; time = 0.36s
+Info:     at iteration #11, type ALL: wirelen solved = 33783, spread = 53507, legal = 60310; time = 0.34s
+Info:     at iteration #12, type ALL: wirelen solved = 35209, spread = 56141, legal = 61736; time = 0.33s
+Info:     at iteration #13, type ALL: wirelen solved = 37331, spread = 53909, legal = 60350; time = 0.34s
+Info:     at iteration #14, type ALL: wirelen solved = 37425, spread = 53645, legal = 59405; time = 0.33s
+Info:     at iteration #15, type ALL: wirelen solved = 38155, spread = 53096, legal = 58078; time = 0.32s
+Info:     at iteration #16, type ALL: wirelen solved = 38003, spread = 53105, legal = 58814; time = 0.32s
+Info:     at iteration #17, type ALL: wirelen solved = 38939, spread = 63452, legal = 68558; time = 0.31s
+Info:     at iteration #18, type ALL: wirelen solved = 45023, spread = 59319, legal = 63643; time = 0.30s
+Info:     at iteration #19, type ALL: wirelen solved = 44614, spread = 55387, legal = 60879; time = 0.28s
+Info:     at iteration #20, type ALL: wirelen solved = 43668, spread = 55074, legal = 60755; time = 0.28s
+Info: HeAP Placer Time: 12.58s
+Info:   of which solving equations: 5.90s
+Info:   of which spreading cells: 1.39s
+Info:   of which strict legalisation: 2.82s
+
+Info: Running simulated annealing placer for refinement.
+Info:   at iteration #1: temp = 0.000000, timing cost = 180, wirelen = 59228
+Info:   at iteration #4: temp = 0.000000, timing cost = 165, wirelen = 55241 
+Info: SA placement time 6.39s
+
+Info: Max frequency for clock 'core_inst.eth_mac_inst.eth_mac_1g_inst.axis_gmii_rx_inst.clk': 129.40 MHz (PASS at 125.00 MHz)
+Info: Max frequency for clock                                                      'clk_125': 49.99 MHz (FAIL at 125.00 MHz)
+
+Info: Max delay <async>                                                              -> posedge clk_125                                                     : 5.03 ns
+Info: Max delay <async>                                                              -> posedge core_inst.eth_mac_inst.eth_mac_1g_inst.axis_gmii_rx_inst.clk: 9.95 ns
+Info: Max delay posedge clk_125                                                      -> posedge core_inst.eth_mac_inst.eth_mac_1g_inst.axis_gmii_rx_inst.clk: 6.15 ns
+Info: Max delay posedge core_inst.eth_mac_inst.eth_mac_1g_inst.axis_gmii_rx_inst.clk -> posedge clk_125                                                     : 1.60 ns
+
+Info: Slack histogram:
+Info:  legend: * represents 22 endpoint(s)
+Info:          + represents [1,22) endpoint(s)
+Info: [-12005, -11073) |+
+Info: [-11073, -10141) |*+
+Info: [-10141,  -9209) |*+
+Info: [ -9209,  -8277) |*+
+Info: [ -8277,  -7345) |***+
+Info: [ -7345,  -6413) |+
+Info: [ -6413,  -5481) |*+
+Info: [ -5481,  -4549) |*+
+Info: [ -4549,  -3617) |***+
+Info: [ -3617,  -2685) |****+
+Info: [ -2685,  -1753) |********+
+Info: [ -1753,   -821) |********+
+Info: [  -821,    111) |**************+
+Info: [   111,   1043) |****************+
+Info: [  1043,   1975) |*****************+
+Info: [  1975,   2907) |*******************+
+Info: [  2907,   3839) |***********************+
+Info: [  3839,   4771) |**************************+
+Info: [  4771,   5703) |*********************+
+Info: [  5703,   6635) |************************************************************ 
+Info: Checksum: 0x9e3ecca0
+Info: Repacking RAMs..
+Info: Repacking CPEs..
+Info: Remove unused clocking cells..
+Info: Routing multipliers...
+Info: Routing clock nets...
+Info:     routing net 'clk_125' to 3191 users
+Info:     routing net 'core_inst.eth_mac_inst.eth_mac_1g_inst.axis_gmii_rx_inst.clk' to 133 users
+Info: Clock router time 16.05s.
+Info: Running router2...
+Info: Setting up routing resources...
+Info: Running main router loop...
+Info:     iter=1 wires=316768 overused=22941 overuse=24180 archfail=NA
+Info:     iter=2 wires=333419 overused=11249 overuse=11365 archfail=NA
+Info:     iter=3 wires=339214 overused=6733 overuse=6764 archfail=NA
+Info:     iter=4 wires=343680 overused=3330 overuse=3344 archfail=NA
+Info:     iter=5 wires=346770 overused=2162 overuse=2169 archfail=NA
+Info:     iter=6 wires=348087 overused=1380 overuse=1382 archfail=NA
+Info:     iter=7 wires=349382 overused=1024 overuse=1027 archfail=NA
+Info:     iter=8 wires=349826 overused=645 overuse=645 archfail=NA
+Info:     iter=9 wires=350432 overused=433 overuse=433 archfail=NA
+Info:     iter=10 wires=350848 overused=247 overuse=248 archfail=NA
+Info:     iter=11 wires=351091 overused=192 overuse=192 archfail=NA
+Info:     iter=12 wires=351508 overused=126 overuse=126 archfail=NA
+Info:     iter=13 wires=351601 overused=108 overuse=108 archfail=NA
+Info:     iter=14 wires=351670 overused=84 overuse=84 archfail=NA
+Info:     iter=15 wires=351753 overused=59 overuse=59 archfail=NA
+Info:     iter=16 wires=351837 overused=50 overuse=50 archfail=NA
+Info:     iter=17 wires=351858 overused=42 overuse=42 archfail=NA
+Info:     iter=18 wires=351973 overused=39 overuse=39 archfail=NA
+Info:     iter=19 wires=351939 overused=29 overuse=29 archfail=NA
+Info:     iter=20 wires=352032 overused=21 overuse=21 archfail=NA
+Info:     iter=21 wires=352042 overused=18 overuse=18 archfail=NA
+Info:     iter=22 wires=352040 overused=16 overuse=16 archfail=NA
+Info:     iter=23 wires=352038 overused=14 overuse=14 archfail=NA
+Info:     iter=24 wires=352053 overused=7 overuse=7 archfail=NA
+Info:     iter=25 wires=352027 overused=5 overuse=5 archfail=NA
+Info:     iter=26 wires=352044 overused=5 overuse=5 archfail=NA
+Info:     iter=27 wires=352067 overused=4 overuse=4 archfail=NA
+Info:     iter=28 wires=352067 overused=4 overuse=4 archfail=NA
+Info:     iter=29 wires=352067 overused=4 overuse=4 archfail=NA
+Info:     iter=30 wires=352067 overused=4 overuse=4 archfail=NA
+Info:     iter=31 wires=352067 overused=4 overuse=4 archfail=NA
+Info:     iter=32 wires=352067 overused=4 overuse=4 archfail=NA
+Info:     iter=33 wires=352067 overused=4 overuse=4 archfail=NA
+Info:     iter=34 wires=352067 overused=4 overuse=4 archfail=NA
+Info:     iter=35 wires=352067 overused=4 overuse=4 archfail=NA
+Info:     iter=36 wires=352067 overused=4 overuse=4 archfail=NA
+Info:     iter=37 wires=352067 overused=4 overuse=4 archfail=NA
+Info:     iter=38 wires=352072 overused=3 overuse=3 archfail=NA
+Info:     iter=39 wires=352072 overused=3 overuse=3 archfail=NA
+Info:     iter=40 wires=352072 overused=3 overuse=3 archfail=NA
+Info:     iter=41 wires=352072 overused=3 overuse=3 archfail=NA
+Info:     iter=42 wires=352072 overused=3 overuse=3 archfail=NA
+Info:     iter=43 wires=352072 overused=3 overuse=3 archfail=NA
+Info:     iter=44 wires=352072 overused=3 overuse=3 archfail=NA
+Info:     iter=45 wires=352072 overused=3 overuse=3 archfail=NA
+Info:     iter=46 wires=352072 overused=3 overuse=3 archfail=NA
+Info:     iter=47 wires=352072 overused=3 overuse=3 archfail=NA
+Info:     iter=48 wires=352072 overused=3 overuse=3 archfail=NA
+Info:     iter=49 wires=352072 overused=3 overuse=3 archfail=NA
+Info:     iter=50 wires=352072 overused=3 overuse=3 archfail=NA
+Info:     iter=51 wires=352072 overused=3 overuse=3 archfail=NA
+Info:     iter=52 wires=352072 overused=3 overuse=3 archfail=NA
+Info:     iter=53 wires=352072 overused=3 overuse=3 archfail=NA
+Info:     iter=54 wires=352072 overused=3 overuse=3 archfail=NA
+Info:     iter=55 wires=352072 overused=3 overuse=3 archfail=NA
+Info:     iter=56 wires=352072 overused=3 overuse=3 archfail=NA
+Info:     iter=57 wires=352072 overused=3 overuse=3 archfail=NA
+Info:     iter=58 wires=352072 overused=3 overuse=3 archfail=NA
+Info:     iter=59 wires=352072 overused=3 overuse=3 archfail=NA
+Info:     iter=60 wires=352072 overused=3 overuse=3 archfail=NA
+Info:     iter=61 wires=352072 overused=3 overuse=3 archfail=NA
+Info:     iter=62 wires=352077 overused=1 overuse=1 archfail=NA
+Info:     iter=63 wires=352087 overused=2 overuse=2 archfail=NA
+Info:     iter=64 wires=352073 overused=0 overuse=0 archfail=0
+Info: Router2 time 81.46s
+Info: Running router1 to check that route is legal...
+
+Info: Routing..
+Info: Setting up routing queue.
+Info: Routing 0 arcs.
+Info:            |   (re-)routed arcs  |   delta    | remaining|       time spent     |
+Info:    IterCnt |  w/ripup   wo/ripup |  w/r  wo/r |      arcs| batch(sec) total(sec)|
+Info:          0 |        0          0 |    0     0 |         0|       1.09       1.09|
+Info: Routing complete.
+Info: Router1 time 1.09s
+Info: Checksum: 0xa26fa29e
+
+Info: Critical path report for clock 'core_inst.eth_mac_inst.eth_mac_1g_inst.axis_gmii_rx_inst.clk' (posedge -> posedge):
+Info:       type curr  total name
+Info:   clk-skew -0.02 -0.02 Net core_inst.eth_mac_inst.eth_mac_1g_inst.axis_gmii_rx_inst.clk (68,99) -> (69,100)
+Info:                          Sink $auto$ff.cc:337:slice$36406.CLK_INT
+Info:                          Defined in:
+Info:                               /home/klaudio/app/ksz9031-gatemate/lib/eth/rtl/axis_gmii_rx.v:42.37-42.40
+Info:   clk-to-q  0.59  0.57 Source $auto$ff.cc:337:slice$46853.DOUT
+Info:    routing  3.98  4.55 Net core_inst.eth_mac_inst.eth_mac_1g_inst.axis_gmii_rx_inst.eth_crc_8.data_in[4] (68,99) -> (67,98)
+Info:                          Sink $abc$72260$auto$blifparse.cc:397:parse_blif$73614.D0_10
+Info:                          Defined in:
+Info:                               /home/klaudio/app/ksz9031-gatemate/rtl/lfsr_precomputed.v:23.34-23.41
+Info:      logic  0.61  5.16 Source $abc$72260$auto$blifparse.cc:397:parse_blif$73614.OUT
+Info:    routing  1.23  6.39 Net $abc$72260$new_n7209 (67,98) -> (68,98)
+Info:                          Sink $abc$72260$auto$blifparse.cc:397:parse_blif$73676.D1_00
+Info:      logic  0.64  7.03 Source $abc$72260$auto$blifparse.cc:397:parse_blif$73676.OUT
+Info:    routing  1.85  8.87 Net $abc$72260$new_n7271 (68,98) -> (69,99)
+Info:                          Sink $abc$72260$auto$blifparse.cc:397:parse_blif$77632.D0_00
+Info:      logic  0.55  9.42 Source $abc$72260$auto$blifparse.cc:397:parse_blif$77632.OUT
+Info:    routing  1.23  10.65 Net $abc$72260$new_n11227 (69,99) -> (68,101)
+Info:                          Sink $abc$72260$auto$blifparse.cc:397:parse_blif$77633.D0_00
+Info:      logic  0.61  11.26 Source $abc$72260$auto$blifparse.cc:397:parse_blif$77633.OUT
+Info:    routing  0.66  11.92 Net $abc$72260$new_n11228 (68,101) -> (69,101)
+Info:                          Sink $abc$72260$auto$blifparse.cc:397:parse_blif$77634.D0_01
+Info:      logic  0.56  12.48 Source $abc$72260$auto$blifparse.cc:397:parse_blif$77634.OUT
+Info:    routing  2.19  14.66 Net $abc$72260$new_n11229 (69,101) -> (69,101)
+Info:                          Sink $abc$72260$auto$blifparse.cc:397:parse_blif$77642.D0_00
+Info:      logic  0.55  15.21 Source $abc$72260$auto$blifparse.cc:397:parse_blif$77642.OUT
+Info:    routing  1.31  16.52 Net $abc$72260$new_n11237 (69,101) -> (69,100)
+Info:                          Sink $abc$72260$auto$blifparse.cc:397:parse_blif$77643.D0_01
+Info:      logic  0.56  17.08 Source $abc$72260$auto$blifparse.cc:397:parse_blif$77643.OUT
+Info:    routing  0.67  17.75 Net $abc$72260$new_n11238 (69,100) -> (69,100)
+Info:                          Sink $abc$72260$auto$blifparse.cc:397:parse_blif$77644.D1_10
+Info:      logic  0.47  18.23 Source $abc$72260$auto$blifparse.cc:397:parse_blif$77644.OUT
+Info:    routing  0.00  18.23 Net $abc$72260$auto$rtlil.cc:3443:MuxGate$63141 (69,100) -> (69,100)
+Info:                          Sink $auto$ff.cc:337:slice$36406.DIN
+Info:      setup  0.10  18.33 Source $auto$ff.cc:337:slice$36406.DIN
+Info: 5.24 ns logic, 13.09 ns routing
+
+Info: Critical path report for clock 'clk_125' (posedge -> posedge):
+Info:       type curr  total name
+Info:   clk-skew  0.51  0.51 Net clk_125 (79,80) -> (61,93)
+Info:                          Sink $auto$ff.cc:337:slice$33605.CLK_INT
+Info:                          Defined in:
+Info:                               /home/klaudio/app/ksz9031-gatemate/rtl/fpga.v:42.6-42.13
+Info:   clk-to-q  0.59  1.10 Source $auto$ff.cc:337:slice$33828.DOUT
+Info:    routing  3.52  4.62 Net core_inst.cont_reg[7] (79,80) -> (79,79)
+Info:                          Sink $abc$72260$auto$blifparse.cc:397:parse_blif$74455.D0_10
+Info:                          Defined in:
+Info:                               /home/klaudio/app/ksz9031-gatemate/rtl/fpga_core.v:273.12-273.20
+Info:      logic  0.55  5.17 Source $abc$72260$auto$blifparse.cc:397:parse_blif$74455.OUT
+Info:    routing  1.60  6.78 Net $abc$72260$new_n8050 (79,79) -> (75,79)
+Info:                          Sink $abc$72260$auto$blifparse.cc:397:parse_blif$74499.D0_00
+Info:      logic  0.61  7.38 Source $abc$72260$auto$blifparse.cc:397:parse_blif$74499.OUT
+Info:    routing  1.62  9.00 Net $abc$72260$new_n8094 (75,79) -> (75,83)
+Info:                          Sink $abc$72260$auto$blifparse.cc:397:parse_blif$74500.D0_01
+Info:      logic  0.47  9.47 Source $abc$72260$auto$blifparse.cc:397:parse_blif$74500.OUT
+Info:    routing  1.16  10.64 Net $abc$72260$new_n8095 (75,83) -> (72,82)
+Info:                          Sink $abc$72260$auto$blifparse.cc:397:parse_blif$74504.D0_00
+Info:      logic  0.55  11.18 Source $abc$72260$auto$blifparse.cc:397:parse_blif$74504.OUT
+Info:    routing  1.54  12.73 Net $abc$72260$new_n8099 (72,82) -> (72,82)
+Info:                          Sink $abc$72260$auto$blifparse.cc:397:parse_blif$74506.D0_01
+Info:      logic  0.56  13.28 Source $abc$72260$auto$blifparse.cc:397:parse_blif$74506.OUT
+Info:    routing  1.47  14.76 Net $abc$72260$new_n8101 (72,82) -> (71,82)
+Info:                          Sink $abc$72260$auto$blifparse.cc:397:parse_blif$74507.D1_10
+Info:      logic  0.47  15.23 Source $abc$72260$auto$blifparse.cc:397:parse_blif$74507.OUT
+Info:    routing  1.58  16.82 Net $abc$72260$new_n8102 (71,82) -> (69,82)
+Info:                          Sink $abc$72260$auto$blifparse.cc:397:parse_blif$74509.D1_10
+Info:      logic  0.47  17.29 Source $abc$72260$auto$blifparse.cc:397:parse_blif$74509.OUT
+Info:    routing  1.44  18.73 Net $abc$72260$new_n8104 (69,82) -> (66,87)
+Info:                          Sink $abc$72260$auto$blifparse.cc:397:parse_blif$74512.D0_00
+Info:      logic  0.55  19.28 Source $abc$72260$auto$blifparse.cc:397:parse_blif$74512.OUT
+Info:    routing  4.01  23.29 Net $abc$72260$new_n8107 (66,87) -> (61,93)
+Info:                          Sink $abc$72260$auto$blifparse.cc:397:parse_blif$75208.D0_01
+Info:      logic  0.47  23.76 Source $abc$72260$auto$blifparse.cc:397:parse_blif$75208.OUT
+Info:    routing  0.00  23.76 Net $abc$72260$auto$rtlil.cc:3443:MuxGate$62329 (61,93) -> (61,93)
+Info:                          Sink $auto$ff.cc:337:slice$33605.DIN
+Info:      setup  0.10  23.86 Source $auto$ff.cc:337:slice$33605.DIN
+Info: 5.40 ns logic, 18.46 ns routing
+
+Info: Critical path report for cross-domain path '<async>' -> 'posedge clk_125':
+Info:       type curr  total name
+Info:     source  0.00  0.00 Source $iopadmap$fpga.btn_2.Y
+Info:    routing  0.00  0.00 Net $iopadmap$fpga.btn_2$conn$Y (73,133) -> (73,133)
+Info:                          Sink $iopadmap$fpga.btn_2$iosel.GPIO_IN
+Info:      logic  0.38  0.38 Source $iopadmap$fpga.btn_2$iosel.IN1
+Info:    routing  4.73  5.11 Net $abc$72260$iopadmap$btn[2] (73,133) -> (58,111)
+Info:                          Sink $abc$72260$auto$blifparse.cc:397:parse_blif$76609.D0_00
+Info:      logic  0.55  5.66 Source $abc$72260$auto$blifparse.cc:397:parse_blif$76609.OUT
+Info:    routing  0.00  5.66 Net $abc$72260$auto$rtlil.cc:3443:MuxGate$63497 (58,111) -> (58,111)
+Info:                          Sink $auto$ff.cc:337:slice$37687.DIN
+Info:      setup  0.10  5.76 Source $auto$ff.cc:337:slice$37687.DIN
+Info: 1.03 ns logic, 4.73 ns routing
+
+Info: Critical path report for cross-domain path '<async>' -> 'posedge core_inst.eth_mac_inst.eth_mac_1g_inst.axis_gmii_rx_inst.clk':
+Info:       type curr  total name
+Info:     source  0.00  0.00 Source rgmii_if_inst.rx_ctl_ibuf.Y
+Info:    routing  0.00  0.00 Net rgmii_if_inst.rx_ctl_ibuf$conn$Y (135,133) -> (135,133)
+Info:                          Sink rgmii_if_inst.rx_ctl_ibuf$iosel.GPIO_IN
+Info:      logic  0.38  0.38 Source rgmii_if_inst.rx_ctl_ibuf$iosel.IN1
+Info:    routing  7.45  7.83 Net rgmii_if_inst.rx_ctl_rise (135,133) -> (77,104)
+Info:                          Sink $abc$72260$auto$blifparse.cc:397:parse_blif$78110.D1_10
+Info:                          Defined in:
+Info:                               /home/klaudio/app/ksz9031-gatemate/rtl/gatemate_rgmii_if.v:170.6-170.17
+Info:      logic  0.47  8.31 Source $abc$72260$auto$blifparse.cc:397:parse_blif$78110.OUT
+Info:    routing  0.00  8.31 Net $abc$72260$auto$rtlil.cc:3443:MuxGate$63447 (77,104) -> (77,104)
+Info:                          Sink $auto$ff.cc:337:slice$37577.DIN
+Info:      setup  0.10  8.40 Source $auto$ff.cc:337:slice$37577.DIN
+Info: 0.95 ns logic, 7.45 ns routing
+
+Info: Critical path report for cross-domain path 'posedge clk_125' -> 'posedge core_inst.eth_mac_inst.eth_mac_1g_inst.axis_gmii_rx_inst.clk':
+Info:       type curr  total name
+Info:   clk-to-q  0.59  0.59 Source $auto$ff.cc:337:slice$37683.DOUT
+Info:    routing  7.55  8.15 Net core_inst.eth_axis_rx_inst.rst (75,75) -> (73,105)
+Info:                          Sink $abc$72260$auto$blifparse.cc:397:parse_blif$77450.D0_01
+Info:                          Defined in:
+Info:                               /home/klaudio/app/ksz9031-gatemate/lib/eth/rtl/eth_axis_rx.v:46.34-46.37
+Info:      logic  0.56  8.70 Source $abc$72260$auto$blifparse.cc:397:parse_blif$77450.OUT
+Info:    routing  1.35  10.05 Net $abc$72260$new_n11045 (73,105) -> (72,105)
+Info:                          Sink $abc$72260$auto$blifparse.cc:397:parse_blif$77452.D0_00
+Info:      logic  0.55  10.60 Source $abc$72260$auto$blifparse.cc:397:parse_blif$77452.OUT
+Info:    routing  1.59  12.19 Net $abc$72260$new_n11047 (72,105) -> (72,106)
+Info:                          Sink $abc$72260$auto$blifparse.cc:397:parse_blif$77455.D0_10
+Info:      logic  0.55  12.73 Source $abc$72260$auto$blifparse.cc:397:parse_blif$77455.OUT
+Info:    routing  0.00  12.73 Net $abc$72260$auto$rtlil.cc:3443:MuxGate$62861 (72,106) -> (72,106)
+Info:                          Sink $auto$ff.cc:337:slice$33418.DIN
+Info:      setup  0.10  12.83 Source $auto$ff.cc:337:slice$33418.DIN
+Info: 2.35 ns logic, 10.48 ns routing
+
+Info: Critical path report for cross-domain path 'posedge core_inst.eth_mac_inst.eth_mac_1g_inst.axis_gmii_rx_inst.clk' -> 'posedge clk_125':
+Info:       type curr  total name
+Info:   clk-to-q  0.59  0.59 Source $auto$ff.cc:337:slice$33498.DOUT
+Info:    routing  2.39  2.98 Net core_inst.eth_mac_inst.rx_fifo.wr_ptr[2] (74,108) -> (75,107)
+Info:                          Sink $abc$72260$auto$blifparse.cc:397:parse_blif$77095.D1_00
+Info:                          Defined in:
+Info:                               /home/klaudio/app/ksz9031-gatemate/rtl/gm_async_fifo.v:45.16-45.22
+Info:      logic  0.57  3.56 Source $abc$72260$auto$blifparse.cc:397:parse_blif$77095.OUT
+Info:    routing  0.00  3.56 Net $abc$72260$auto$rtlil.cc:3443:MuxGate$62531 (75,107) -> (75,107)
+Info:                          Sink $auto$ff.cc:337:slice$33399.DIN
+Info:      setup  0.10  3.66 Source $auto$ff.cc:337:slice$33399.DIN
+Info: 1.27 ns logic, 2.39 ns routing
+
+Warning: Max frequency for clock 'core_inst.eth_mac_inst.eth_mac_1g_inst.axis_gmii_rx_inst.clk': 54.57 MHz (FAIL at 125.00 MHz)
+Warning: Max frequency for clock                                                      'clk_125': 41.91 MHz (FAIL at 125.00 MHz)
+
+Info: Max delay <async>                                                              -> posedge clk_125                                                     : 5.76 ns
+Info: Max delay <async>                                                              -> posedge core_inst.eth_mac_inst.eth_mac_1g_inst.axis_gmii_rx_inst.clk: 8.40 ns
+Info: Max delay posedge clk_125                                                      -> posedge core_inst.eth_mac_inst.eth_mac_1g_inst.axis_gmii_rx_inst.clk: 12.83 ns
+Info: Max delay posedge core_inst.eth_mac_inst.eth_mac_1g_inst.axis_gmii_rx_inst.clk -> posedge clk_125                                                     : 3.66 ns
+
+Info: Slack histogram:
+Info:  legend: * represents 9 endpoint(s)
+Info:          + represents [1,9) endpoint(s)
+Info: [-15862, -14747) |+
+Info: [-14747, -13632) |*+
+Info: [-13632, -12517) |***+
+Info: [-12517, -11402) |*****+
+Info: [-11402, -10287) |*********+
+Info: [-10287,  -9172) |*********+
+Info: [ -9172,  -8057) |**************+
+Info: [ -8057,  -6942) |*****************+
+Info: [ -6942,  -5827) |************************+
+Info: [ -5827,  -4712) |******************************+
+Info: [ -4712,  -3597) |**************************************+
+Info: [ -3597,  -2482) |*****************************************+
+Info: [ -2482,  -1367) |********************************************+
+Info: [ -1367,   -252) |***************************************************+
+Info: [  -252,    863) |*********************************************************+
+Info: [   863,   1978) |***********************************************+
+Info: [  1978,   3093) |**************************************+
+Info: [  3093,   4208) |******************************************+
+Info: [  4208,   5323) |************************************************************ 
+Info: [  5323,   6438) |***************************************+
+Info: Update configuration based on routing..
+9 warnings, 0 errors
+
+Info: Program finished normally.

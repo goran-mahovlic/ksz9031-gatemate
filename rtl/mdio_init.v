@@ -52,7 +52,8 @@ module mdio_init #(
     output reg         init_error,
     output reg  [15:0] phy_id,       // read PHY ID2 for debug
     output reg  [4:0]  phy_addr_found,
-    output reg  [4:0]  state_dbg     // exposed for LED debug
+    output reg  [4:0]  state_dbg,    // exposed for LED debug
+    output wire [4:0]  scan_addr_dbg // current scan address (0..31)
 );
 
 // ----------------------------------------------------------------
@@ -135,6 +136,8 @@ reg [22:0] wait_cnt;
 reg [4:0]  scan_addr;  // 0..31
 reg [2:0]  scan_retry; // retries per address (0..2)
 
+assign scan_addr_dbg = scan_addr;
+
 always @(posedge clk) begin
     if (rst) begin
         state          <= S_IDLE;
@@ -187,7 +190,7 @@ always @(posedge clk) begin
                 if (!mdio_busy) begin
                     mdio_rw    <= 1'b1;
                     mdio_phy   <= scan_addr;
-                    mdio_reg   <= 5'd3;   // PHY Identifier 2
+                    mdio_reg   <= 5'd2;   // PHY Identifier 1 (KSZ9031: 0x0022)
                     mdio_wdata <= 16'd0;
                     mdio_start <= 1'b1;
                     state      <= S_SCAN_WAIT;
@@ -334,7 +337,6 @@ always @(posedge clk) begin
             end
 
             S_ERROR: begin
-                init_done  <= 1'b1;
                 init_error <= 1'b1;
             end
 

@@ -41,6 +41,6 @@ Net "eth_rx_ctl"  Loc = "IO_EB_A8" | PULLUP=true | SLEW=fast;
 Net "eth_rx_clk"  Loc = "IO_EB_A7" | PULLUP=true | SLEW=fast;
 
 ## EtherNet Control
-Net "eth_rst_n" Loc = "IO_EB_B3";
-Net "eth_mdc"   Loc = "IO_EB_B6";
+Net "eth_rst_n" Loc = "IO_EB_B3" | SLEW=fast;
+Net "eth_mdc"   Loc = "IO_EB_B6" | SLEW=fast;
 Net "eth_mdio"  Loc = "IO_EB_A6" | PULLUP=true | SLEW=fast;

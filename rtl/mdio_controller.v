@@ -89,10 +89,14 @@ assign mdc = mdc_reg;
 //   T=0 → drive, T=1 → hi-Z
 // mdio_en_reg=1 means we WANT to drive → T must be 0 → T = ~mdio_en_reg
 wire mdio_in_raw;
+// MDIO is open-drain: external pull-up keeps bus high when nobody drives.
+// CC_IOBUF PULLUP must be enabled to match the ccf constraint and to keep
+// the line high during turnaround — otherwise reads sample a floating bus
+// and always return 0x0000.
 CC_IOBUF #(
     .PIN_NAME("UNPLACED"),
-    .DRIVE("3"),
-    .PULLUP(1'b0),
+    .DRIVE("12"),              // 12 mA drive for clean edges on PHY side
+    .PULLUP(1'b1),             // enable weak pull-up (matches ccf)
     .PULLDOWN(1'b0),
     .SLEW("FAST")
 ) mdio_iobuf (

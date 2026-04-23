@@ -1,0 +1,1869 @@
+
+ /----------------------------------------------------------------------------\
+ |  yosys -- Yosys Open SYnthesis Suite                                       |
+ |  Copyright (C) 2012 - 2026  Claire Xenia Wolf <claire@yosyshq.com>         |
+ |  Distributed under an ISC-like license, type "license" to see terms        |
+ \----------------------------------------------------------------------------/
+ Yosys 0.63+95 (git sha1 4716f4410, clang++ 18.1.8 -fPIC -O3)
+
+-- Running command `
+    read_verilog /home/klaudio/app/ksz9031-gatemate/rtl/fpga_phase2.v
+    read_verilog /home/klaudio/app/ksz9031-gatemate/rtl/gatemate_25MHz_125MHz_pll.v
+    read_verilog /home/klaudio/app/ksz9031-gatemate/rtl/reset_sync.v
+    read_verilog /home/klaudio/app/ksz9031-gatemate/rtl/uart.v
+    read_verilog /home/klaudio/app/ksz9031-gatemate/rtl/uart_heartbeat.v
+    synth_gatemate -top fpga -luttree -nomx8 -json /home/klaudio/app/ksz9031-gatemate/build_phase2/fpga.json
+' --
+
+1. Executing Verilog-2005 frontend: /home/klaudio/app/ksz9031-gatemate/rtl/fpga_phase2.v
+Parsing Verilog input from `/home/klaudio/app/ksz9031-gatemate/rtl/fpga_phase2.v' to AST representation.
+/home/klaudio/app/ksz9031-gatemate/rtl/fpga_phase2.v:148: Warning: Yosys has only limited support for tri-state logic at the moment.
+Generating RTLIL representation for module `\fpga'.
+Successfully finished Verilog frontend.
+
+2. Executing Verilog-2005 frontend: /home/klaudio/app/ksz9031-gatemate/rtl/gatemate_25MHz_125MHz_pll.v
+Parsing Verilog input from `/home/klaudio/app/ksz9031-gatemate/rtl/gatemate_25MHz_125MHz_pll.v' to AST representation.
+Generating RTLIL representation for module `\divide_5'.
+Generating RTLIL representation for module `\pll'.
+Successfully finished Verilog frontend.
+
+3. Executing Verilog-2005 frontend: /home/klaudio/app/ksz9031-gatemate/rtl/reset_sync.v
+Parsing Verilog input from `/home/klaudio/app/ksz9031-gatemate/rtl/reset_sync.v' to AST representation.
+Generating RTLIL representation for module `\reset_sync'.
+Successfully finished Verilog frontend.
+
+4. Executing Verilog-2005 frontend: /home/klaudio/app/ksz9031-gatemate/rtl/uart.v
+Parsing Verilog input from `/home/klaudio/app/ksz9031-gatemate/rtl/uart.v' to AST representation.
+Generating RTLIL representation for module `\uart'.
+Successfully finished Verilog frontend.
+
+5. Executing Verilog-2005 frontend: /home/klaudio/app/ksz9031-gatemate/rtl/uart_heartbeat.v
+Parsing Verilog input from `/home/klaudio/app/ksz9031-gatemate/rtl/uart_heartbeat.v' to AST representation.
+Generating RTLIL representation for module `\uart_heartbeat'.
+Successfully finished Verilog frontend.
+
+6. Executing SYNTH_GATEMATE pass.
+
+6.1. Executing Verilog-2005 frontend: /home/klaudio/Programs/oss-cad-suite/lib/../share/yosys/gatemate/cells_sim.v
+Parsing Verilog input from `/home/klaudio/Programs/oss-cad-suite/lib/../share/yosys/gatemate/cells_sim.v' to AST representation.
+Generating RTLIL representation for module `\CC_IBUF'.
+Generating RTLIL representation for module `\CC_OBUF'.
+Generating RTLIL representation for module `\CC_TOBUF'.
+Generating RTLIL representation for module `\CC_IOBUF'.
+Generating RTLIL representation for module `\CC_LVDS_IBUF'.
+Generating RTLIL representation for module `\CC_LVDS_OBUF'.
+Generating RTLIL representation for module `\CC_LVDS_TOBUF'.
+Generating RTLIL representation for module `\CC_LVDS_IOBUF'.
+Generating RTLIL representation for module `\CC_IDDR'.
+Generating RTLIL representation for module `\CC_ODDR'.
+Generating RTLIL representation for module `\CC_DFF'.
+Generating RTLIL representation for module `\CC_DLT'.
+Generating RTLIL representation for module `\CC_LUT1'.
+Generating RTLIL representation for module `\CC_LUT2'.
+Generating RTLIL representation for module `\CC_LUT3'.
+Generating RTLIL representation for module `\CC_LUT4'.
+Generating RTLIL representation for module `\CC_MX2'.
+Generating RTLIL representation for module `\CC_MX4'.
+Generating RTLIL representation for module `\CC_MX8'.
+Generating RTLIL representation for module `\CC_ADDF'.
+Generating RTLIL representation for module `\CC_MULT'.
+Generating RTLIL representation for module `\CC_BUFG'.
+Generating RTLIL representation for module `\CC_BRAM_20K'.
+Generating RTLIL representation for module `\CC_BRAM_40K'.
+Generating RTLIL representation for module `\CC_FIFO_40K'.
+Generating RTLIL representation for module `\CC_L2T4'.
+Generating RTLIL representation for module `\CC_L2T5'.
+Successfully finished Verilog frontend.
+
+6.2. Executing Verilog-2005 frontend: /home/klaudio/Programs/oss-cad-suite/lib/../share/yosys/gatemate/cells_bb.v
+Parsing Verilog input from `/home/klaudio/Programs/oss-cad-suite/lib/../share/yosys/gatemate/cells_bb.v' to AST representation.
+Generating RTLIL representation for module `\CC_PLL'.
+Generating RTLIL representation for module `\CC_PLL_ADV'.
+Generating RTLIL representation for module `\CC_SERDES'.
+Generating RTLIL representation for module `\CC_CFG_CTRL'.
+Generating RTLIL representation for module `\CC_USR_RSTN'.
+Successfully finished Verilog frontend.
+
+6.3. Executing HIERARCHY pass (managing design hierarchy).
+
+6.3.1. Analyzing design hierarchy..
+Top module:  \fpga
+Used module:     \uart
+Used module:     \uart_heartbeat
+Used module:     \reset_sync
+Used module:     \pll
+Used module:         \divide_5
+Parameter \CLK_FREQ = 125000000
+Parameter \BAUD_RATE = 115200
+
+6.3.2. Executing AST frontend in derive mode using pre-parsed AST for module `\uart'.
+Parameter \CLK_FREQ = 125000000
+Parameter \BAUD_RATE = 115200
+Generating RTLIL representation for module `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart'.
+Parameter \CLK_FREQ = 125000000
+Parameter \PERIOD_S = 1
+
+6.3.3. Executing AST frontend in derive mode using pre-parsed AST for module `\uart_heartbeat'.
+Parameter \CLK_FREQ = 125000000
+Parameter \PERIOD_S = 1
+Generating RTLIL representation for module `$paramod$8e7de6dae18d02c51fd9ce80380091ca0c6b42c8\uart_heartbeat'.
+
+6.3.4. Analyzing design hierarchy..
+Top module:  \fpga
+Used module:     $paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart
+Used module:     $paramod$8e7de6dae18d02c51fd9ce80380091ca0c6b42c8\uart_heartbeat
+Used module:     \reset_sync
+Used module:     \pll
+Used module:         \divide_5
+
+6.3.5. Analyzing design hierarchy..
+Top module:  \fpga
+Used module:     $paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart
+Used module:     $paramod$8e7de6dae18d02c51fd9ce80380091ca0c6b42c8\uart_heartbeat
+Used module:     \reset_sync
+Used module:     \pll
+Used module:         \divide_5
+Removing unused module `\uart_heartbeat'.
+Removing unused module `\uart'.
+Removed 2 unused modules.
+
+6.4. Executing PROC pass (convert processes to netlists).
+
+6.4.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).
+Cleaned up 0 empty switches.
+
+6.4.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).
+Marked 3 switch rules as full_case in process $proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart_heartbeat.v:73$183 in module $paramod$8e7de6dae18d02c51fd9ce80380091ca0c6b42c8\uart_heartbeat.
+Marked 2 switch rules as full_case in process $proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart_heartbeat.v:40$180 in module $paramod$8e7de6dae18d02c51fd9ce80380091ca0c6b42c8\uart_heartbeat.
+Marked 8 switch rules as full_case in process $proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:134$135 in module $paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.
+Marked 6 switch rules as full_case in process $proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:49$123 in module $paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.
+Marked 1 switch rules as full_case in process $proc$/home/klaudio/app/ksz9031-gatemate/rtl/reset_sync.v:31$30 in module reset_sync.
+Marked 2 switch rules as full_case in process $proc$/home/klaudio/app/ksz9031-gatemate/rtl/fpga_phase2.v:121$3 in module fpga.
+Marked 1 switch rules as full_case in process $proc$/home/klaudio/app/ksz9031-gatemate/rtl/fpga_phase2.v:112$1 in module fpga.
+Removed a total of 0 dead cases.
+
+6.4.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).
+Removed 6 redundant assignments.
+Promoted 37 assignments to connections.
+
+6.4.4. Executing PROC_INIT pass (extract init attributes).
+Found init rule in `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:122$176'.
+  Set init value: \rx_sync_1 = 1'1
+Found init rule in `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:122$175'.
+  Set init value: \rx_sync_0 = 1'1
+Found init rule in `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:119$174'.
+  Set init value: \rx_err = 1'0
+Found init rule in `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:118$173'.
+  Set init value: \rx_active = 1'0
+Found init rule in `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:117$172'.
+  Set init value: \rx_data_reg = 8'00000000
+Found init rule in `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:116$171'.
+  Set init value: \rx_shift = 8'00000000
+Found init rule in `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:115$170'.
+  Set init value: \rx_bit_idx = 3'000
+Found init rule in `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:114$169'.
+  Set init value: \rx_clk_cnt = 16'0000000000000000
+Found init rule in `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:113$168'.
+  Set init value: \rx_state = 3'000
+Found init rule in `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:42$167'.
+  Set init value: \tx_active = 1'0
+Found init rule in `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:41$166'.
+  Set init value: \tx_out = 1'1
+Found init rule in `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:40$165'.
+  Set init value: \tx_shift = 8'00000000
+Found init rule in `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:39$164'.
+  Set init value: \tx_bit_idx = 3'000
+Found init rule in `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:38$163'.
+  Set init value: \tx_clk_cnt = 16'0000000000000000
+Found init rule in `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:37$162'.
+  Set init value: \tx_state = 3'000
+Found init rule in `\reset_sync.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/reset_sync.v:29$34'.
+  Set init value: \r1 = 1'0
+Found init rule in `\reset_sync.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/reset_sync.v:28$33'.
+  Set init value: \r0 = 1'0
+Found init rule in `\pll.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/gatemate_25MHz_125MHz_pll.v:61$29'.
+  Set init value: \locked_s1 = 1'0
+Found init rule in `\pll.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/gatemate_25MHz_125MHz_pll.v:44$28'.
+  Set init value: \lock_out = 1'0
+Found init rule in `\divide_5.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/gatemate_25MHz_125MHz_pll.v:13$26'.
+  Set init value: \q2temp = 1'0
+Found init rule in `\divide_5.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/gatemate_25MHz_125MHz_pll.v:13$25'.
+  Set init value: \q0 = 1'0
+Found init rule in `\divide_5.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/gatemate_25MHz_125MHz_pll.v:13$24'.
+  Set init value: \q1 = 1'0
+Found init rule in `\divide_5.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/gatemate_25MHz_125MHz_pll.v:13$23'.
+  Set init value: \q2 = 1'0
+
+6.4.5. Executing PROC_ARST pass (detect async resets in processes).
+Found async reset \async_rst_n in `\reset_sync.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/reset_sync.v:31$30'.
+
+6.4.6. Executing PROC_ROM pass (convert switches to ROMs).
+Converted 0 switches.
+<suppressed ~29 debug messages>
+
+6.4.7. Executing PROC_MUX pass (convert decision trees to multiplexers).
+Creating decoders for process `$paramod$8e7de6dae18d02c51fd9ce80380091ca0c6b42c8\uart_heartbeat.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart_heartbeat.v:67$192'.
+Creating decoders for process `$paramod$8e7de6dae18d02c51fd9ce80380091ca0c6b42c8\uart_heartbeat.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart_heartbeat.v:73$183'.
+     1/4: $0\tx_ena[0:0]
+     2/4: $0\char_idx[1:0]
+     3/4: $0\state[2:0]
+     4/4: $0\tx_data[7:0]
+Creating decoders for process `$paramod$8e7de6dae18d02c51fd9ce80380091ca0c6b42c8\uart_heartbeat.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart_heartbeat.v:40$180'.
+     1/2: $0\tick[0:0]
+     2/2: $0\tick_cnt[26:0]
+Creating decoders for process `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:122$176'.
+Creating decoders for process `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:122$175'.
+Creating decoders for process `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:119$174'.
+Creating decoders for process `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:118$173'.
+Creating decoders for process `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:117$172'.
+Creating decoders for process `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:116$171'.
+Creating decoders for process `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:115$170'.
+Creating decoders for process `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:114$169'.
+Creating decoders for process `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:113$168'.
+Creating decoders for process `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:42$167'.
+Creating decoders for process `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:41$166'.
+Creating decoders for process `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:40$165'.
+Creating decoders for process `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:39$164'.
+Creating decoders for process `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:38$163'.
+Creating decoders for process `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:37$162'.
+Creating decoders for process `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:134$135'.
+     1/12: $3$lookahead\rx_shift$134[7:0]$148
+     2/12: $3$bitselwrite$pos$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:172$122[2:0]$147
+     3/12: $2$lookahead\rx_shift$134[7:0]$141
+     4/12: $2$bitselwrite$pos$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:172$122[2:0]$140
+     5/12: $1$lookahead\rx_shift$134[7:0]$139
+     6/12: $1$bitselwrite$pos$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:172$122[2:0]$138
+     7/12: $0\rx_err[0:0]
+     8/12: $0\rx_active[0:0]
+     9/12: $0\rx_data_reg[7:0]
+    10/12: $0\rx_bit_idx[2:0]
+    11/12: $0\rx_clk_cnt[15:0]
+    12/12: $0\rx_state[2:0]
+Creating decoders for process `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:123$133'.
+Creating decoders for process `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:49$123'.
+     1/6: $0\tx_active[0:0]
+     2/6: $0\tx_out[0:0]
+     3/6: $0\tx_shift[7:0]
+     4/6: $0\tx_bit_idx[2:0]
+     5/6: $0\tx_clk_cnt[15:0]
+     6/6: $0\tx_state[2:0]
+Creating decoders for process `\reset_sync.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/reset_sync.v:29$34'.
+Creating decoders for process `\reset_sync.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/reset_sync.v:28$33'.
+Creating decoders for process `\reset_sync.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/reset_sync.v:31$30'.
+     1/2: $0\r1[0:0]
+     2/2: $0\r0[0:0]
+Creating decoders for process `\pll.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/gatemate_25MHz_125MHz_pll.v:61$29'.
+Creating decoders for process `\pll.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/gatemate_25MHz_125MHz_pll.v:44$28'.
+Creating decoders for process `\pll.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/gatemate_25MHz_125MHz_pll.v:62$27'.
+Creating decoders for process `\divide_5.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/gatemate_25MHz_125MHz_pll.v:13$26'.
+Creating decoders for process `\divide_5.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/gatemate_25MHz_125MHz_pll.v:13$25'.
+Creating decoders for process `\divide_5.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/gatemate_25MHz_125MHz_pll.v:13$24'.
+Creating decoders for process `\divide_5.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/gatemate_25MHz_125MHz_pll.v:13$23'.
+Creating decoders for process `\divide_5.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/gatemate_25MHz_125MHz_pll.v:29$21'.
+Creating decoders for process `\divide_5.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/gatemate_25MHz_125MHz_pll.v:23$20'.
+Creating decoders for process `\fpga.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/fpga_phase2.v:121$3'.
+     1/1: $0\hb_led_cnt[23:0]
+Creating decoders for process `\fpga.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/fpga_phase2.v:112$1'.
+     1/1: $0\blink_cnt[24:0]
+
+6.4.8. Executing PROC_DLATCH pass (convert process syncs to latches).
+No latch inferred for signal `$paramod$8e7de6dae18d02c51fd9ce80380091ca0c6b42c8\uart_heartbeat.$memwr$\char_rom$/home/klaudio/app/ksz9031-gatemate/rtl/uart_heartbeat.v:68$177_EN' from process `$paramod$8e7de6dae18d02c51fd9ce80380091ca0c6b42c8\uart_heartbeat.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart_heartbeat.v:67$192'.
+No latch inferred for signal `$paramod$8e7de6dae18d02c51fd9ce80380091ca0c6b42c8\uart_heartbeat.$memwr$\char_rom$/home/klaudio/app/ksz9031-gatemate/rtl/uart_heartbeat.v:69$178_EN' from process `$paramod$8e7de6dae18d02c51fd9ce80380091ca0c6b42c8\uart_heartbeat.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart_heartbeat.v:67$192'.
+No latch inferred for signal `$paramod$8e7de6dae18d02c51fd9ce80380091ca0c6b42c8\uart_heartbeat.$memwr$\char_rom$/home/klaudio/app/ksz9031-gatemate/rtl/uart_heartbeat.v:70$179_EN' from process `$paramod$8e7de6dae18d02c51fd9ce80380091ca0c6b42c8\uart_heartbeat.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart_heartbeat.v:67$192'.
+
+6.4.9. Executing PROC_DFF pass (convert process syncs to FFs).
+Creating register for signal `$paramod$8e7de6dae18d02c51fd9ce80380091ca0c6b42c8\uart_heartbeat.\tx_data' using process `$paramod$8e7de6dae18d02c51fd9ce80380091ca0c6b42c8\uart_heartbeat.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart_heartbeat.v:73$183'.
+  created $dff cell `$procdff$504' with positive edge clock.
+Creating register for signal `$paramod$8e7de6dae18d02c51fd9ce80380091ca0c6b42c8\uart_heartbeat.\tx_ena' using process `$paramod$8e7de6dae18d02c51fd9ce80380091ca0c6b42c8\uart_heartbeat.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart_heartbeat.v:73$183'.
+  created $dff cell `$procdff$505' with positive edge clock.
+Creating register for signal `$paramod$8e7de6dae18d02c51fd9ce80380091ca0c6b42c8\uart_heartbeat.\state' using process `$paramod$8e7de6dae18d02c51fd9ce80380091ca0c6b42c8\uart_heartbeat.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart_heartbeat.v:73$183'.
+  created $dff cell `$procdff$506' with positive edge clock.
+Creating register for signal `$paramod$8e7de6dae18d02c51fd9ce80380091ca0c6b42c8\uart_heartbeat.\char_idx' using process `$paramod$8e7de6dae18d02c51fd9ce80380091ca0c6b42c8\uart_heartbeat.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart_heartbeat.v:73$183'.
+  created $dff cell `$procdff$507' with positive edge clock.
+Creating register for signal `$paramod$8e7de6dae18d02c51fd9ce80380091ca0c6b42c8\uart_heartbeat.\tick_cnt' using process `$paramod$8e7de6dae18d02c51fd9ce80380091ca0c6b42c8\uart_heartbeat.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart_heartbeat.v:40$180'.
+  created $dff cell `$procdff$508' with positive edge clock.
+Creating register for signal `$paramod$8e7de6dae18d02c51fd9ce80380091ca0c6b42c8\uart_heartbeat.\tick' using process `$paramod$8e7de6dae18d02c51fd9ce80380091ca0c6b42c8\uart_heartbeat.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart_heartbeat.v:40$180'.
+  created $dff cell `$procdff$509' with positive edge clock.
+Creating register for signal `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.\rx_state' using process `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:134$135'.
+  created $dff cell `$procdff$510' with positive edge clock.
+Creating register for signal `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.\rx_clk_cnt' using process `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:134$135'.
+  created $dff cell `$procdff$511' with positive edge clock.
+Creating register for signal `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.\rx_bit_idx' using process `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:134$135'.
+  created $dff cell `$procdff$512' with positive edge clock.
+Creating register for signal `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.\rx_shift' using process `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:134$135'.
+  created $dff cell `$procdff$513' with positive edge clock.
+Creating register for signal `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.\rx_data_reg' using process `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:134$135'.
+  created $dff cell `$procdff$514' with positive edge clock.
+Creating register for signal `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.\rx_active' using process `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:134$135'.
+  created $dff cell `$procdff$515' with positive edge clock.
+Creating register for signal `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.\rx_err' using process `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:134$135'.
+  created $dff cell `$procdff$516' with positive edge clock.
+Creating register for signal `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.\rx_sync_0' using process `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:123$133'.
+  created $dff cell `$procdff$517' with positive edge clock.
+Creating register for signal `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.\rx_sync_1' using process `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:123$133'.
+  created $dff cell `$procdff$518' with positive edge clock.
+Creating register for signal `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.\tx_state' using process `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:49$123'.
+  created $dff cell `$procdff$519' with positive edge clock.
+Creating register for signal `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.\tx_clk_cnt' using process `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:49$123'.
+  created $dff cell `$procdff$520' with positive edge clock.
+Creating register for signal `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.\tx_bit_idx' using process `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:49$123'.
+  created $dff cell `$procdff$521' with positive edge clock.
+Creating register for signal `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.\tx_shift' using process `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:49$123'.
+  created $dff cell `$procdff$522' with positive edge clock.
+Creating register for signal `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.\tx_out' using process `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:49$123'.
+  created $dff cell `$procdff$523' with positive edge clock.
+Creating register for signal `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.\tx_active' using process `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:49$123'.
+  created $dff cell `$procdff$524' with positive edge clock.
+Creating register for signal `\reset_sync.\r0' using process `\reset_sync.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/reset_sync.v:31$30'.
+  created $adff cell `$procdff$529' with positive edge clock and positive level reset.
+Creating register for signal `\reset_sync.\r1' using process `\reset_sync.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/reset_sync.v:31$30'.
+  created $adff cell `$procdff$534' with positive edge clock and positive level reset.
+Creating register for signal `\pll.\lock_out' using process `\pll.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/gatemate_25MHz_125MHz_pll.v:62$27'.
+  created $dff cell `$procdff$535' with positive edge clock.
+Creating register for signal `\pll.\locked_s1' using process `\pll.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/gatemate_25MHz_125MHz_pll.v:62$27'.
+  created $dff cell `$procdff$536' with positive edge clock.
+Creating register for signal `\divide_5.\q2temp' using process `\divide_5.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/gatemate_25MHz_125MHz_pll.v:29$21'.
+  created $dff cell `$procdff$537' with negative edge clock.
+Creating register for signal `\divide_5.\q2' using process `\divide_5.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/gatemate_25MHz_125MHz_pll.v:23$20'.
+  created $dff cell `$procdff$538' with positive edge clock.
+Creating register for signal `\divide_5.\q1' using process `\divide_5.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/gatemate_25MHz_125MHz_pll.v:23$20'.
+  created $dff cell `$procdff$539' with positive edge clock.
+Creating register for signal `\divide_5.\q0' using process `\divide_5.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/gatemate_25MHz_125MHz_pll.v:23$20'.
+  created $dff cell `$procdff$540' with positive edge clock.
+Creating register for signal `\fpga.\hb_led_cnt' using process `\fpga.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/fpga_phase2.v:121$3'.
+  created $dff cell `$procdff$541' with positive edge clock.
+Creating register for signal `\fpga.\blink_cnt' using process `\fpga.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/fpga_phase2.v:112$1'.
+  created $dff cell `$procdff$542' with positive edge clock.
+
+6.4.10. Executing PROC_MEMWR pass (convert process memory writes to cells).
+
+6.4.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).
+Removing empty process `$paramod$8e7de6dae18d02c51fd9ce80380091ca0c6b42c8\uart_heartbeat.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart_heartbeat.v:67$192'.
+Found and cleaned up 7 empty switches in `$paramod$8e7de6dae18d02c51fd9ce80380091ca0c6b42c8\uart_heartbeat.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart_heartbeat.v:73$183'.
+Removing empty process `$paramod$8e7de6dae18d02c51fd9ce80380091ca0c6b42c8\uart_heartbeat.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart_heartbeat.v:73$183'.
+Found and cleaned up 2 empty switches in `$paramod$8e7de6dae18d02c51fd9ce80380091ca0c6b42c8\uart_heartbeat.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart_heartbeat.v:40$180'.
+Removing empty process `$paramod$8e7de6dae18d02c51fd9ce80380091ca0c6b42c8\uart_heartbeat.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart_heartbeat.v:40$180'.
+Removing empty process `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:122$176'.
+Removing empty process `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:122$175'.
+Removing empty process `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:119$174'.
+Removing empty process `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:118$173'.
+Removing empty process `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:117$172'.
+Removing empty process `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:116$171'.
+Removing empty process `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:115$170'.
+Removing empty process `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:114$169'.
+Removing empty process `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:113$168'.
+Removing empty process `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:42$167'.
+Removing empty process `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:41$166'.
+Removing empty process `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:40$165'.
+Removing empty process `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:39$164'.
+Removing empty process `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:38$163'.
+Removing empty process `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:37$162'.
+Found and cleaned up 9 empty switches in `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:134$135'.
+Removing empty process `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:134$135'.
+Removing empty process `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:123$133'.
+Found and cleaned up 7 empty switches in `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:49$123'.
+Removing empty process `$paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:49$123'.
+Removing empty process `reset_sync.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/reset_sync.v:29$34'.
+Removing empty process `reset_sync.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/reset_sync.v:28$33'.
+Removing empty process `reset_sync.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/reset_sync.v:31$30'.
+Removing empty process `pll.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/gatemate_25MHz_125MHz_pll.v:61$29'.
+Removing empty process `pll.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/gatemate_25MHz_125MHz_pll.v:44$28'.
+Removing empty process `pll.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/gatemate_25MHz_125MHz_pll.v:62$27'.
+Removing empty process `divide_5.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/gatemate_25MHz_125MHz_pll.v:13$26'.
+Removing empty process `divide_5.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/gatemate_25MHz_125MHz_pll.v:13$25'.
+Removing empty process `divide_5.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/gatemate_25MHz_125MHz_pll.v:13$24'.
+Removing empty process `divide_5.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/gatemate_25MHz_125MHz_pll.v:13$23'.
+Removing empty process `divide_5.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/gatemate_25MHz_125MHz_pll.v:29$21'.
+Removing empty process `divide_5.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/gatemate_25MHz_125MHz_pll.v:23$20'.
+Found and cleaned up 3 empty switches in `\fpga.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/fpga_phase2.v:121$3'.
+Removing empty process `fpga.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/fpga_phase2.v:121$3'.
+Found and cleaned up 1 empty switch in `\fpga.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/fpga_phase2.v:112$1'.
+Removing empty process `fpga.$proc$/home/klaudio/app/ksz9031-gatemate/rtl/fpga_phase2.v:112$1'.
+Cleaned up 29 empty switches.
+
+6.4.12. Executing OPT_EXPR pass (perform const folding).
+Optimizing module $paramod$8e7de6dae18d02c51fd9ce80380091ca0c6b42c8\uart_heartbeat.
+<suppressed ~7 debug messages>
+Optimizing module $paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.
+<suppressed ~18 debug messages>
+Optimizing module reset_sync.
+<suppressed ~4 debug messages>
+Optimizing module pll.
+Optimizing module divide_5.
+Optimizing module fpga.
+<suppressed ~3 debug messages>
+
+6.5. Executing FLATTEN pass (flatten design).
+Deleting now unused module $paramod$8e7de6dae18d02c51fd9ce80380091ca0c6b42c8\uart_heartbeat.
+Deleting now unused module $paramod$901be6c6628873babcd5b47477b377a311fa73c7\uart.
+Deleting now unused module reset_sync.
+Deleting now unused module pll.
+Deleting now unused module divide_5.
+<suppressed ~5 debug messages>
+
+6.6. Executing TRIBUF pass.
+
+6.7. Executing DEMINOUT pass (demote inout ports to input or output).
+
+6.8. Executing OPT_EXPR pass (perform const folding).
+Optimizing module fpga.
+<suppressed ~30 debug messages>
+
+6.9. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \fpga..
+Removed 108 unused cells and 276 unused wires.
+<suppressed ~138 debug messages>
+
+6.10. Executing CHECK pass (checking for obvious problems).
+Checking module fpga...
+Found and reported 0 problems.
+
+6.11. Executing OPT pass (performing simple optimizations).
+
+6.11.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module fpga.
+
+6.11.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\fpga'.
+Computing hashes of 120 cells of `\fpga'.
+Finding duplicate cells in `\fpga'.
+Computing hashes of 98 cells of `\fpga'.
+Finding duplicate cells in `\fpga'.
+<suppressed ~66 debug messages>
+Removed a total of 22 cells.
+
+6.11.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \fpga..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~64 debug messages>
+
+6.11.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \fpga.
+    New ctrl vector for $pmux cell $flatten\uart_inst.$procmux$419: { $flatten\uart_inst.$procmux$465_CMP $flatten\uart_inst.$procmux$461_CMP $auto$opt_reduce.cc:137:opt_pmux$549 }
+  Optimizing cells in module \fpga.
+Performed a total of 1 changes.
+
+6.11.5. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\fpga'.
+Computing hashes of 99 cells of `\fpga'.
+Finding duplicate cells in `\fpga'.
+Computing hashes of 97 cells of `\fpga'.
+Finding duplicate cells in `\fpga'.
+<suppressed ~6 debug messages>
+Removed a total of 2 cells.
+
+6.11.6. Executing OPT_DFF pass (perform DFF optimizations).
+
+6.11.7. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \fpga..
+Removed 0 unused cells and 24 unused wires.
+<suppressed ~1 debug messages>
+
+6.11.8. Executing OPT_EXPR pass (perform const folding).
+Optimizing module fpga.
+
+6.11.9. Rerunning OPT passes. (Maybe there is more to do..)
+
+6.11.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \fpga..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~64 debug messages>
+
+6.11.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \fpga.
+    New ctrl vector for $pmux cell $flatten\uart_inst.$procmux$456: { $flatten\uart_inst.$procmux$414_CMP $auto$opt_reduce.cc:137:opt_pmux$551 }
+  Optimizing cells in module \fpga.
+Performed a total of 1 changes.
+
+6.11.12. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\fpga'.
+Computing hashes of 98 cells of `\fpga'.
+Finding duplicate cells in `\fpga'.
+Removed a total of 0 cells.
+
+6.11.13. Executing OPT_DFF pass (perform DFF optimizations).
+
+6.11.14. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \fpga..
+
+6.11.15. Executing OPT_EXPR pass (perform const folding).
+Optimizing module fpga.
+
+6.11.16. Rerunning OPT passes. (Maybe there is more to do..)
+
+6.11.17. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \fpga..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~62 debug messages>
+
+6.11.18. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \fpga.
+Performed a total of 0 changes.
+
+6.11.19. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\fpga'.
+Computing hashes of 98 cells of `\fpga'.
+Finding duplicate cells in `\fpga'.
+Removed a total of 0 cells.
+
+6.11.20. Executing OPT_DFF pass (perform DFF optimizations).
+
+6.11.21. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \fpga..
+
+6.11.22. Executing OPT_EXPR pass (perform const folding).
+Optimizing module fpga.
+
+6.11.23. Finished fast OPT passes. (There is nothing left to do.)
+
+6.12. Executing FSM pass (extract and optimize FSM).
+
+6.12.1. Executing FSM_DETECT pass (finding FSMs in design).
+Found FSM state register fpga.hb_inst.state.
+Not marking fpga.uart_inst.tx_state as FSM state register:
+    Register has an initialization value.
+
+6.12.2. Executing FSM_EXTRACT pass (extracting FSM from design).
+Extracting FSM `\hb_inst.state' from module `\fpga'.
+  found $dff cell for state register: $flatten\hb_inst.$procdff$506
+  root of input selection tree: $flatten\hb_inst.$0\state[2:0]
+  found reset state: 3'000 (guessed from mux tree)
+  found ctrl input: \rst_sync_inst.r1
+  found state code: 3'000
+  found ctrl input: $flatten\hb_inst.$procmux$215_CMP
+  found ctrl input: $flatten\hb_inst.$procmux$231_CMP
+  found ctrl input: $flatten\hb_inst.$procmux$203_CMP
+  found ctrl input: $flatten\hb_inst.$procmux$216_CMP
+  found ctrl input: \uart_inst.tx_active
+  found ctrl input: $flatten\hb_inst.$eq$/home/klaudio/app/ksz9031-gatemate/rtl/uart_heartbeat.v:108$187_Y
+  found state code: 3'001
+  found state code: 3'100
+  found state code: 3'011
+  found state code: 3'010
+  found ctrl input: \hb_inst.tick
+  found ctrl output: $flatten\hb_inst.$procmux$231_CMP
+  found ctrl output: $flatten\hb_inst.$procmux$216_CMP
+  found ctrl output: $flatten\hb_inst.$procmux$215_CMP
+  found ctrl output: $flatten\hb_inst.$procmux$203_CMP
+  ctrl inputs: { \uart_inst.tx_active \hb_inst.tick $flatten\hb_inst.$eq$/home/klaudio/app/ksz9031-gatemate/rtl/uart_heartbeat.v:108$187_Y \rst_sync_inst.r1 }
+  ctrl outputs: { $flatten\hb_inst.$0\state[2:0] $flatten\hb_inst.$procmux$203_CMP $flatten\hb_inst.$procmux$215_CMP $flatten\hb_inst.$procmux$216_CMP $flatten\hb_inst.$procmux$231_CMP }
+  transition:      3'000 4'---0 ->      3'000 7'0000010
+  transition:      3'000 4'-0-1 ->      3'000 7'0000010
+  transition:      3'000 4'-1-1 ->      3'001 7'0010010
+  transition:      3'100 4'---0 ->      3'000 7'0000000
+  transition:      3'100 4'---1 ->      3'000 7'0000000
+  transition:      3'010 4'---0 ->      3'000 7'0000001
+  transition:      3'010 4'0--1 ->      3'010 7'0100001
+  transition:      3'010 4'1--1 ->      3'011 7'0110001
+  transition:      3'001 4'---0 ->      3'000 7'0001000
+  transition:      3'001 4'0--1 ->      3'010 7'0101000
+  transition:      3'001 4'1--1 ->      3'001 7'0011000
+  transition:      3'011 4'---0 ->      3'000 7'0000100
+  transition:      3'011 4'0-01 ->      3'001 7'0010100
+  transition:      3'011 4'0-11 ->      3'100 7'1000100
+  transition:      3'011 4'1--1 ->      3'011 7'0110100
+
+6.12.3. Executing FSM_OPT pass (simple optimizations of FSMs).
+Optimizing FSM `$fsm$\hb_inst.state$552' from module `\fpga'.
+  Merging pattern 4'---0 and 4'---1 from group (1 0 7'0000000).
+  Merging pattern 4'---1 and 4'---0 from group (1 0 7'0000000).
+
+6.12.4. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \fpga..
+Removed 12 unused cells and 12 unused wires.
+<suppressed ~13 debug messages>
+
+6.12.5. Executing FSM_OPT pass (simple optimizations of FSMs).
+Optimizing FSM `$fsm$\hb_inst.state$552' from module `\fpga'.
+  Removing unused output signal $flatten\hb_inst.$procmux$231_CMP.
+  Removing unused output signal $flatten\hb_inst.$0\state[2:0] [0].
+  Removing unused output signal $flatten\hb_inst.$0\state[2:0] [1].
+  Removing unused output signal $flatten\hb_inst.$0\state[2:0] [2].
+
+6.12.6. Executing FSM_RECODE pass (re-assigning FSM state encoding).
+Recoding FSM `$fsm$\hb_inst.state$552' from module `\fpga' using `auto' encoding:
+  mapping auto encoding to `one-hot` for this FSM.
+  000 -> ----1
+  100 -> ---1-
+  010 -> --1--
+  001 -> -1---
+  011 -> 1----
+
+6.12.7. Executing FSM_INFO pass (dumping all available information on FSM cells).
+
+FSM `$fsm$\hb_inst.state$552' from module `fpga':
+-------------------------------------
+
+  Information on FSM $fsm$\hb_inst.state$552 (\hb_inst.state):
+
+  Number of input signals:    4
+  Number of output signals:   3
+  Number of state bits:       5
+
+  Input signals:
+    0: \rst_sync_inst.r1
+    1: $flatten\hb_inst.$eq$/home/klaudio/app/ksz9031-gatemate/rtl/uart_heartbeat.v:108$187_Y
+    2: \hb_inst.tick
+    3: \uart_inst.tx_active
+
+  Output signals:
+    0: $flatten\hb_inst.$procmux$216_CMP
+    1: $flatten\hb_inst.$procmux$215_CMP
+    2: $flatten\hb_inst.$procmux$203_CMP
+
+  State encoding:
+    0:    5'----1  <RESET STATE>
+    1:    5'---1-
+    2:    5'--1--
+    3:    5'-1---
+    4:    5'1----
+
+  Transition Table (state_in, ctrl_in, state_out, ctrl_out):
+      0:     0 4'---0   ->     0 3'001
+      1:     0 4'-0-1   ->     0 3'001
+      2:     0 4'-1-1   ->     3 3'001
+      3:     1 4'----   ->     0 3'000
+      4:     2 4'---0   ->     0 3'000
+      5:     2 4'0--1   ->     2 3'000
+      6:     2 4'1--1   ->     4 3'000
+      7:     3 4'---0   ->     0 3'100
+      8:     3 4'0--1   ->     2 3'100
+      9:     3 4'1--1   ->     3 3'100
+     10:     4 4'---0   ->     0 3'010
+     11:     4 4'0-11   ->     1 3'010
+     12:     4 4'0-01   ->     3 3'010
+     13:     4 4'1--1   ->     4 3'010
+
+-------------------------------------
+
+6.12.8. Executing FSM_MAP pass (mapping FSMs to basic logic).
+Mapping FSM `$fsm$\hb_inst.state$552' from module `\fpga'.
+
+6.13. Executing OPT pass (performing simple optimizations).
+
+6.13.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module fpga.
+<suppressed ~1 debug messages>
+
+6.13.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\fpga'.
+Computing hashes of 106 cells of `\fpga'.
+Finding duplicate cells in `\fpga'.
+Computing hashes of 105 cells of `\fpga'.
+Finding duplicate cells in `\fpga'.
+<suppressed ~3 debug messages>
+Removed a total of 1 cells.
+
+6.13.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \fpga..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~54 debug messages>
+
+6.13.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \fpga.
+Performed a total of 0 changes.
+
+6.13.5. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\fpga'.
+Computing hashes of 105 cells of `\fpga'.
+Finding duplicate cells in `\fpga'.
+Removed a total of 0 cells.
+
+6.13.6. Executing OPT_DFF pass (perform DFF optimizations).
+Adding SRST signal on $procdff$542 ($dff) from module fpga (D = $add$/home/klaudio/app/ksz9031-gatemate/rtl/fpga_phase2.v:116$2_Y, Q = \blink_cnt, rval = 25'0000000000000000000000000).
+Adding SRST signal on $procdff$541 ($dff) from module fpga (D = $procmux$496_Y, Q = \hb_led_cnt, rval = 24'000000000000000000000000).
+Adding EN signal on $auto$ff.cc:337:slice$599 ($sdff) from module fpga (D = $procmux$496_Y, Q = \hb_led_cnt).
+Adding SRST signal on $flatten\hb_inst.$procdff$509 ($dff) from module fpga (D = $flatten\hb_inst.$procmux$253_Y, Q = \hb_inst.tick, rval = 1'0).
+Adding SRST signal on $flatten\hb_inst.$procdff$508 ($dff) from module fpga (D = $flatten\hb_inst.$add$/home/klaudio/app/ksz9031-gatemate/rtl/uart_heartbeat.v:48$182_Y, Q = \hb_inst.tick_cnt, rval = 27'000000000000000000000000000).
+Adding SRST signal on $flatten\hb_inst.$procdff$507 ($dff) from module fpga (D = $flatten\hb_inst.$procmux$214_Y, Q = \hb_inst.char_idx, rval = 2'00).
+Adding EN signal on $auto$ff.cc:337:slice$609 ($sdff) from module fpga (D = $flatten\hb_inst.$procmux$214_Y, Q = \hb_inst.char_idx).
+Adding SRST signal on $flatten\hb_inst.$procdff$505 ($dff) from module fpga (D = $flatten\hb_inst.$procmux$200_Y, Q = \hb_inst.tx_ena, rval = 1'0).
+Adding SRST signal on $flatten\hb_inst.$procdff$504 ($dff) from module fpga (D = $flatten\hb_inst.$procmux$247_Y, Q = \hb_inst.tx_data, rval = 8'00000000).
+Adding EN signal on $auto$ff.cc:337:slice$622 ($sdff) from module fpga (D = $flatten\hb_inst.$memrd$\char_rom$/home/klaudio/app/ksz9031-gatemate/rtl/uart_heartbeat.v:92$185_DATA, Q = \hb_inst.tx_data).
+Adding SRST signal on $flatten\uart_inst.$procdff$524 ($dff) from module fpga (D = $flatten\uart_inst.$procmux$410_Y, Q = \uart_inst.tx_active, rval = 1'0).
+Adding EN signal on $auto$ff.cc:337:slice$628 ($sdff) from module fpga (D = $flatten\uart_inst.$procmux$410_Y, Q = \uart_inst.tx_active).
+Adding SRST signal on $flatten\uart_inst.$procdff$519 ($dff) from module fpga (D = $flatten\uart_inst.$procmux$474_Y, Q = \uart_inst.tx_state, rval = 3'000).
+Adding EN signal on $auto$ff.cc:337:slice$636 ($sdff) from module fpga (D = $flatten\uart_inst.$procmux$474_Y, Q = \uart_inst.tx_state).
+Adding SRST signal on $flatten\uart_inst.$procdff$520 ($dff) from module fpga (D = $flatten\uart_inst.$procmux$456_Y, Q = \uart_inst.tx_clk_cnt, rval = 16'0000000000000000).
+Adding EN signal on $auto$ff.cc:337:slice$650 ($sdff) from module fpga (D = $flatten\uart_inst.$procmux$456_Y, Q = \uart_inst.tx_clk_cnt).
+Adding SRST signal on $flatten\uart_inst.$procdff$521 ($dff) from module fpga (D = $flatten\uart_inst.$procmux$446_Y, Q = \uart_inst.tx_bit_idx, rval = 3'000).
+Adding EN signal on $auto$ff.cc:337:slice$654 ($sdff) from module fpga (D = $flatten\uart_inst.$procmux$446_Y, Q = \uart_inst.tx_bit_idx).
+Adding EN signal on $flatten\uart_inst.$procdff$522 ($dff) from module fpga (D = \hb_inst.tx_data, Q = \uart_inst.tx_shift).
+Adding SRST signal on $flatten\uart_inst.$procdff$523 ($dff) from module fpga (D = $flatten\uart_inst.$procmux$419_Y, Q = \uart_inst.tx_out, rval = 1'1).
+Adding EN signal on $auto$ff.cc:337:slice$665 ($sdff) from module fpga (D = $flatten\uart_inst.$procmux$419_Y, Q = \uart_inst.tx_out).
+
+6.13.7. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \fpga..
+Removed 19 unused cells and 27 unused wires.
+<suppressed ~20 debug messages>
+
+6.13.8. Executing OPT_EXPR pass (perform const folding).
+Optimizing module fpga.
+<suppressed ~6 debug messages>
+
+6.13.9. Rerunning OPT passes. (Maybe there is more to do..)
+
+6.13.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \fpga..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~31 debug messages>
+
+6.13.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \fpga.
+Performed a total of 0 changes.
+
+6.13.12. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\fpga'.
+Computing hashes of 111 cells of `\fpga'.
+Finding duplicate cells in `\fpga'.
+Computing hashes of 108 cells of `\fpga'.
+Finding duplicate cells in `\fpga'.
+<suppressed ~9 debug messages>
+Removed a total of 3 cells.
+
+6.13.13. Executing OPT_DFF pass (perform DFF optimizations).
+
+6.13.14. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \fpga..
+Removed 0 unused cells and 3 unused wires.
+<suppressed ~1 debug messages>
+
+6.13.15. Executing OPT_EXPR pass (perform const folding).
+Optimizing module fpga.
+
+6.13.16. Rerunning OPT passes. (Maybe there is more to do..)
+
+6.13.17. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \fpga..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~31 debug messages>
+
+6.13.18. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \fpga.
+Performed a total of 0 changes.
+
+6.13.19. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\fpga'.
+Computing hashes of 108 cells of `\fpga'.
+Finding duplicate cells in `\fpga'.
+Removed a total of 0 cells.
+
+6.13.20. Executing OPT_DFF pass (perform DFF optimizations).
+
+6.13.21. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \fpga..
+
+6.13.22. Executing OPT_EXPR pass (perform const folding).
+Optimizing module fpga.
+
+6.13.23. Finished fast OPT passes. (There is nothing left to do.)
+
+6.14. Executing WREDUCE pass (reducing word size of cells).
+Removed top 30 address bits (of 32) from memory init port fpga.$flatten\hb_inst.$meminit$\char_rom$/home/klaudio/app/ksz9031-gatemate/rtl/uart_heartbeat.v:68$189 (hb_inst.char_rom).
+Removed top 30 address bits (of 32) from memory init port fpga.$flatten\hb_inst.$meminit$\char_rom$/home/klaudio/app/ksz9031-gatemate/rtl/uart_heartbeat.v:69$190 (hb_inst.char_rom).
+Removed top 30 address bits (of 32) from memory init port fpga.$flatten\hb_inst.$meminit$\char_rom$/home/klaudio/app/ksz9031-gatemate/rtl/uart_heartbeat.v:70$191 (hb_inst.char_rom).
+Removed top 2 bits (of 3) from port B of cell fpga.$auto$fsm_map.cc:77:implement_pattern_cache$580 ($eq).
+Removed top 1 bits (of 2) from port B of cell fpga.$auto$fsm_map.cc:77:implement_pattern_cache$574 ($eq).
+Removed top 1 bits (of 3) from port B of cell fpga.$auto$fsm_map.cc:77:implement_pattern_cache$570 ($eq).
+Removed top 1 bits (of 2) from port B of cell fpga.$auto$fsm_map.cc:77:implement_pattern_cache$565 ($eq).
+Removed top 2 bits (of 3) from port B of cell fpga.$flatten\uart_inst.$procmux$465_CMP0 ($eq).
+Removed top 1 bits (of 3) from port B of cell fpga.$flatten\uart_inst.$procmux$461_CMP0 ($eq).
+Removed top 1 bits (of 3) from port B of cell fpga.$flatten\uart_inst.$procmux$457_CMP0 ($eq).
+Removed top 31 bits (of 32) from port B of cell fpga.$flatten\uart_inst.$add$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:95$132 ($add).
+Removed top 16 bits (of 32) from port Y of cell fpga.$flatten\uart_inst.$add$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:95$132 ($add).
+Removed top 21 bits (of 32) from port B of cell fpga.$flatten\uart_inst.$lt$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:94$131 ($lt).
+Removed top 31 bits (of 32) from port B of cell fpga.$flatten\uart_inst.$add$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:85$130 ($add).
+Removed top 29 bits (of 32) from port Y of cell fpga.$flatten\uart_inst.$add$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:85$130 ($add).
+Removed top 29 bits (of 32) from port B of cell fpga.$flatten\uart_inst.$lt$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:84$129 ($lt).
+Removed top 29 bits (of 32) from wire fpga.$flatten\uart_inst.$add$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:85$130_Y.
+Removed top 16 bits (of 32) from wire fpga.$flatten\uart_inst.$add$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:72$125_Y.
+
+6.15. Executing PEEPOPT pass (run peephole optimizers).
+
+6.16. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \fpga..
+Removed 0 unused cells and 2 unused wires.
+<suppressed ~1 debug messages>
+
+6.17. Executing MUXPACK pass ($mux cell cascades to $pmux).
+Converted 0 (p)mux cells into 0 pmux cells.
+<suppressed ~15 debug messages>
+
+6.18. Executing SHARE pass (SAT-based resource sharing).
+
+6.19. Executing TECHMAP pass (map to technology primitives).
+
+6.19.1. Executing Verilog-2005 frontend: /home/klaudio/Programs/oss-cad-suite/lib/../share/yosys/cmp2lut.v
+Parsing Verilog input from `/home/klaudio/Programs/oss-cad-suite/lib/../share/yosys/cmp2lut.v' to AST representation.
+Generating RTLIL representation for module `\_90_lut_cmp_'.
+Successfully finished Verilog frontend.
+
+6.19.2. Continuing TECHMAP pass.
+Using template $paramod$254ef1516958dd5ebf9155b08a85a11a24f732fb\_90_lut_cmp_ for cells of type $lt.
+No more expansions possible.
+<suppressed ~62 debug messages>
+
+6.20. Executing OPT_EXPR pass (perform const folding).
+Optimizing module fpga.
+
+6.21. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \fpga..
+Removed 0 unused cells and 3 unused wires.
+<suppressed ~1 debug messages>
+
+6.22. Executing TECHMAP pass (map to technology primitives).
+
+6.22.1. Executing Verilog-2005 frontend: /home/klaudio/Programs/oss-cad-suite/lib/../share/yosys/gatemate/mul_map.v
+Parsing Verilog input from `/home/klaudio/Programs/oss-cad-suite/lib/../share/yosys/gatemate/mul_map.v' to AST representation.
+Generating RTLIL representation for module `$__MULMXN'.
+Successfully finished Verilog frontend.
+
+6.22.2. Continuing TECHMAP pass.
+No more expansions possible.
+<suppressed ~4 debug messages>
+
+6.23. Executing ALUMACC pass (create $alu and $macc cells).
+Extracting $alu and $macc cells in module fpga:
+  creating $macc model for $flatten\hb_inst.$add$/home/klaudio/app/ksz9031-gatemate/rtl/uart_heartbeat.v:48$182 ($add).
+  creating $macc model for $flatten\hb_inst.$add$/home/klaudio/app/ksz9031-gatemate/rtl/uart_heartbeat.v:111$188 ($add).
+  creating $macc model for $flatten\uart_inst.$add$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:95$132 ($add).
+  creating $macc model for $flatten\uart_inst.$add$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:85$130 ($add).
+  creating $macc model for $sub$/home/klaudio/app/ksz9031-gatemate/rtl/fpga_phase2.v:127$5 ($sub).
+  creating $macc model for $add$/home/klaudio/app/ksz9031-gatemate/rtl/fpga_phase2.v:116$2 ($add).
+  creating $alu model for $macc $add$/home/klaudio/app/ksz9031-gatemate/rtl/fpga_phase2.v:116$2.
+  creating $alu model for $macc $sub$/home/klaudio/app/ksz9031-gatemate/rtl/fpga_phase2.v:127$5.
+  creating $alu model for $macc $flatten\uart_inst.$add$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:85$130.
+  creating $alu model for $macc $flatten\uart_inst.$add$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:95$132.
+  creating $alu model for $macc $flatten\hb_inst.$add$/home/klaudio/app/ksz9031-gatemate/rtl/uart_heartbeat.v:111$188.
+  creating $alu model for $macc $flatten\hb_inst.$add$/home/klaudio/app/ksz9031-gatemate/rtl/uart_heartbeat.v:48$182.
+  creating $alu model for $flatten\uart_inst.$lt$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:94$131 ($lt): new $alu
+  creating $alu cell for $flatten\uart_inst.$lt$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:94$131: $auto$alumacc.cc:512:replace_alu$675
+  creating $alu cell for $flatten\hb_inst.$add$/home/klaudio/app/ksz9031-gatemate/rtl/uart_heartbeat.v:48$182: $auto$alumacc.cc:512:replace_alu$680
+  creating $alu cell for $flatten\hb_inst.$add$/home/klaudio/app/ksz9031-gatemate/rtl/uart_heartbeat.v:111$188: $auto$alumacc.cc:512:replace_alu$683
+  creating $alu cell for $flatten\uart_inst.$add$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:95$132: $auto$alumacc.cc:512:replace_alu$686
+  creating $alu cell for $flatten\uart_inst.$add$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:85$130: $auto$alumacc.cc:512:replace_alu$689
+  creating $alu cell for $sub$/home/klaudio/app/ksz9031-gatemate/rtl/fpga_phase2.v:127$5: $auto$alumacc.cc:512:replace_alu$692
+  creating $alu cell for $add$/home/klaudio/app/ksz9031-gatemate/rtl/fpga_phase2.v:116$2: $auto$alumacc.cc:512:replace_alu$695
+  created 7 $alu and 0 $macc cells.
+
+6.24. Executing OPT pass (performing simple optimizations).
+
+6.24.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module fpga.
+<suppressed ~6 debug messages>
+
+6.24.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\fpga'.
+Computing hashes of 109 cells of `\fpga'.
+Finding duplicate cells in `\fpga'.
+Removed a total of 0 cells.
+
+6.24.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \fpga..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~31 debug messages>
+
+6.24.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \fpga.
+Performed a total of 0 changes.
+
+6.24.5. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\fpga'.
+Computing hashes of 109 cells of `\fpga'.
+Finding duplicate cells in `\fpga'.
+Removed a total of 0 cells.
+
+6.24.6. Executing OPT_DFF pass (perform DFF optimizations).
+
+6.24.7. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \fpga..
+Removed 0 unused cells and 1 unused wires.
+<suppressed ~1 debug messages>
+
+6.24.8. Executing OPT_EXPR pass (perform const folding).
+Optimizing module fpga.
+
+6.24.9. Rerunning OPT passes. (Maybe there is more to do..)
+
+6.24.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \fpga..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~31 debug messages>
+
+6.24.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \fpga.
+Performed a total of 0 changes.
+
+6.24.12. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\fpga'.
+Computing hashes of 109 cells of `\fpga'.
+Finding duplicate cells in `\fpga'.
+Removed a total of 0 cells.
+
+6.24.13. Executing OPT_DFF pass (perform DFF optimizations).
+
+6.24.14. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \fpga..
+
+6.24.15. Executing OPT_EXPR pass (perform const folding).
+Optimizing module fpga.
+
+6.24.16. Finished fast OPT passes. (There is nothing left to do.)
+
+6.25. Executing MEMORY pass.
+
+6.25.1. Executing OPT_MEM pass (optimize memories).
+fpga.hb_inst.char_rom: removing const-1 lane 3
+fpga.hb_inst.char_rom: removing const-0 lane 4
+fpga.hb_inst.char_rom: removing const-0 lane 5
+fpga.hb_inst.char_rom: removing const-0 lane 7
+Performed a total of 1 transformations.
+
+6.25.2. Executing OPT_MEM_PRIORITY pass (removing unnecessary memory write priority relations).
+Performed a total of 0 transformations.
+
+6.25.3. Executing OPT_MEM_FEEDBACK pass (finding memory read-to-write feedback paths).
+
+6.25.4. Executing MEMORY_BMUX2ROM pass (converting muxes to ROMs).
+
+6.25.5. Executing MEMORY_DFF pass (merging $dff cells to $memrd).
+Checking read port `\hb_inst.char_rom'[0] in module `\fpga': merging output FF to cell.
+
+6.25.6. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \fpga..
+
+6.25.7. Executing MEMORY_SHARE pass (consolidating $memrd/$memwr cells).
+
+6.25.8. Executing OPT_MEM_WIDEN pass (optimize memories where all ports are wide).
+Performed a total of 0 transformations.
+
+6.25.9. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \fpga..
+
+6.25.10. Executing MEMORY_COLLECT pass (generating $mem cells).
+
+6.26. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \fpga..
+
+6.27. Executing MEMORY_LIBMAP pass (mapping memories to cells).
+using FF mapping for memory fpga.hb_inst.char_rom
+<suppressed ~153 debug messages>
+
+6.28. Executing TECHMAP pass (map to technology primitives).
+
+6.28.1. Executing Verilog-2005 frontend: /home/klaudio/Programs/oss-cad-suite/lib/../share/yosys/gatemate/brams_map.v
+Parsing Verilog input from `/home/klaudio/Programs/oss-cad-suite/lib/../share/yosys/gatemate/brams_map.v' to AST representation.
+Generating RTLIL representation for module `$__CC_BRAM_TDP_'.
+Generating RTLIL representation for module `$__CC_BRAM_SDP_'.
+Successfully finished Verilog frontend.
+
+6.28.2. Continuing TECHMAP pass.
+No more expansions possible.
+<suppressed ~4 debug messages>
+
+6.29. Executing OPT pass (performing simple optimizations).
+
+6.29.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module fpga.
+<suppressed ~21 debug messages>
+
+6.29.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\fpga'.
+Computing hashes of 97 cells of `\fpga'.
+Finding duplicate cells in `\fpga'.
+Removed a total of 0 cells.
+
+6.29.3. Executing OPT_DFF pass (perform DFF optimizations).
+Setting constant 0-bit at position 0 on $auto$ff.cc:337:slice$623 ($sdffe) from module fpga.
+Setting constant 0-bit at position 1 on $auto$ff.cc:337:slice$623 ($sdffe) from module fpga.
+Setting constant 0-bit at position 2 on $auto$ff.cc:337:slice$623 ($sdffe) from module fpga.
+Setting constant 0-bit at position 4 on $auto$ff.cc:337:slice$623 ($sdffe) from module fpga.
+Setting constant 0-bit at position 5 on $auto$ff.cc:337:slice$623 ($sdffe) from module fpga.
+Setting constant 0-bit at position 6 on $auto$ff.cc:337:slice$623 ($sdffe) from module fpga.
+Setting constant 0-bit at position 7 on $auto$ff.cc:337:slice$623 ($sdffe) from module fpga.
+
+6.29.4. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \fpga..
+Removed 2 unused cells and 19 unused wires.
+<suppressed ~3 debug messages>
+
+6.29.5. Rerunning OPT passes. (Removed registers in this run.)
+
+6.29.6. Executing OPT_EXPR pass (perform const folding).
+Optimizing module fpga.
+
+6.29.7. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\fpga'.
+Computing hashes of 95 cells of `\fpga'.
+Finding duplicate cells in `\fpga'.
+Removed a total of 0 cells.
+
+6.29.8. Executing OPT_DFF pass (perform DFF optimizations).
+Setting constant 0-bit at position 4 on $auto$ff.cc:337:slice$662 ($dffe) from module fpga.
+Setting constant 0-bit at position 5 on $auto$ff.cc:337:slice$662 ($dffe) from module fpga.
+Setting constant 0-bit at position 7 on $auto$ff.cc:337:slice$662 ($dffe) from module fpga.
+
+6.29.9. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \fpga..
+
+6.29.10. Rerunning OPT passes. (Removed registers in this run.)
+
+6.29.11. Executing OPT_EXPR pass (perform const folding).
+Optimizing module fpga.
+
+6.29.12. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\fpga'.
+Computing hashes of 95 cells of `\fpga'.
+Finding duplicate cells in `\fpga'.
+Removed a total of 0 cells.
+
+6.29.13. Executing OPT_DFF pass (perform DFF optimizations).
+
+6.29.14. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \fpga..
+
+6.29.15. Finished fast OPT passes.
+
+6.30. Executing MEMORY_MAP pass (converting memories to logic and flip-flops).
+Mapping memory \hb_inst.char_rom in module \fpga:
+  created 3 $dff cells and 0 static cells of width 4.
+Extracted data FF from read port 0 of fpga.hb_inst.char_rom: $\hb_inst.char_rom$rdreg[0]
+  read interface: 1 $dff and 3 $mux cells.
+  write interface: 0 write mux blocks.
+
+6.31. Executing OPT pass (performing simple optimizations).
+
+6.31.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module fpga.
+<suppressed ~2 debug messages>
+
+6.31.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\fpga'.
+Computing hashes of 98 cells of `\fpga'.
+Finding duplicate cells in `\fpga'.
+Removed a total of 0 cells.
+
+6.31.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \fpga..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~22 debug messages>
+
+6.31.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \fpga.
+    Consolidated identical input bits for $mux cell $memory\hb_inst.char_rom$rdmux[0][1][0]$714:
+      Old ports: A=4'1000, B=4'0101, Y=$memory\hb_inst.char_rom$rdmux[0][0][0]$a$712
+      New ports: A=2'10, B=2'01, Y={ $memory\hb_inst.char_rom$rdmux[0][0][0]$a$712 [3] $memory\hb_inst.char_rom$rdmux[0][0][0]$a$712 [0] }
+      New connections: $memory\hb_inst.char_rom$rdmux[0][0][0]$a$712 [2:1] = { $memory\hb_inst.char_rom$rdmux[0][0][0]$a$712 [0] 1'0 }
+    Consolidated identical input bits for $mux cell $memory\hb_inst.char_rom$rdmux[0][1][1]$717:
+      Old ports: A=4'0010, B=4'x, Y=$memory\hb_inst.char_rom$rdmux[0][0][0]$b$713
+      New ports: A=2'10, B=2'x, Y=$memory\hb_inst.char_rom$rdmux[0][0][0]$b$713 [1:0]
+      New connections: $memory\hb_inst.char_rom$rdmux[0][0][0]$b$713 [3:2] = { $memory\hb_inst.char_rom$rdmux[0][0][0]$b$713 [0] $memory\hb_inst.char_rom$rdmux[0][0][0]$b$713 [0] }
+    Consolidated identical input bits for $pmux cell $flatten\uart_inst.$procmux$474:
+      Old ports: A=3'000, B=12'001010011000, Y=$flatten\uart_inst.$procmux$474_Y
+      New ports: A=2'00, B=8'01101100, Y=$flatten\uart_inst.$procmux$474_Y [1:0]
+      New connections: $flatten\uart_inst.$procmux$474_Y [2] = 1'0
+    New ctrl vector for $pmux cell $flatten\uart_inst.$procmux$474: { $flatten\uart_inst.$procmux$414_CMP $flatten\uart_inst.$procmux$422_CMP $flatten\uart_inst.$procmux$421_CMP }
+  Optimizing cells in module \fpga.
+    Consolidated identical input bits for $mux cell $memory\hb_inst.char_rom$rdmux[0][0][0]$711:
+      Old ports: A=$memory\hb_inst.char_rom$rdmux[0][0][0]$a$712, B=$memory\hb_inst.char_rom$rdmux[0][0][0]$b$713, Y=$\hb_inst.char_rom$rdreg[0]$d
+      New ports: A={ $memory\hb_inst.char_rom$rdmux[0][0][0]$a$712 [3] 1'0 $memory\hb_inst.char_rom$rdmux[0][0][0]$a$712 [0] }, B={ $memory\hb_inst.char_rom$rdmux[0][0][0]$b$713 [0] $memory\hb_inst.char_rom$rdmux[0][0][0]$b$713 [1:0] }, Y={ $\hb_inst.char_rom$rdreg[0]$d [3] $\hb_inst.char_rom$rdreg[0]$d [1:0] }
+      New connections: $\hb_inst.char_rom$rdreg[0]$d [2] = $\hb_inst.char_rom$rdreg[0]$d [0]
+  Optimizing cells in module \fpga.
+Performed a total of 5 changes.
+
+6.31.5. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\fpga'.
+Computing hashes of 98 cells of `\fpga'.
+Finding duplicate cells in `\fpga'.
+Removed a total of 0 cells.
+
+6.31.6. Executing OPT_DFF pass (perform DFF optimizations).
+
+6.31.7. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \fpga..
+Removed 1 unused cells and 5 unused wires.
+<suppressed ~2 debug messages>
+
+6.31.8. Executing OPT_EXPR pass (perform const folding).
+Optimizing module fpga.
+
+6.31.9. Rerunning OPT passes. (Maybe there is more to do..)
+
+6.31.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \fpga..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~22 debug messages>
+
+6.31.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \fpga.
+Performed a total of 0 changes.
+
+6.31.12. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\fpga'.
+Computing hashes of 97 cells of `\fpga'.
+Finding duplicate cells in `\fpga'.
+Removed a total of 0 cells.
+
+6.31.13. Executing OPT_DFF pass (perform DFF optimizations).
+Setting constant 0-bit at position 2 on $auto$ff.cc:337:slice$637 ($sdffe) from module fpga.
+
+6.31.14. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \fpga..
+
+6.31.15. Executing OPT_EXPR pass (perform const folding).
+Optimizing module fpga.
+<suppressed ~1 debug messages>
+
+6.31.16. Rerunning OPT passes. (Maybe there is more to do..)
+
+6.31.17. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \fpga..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~22 debug messages>
+
+6.31.18. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \fpga.
+Performed a total of 0 changes.
+
+6.31.19. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\fpga'.
+Computing hashes of 97 cells of `\fpga'.
+Finding duplicate cells in `\fpga'.
+Removed a total of 0 cells.
+
+6.31.20. Executing OPT_DFF pass (perform DFF optimizations).
+
+6.31.21. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \fpga..
+
+6.31.22. Executing OPT_EXPR pass (perform const folding).
+Optimizing module fpga.
+
+6.31.23. Finished fast OPT passes. (There is nothing left to do.)
+
+6.32. Executing TECHMAP pass (map to technology primitives).
+
+6.32.1. Executing Verilog-2005 frontend: /home/klaudio/Programs/oss-cad-suite/lib/../share/yosys/techmap.v
+Parsing Verilog input from `/home/klaudio/Programs/oss-cad-suite/lib/../share/yosys/techmap.v' to AST representation.
+Generating RTLIL representation for module `\_90_simplemap_bool_ops'.
+Generating RTLIL representation for module `\_90_simplemap_reduce_ops'.
+Generating RTLIL representation for module `\_90_simplemap_logic_ops'.
+Generating RTLIL representation for module `\_90_simplemap_compare_ops'.
+Generating RTLIL representation for module `\_90_simplemap_various'.
+Generating RTLIL representation for module `\_90_simplemap_registers'.
+Generating RTLIL representation for module `\_90_shift_ops_shr_shl_sshl_sshr'.
+Generating RTLIL representation for module `\_90_shift_shiftx'.
+Generating RTLIL representation for module `\_90_fa'.
+Generating RTLIL representation for module `\_90_lcu_brent_kung'.
+Generating RTLIL representation for module `\_90_alu'.
+Generating RTLIL representation for module `\_90_macc'.
+Generating RTLIL representation for module `\_90_alumacc'.
+Generating RTLIL representation for module `$__div_mod_u'.
+Generating RTLIL representation for module `$__div_mod_trunc'.
+Generating RTLIL representation for module `\_90_div'.
+Generating RTLIL representation for module `\_90_mod'.
+Generating RTLIL representation for module `$__div_mod_floor'.
+Generating RTLIL representation for module `\_90_divfloor'.
+Generating RTLIL representation for module `\_90_modfloor'.
+Generating RTLIL representation for module `\_90_pow'.
+Generating RTLIL representation for module `\_90_pmux'.
+Generating RTLIL representation for module `\_90_demux'.
+Generating RTLIL representation for module `\_90_lut'.
+Generating RTLIL representation for module `$connect'.
+Generating RTLIL representation for module `$input_port'.
+Successfully finished Verilog frontend.
+
+6.32.2. Executing Verilog-2005 frontend: /home/klaudio/Programs/oss-cad-suite/lib/../share/yosys/gatemate/arith_map.v
+Parsing Verilog input from `/home/klaudio/Programs/oss-cad-suite/lib/../share/yosys/gatemate/arith_map.v' to AST representation.
+Generating RTLIL representation for module `\_80_gatemate_alu'.
+Successfully finished Verilog frontend.
+
+6.32.3. Continuing TECHMAP pass.
+Using extmapper simplemap for cells of type $sdffe.
+Using extmapper simplemap for cells of type $dffe.
+Using template $paramod$c6885379b74fbbf6906b35106e386e521d86cbb2\_80_gatemate_alu for cells of type $alu.
+Using template $paramod$c9511eeb847f2aa95252b1013477609463f67ee0\_80_gatemate_alu for cells of type $alu.
+Using template $paramod$3ef7d3dd227da7627a99c5e5a6a4deb817573e39\_80_gatemate_alu for cells of type $alu.
+Using template $paramod$2af30114e9bd4ccb04dad757b3f0a8f6bf0615b0\_80_gatemate_alu for cells of type $alu.
+Using template $paramod$175e67c02b86e96b1288b9dc100122520d7240d8\_90_alu for cells of type $alu.
+Using template $paramod$956e79e8f8c5e64be7438155ae50a966e615cb04\_80_gatemate_alu for cells of type $alu.
+Using extmapper simplemap for cells of type $not.
+Using template $paramod$4a9cb7fc4484aef400228159112c1f8b14348915\_80_gatemate_alu for cells of type $alu.
+Using extmapper simplemap for cells of type $reduce_bool.
+Using extmapper simplemap for cells of type $reduce_and.
+Using extmapper simplemap for cells of type $ne.
+Using extmapper simplemap for cells of type $sdff.
+Using extmapper simplemap for cells of type $reduce_or.
+Using extmapper simplemap for cells of type $and.
+Using extmapper simplemap for cells of type $eq.
+Using extmapper simplemap for cells of type $dff.
+Using extmapper simplemap for cells of type $mux.
+Using extmapper simplemap for cells of type $adff.
+Using template $paramod$97565c3687be688407d1272a293bd9d0ae6852dc\_90_pmux for cells of type $pmux.
+Using extmapper simplemap for cells of type $logic_not.
+Using template $paramod$constmap:8e41dc37225da219580c3f2254ecc2e9b53ec46b$paramod$92adee9538f2381d8e5006822c900eb986d754e8\_90_shift_shiftx for cells of type $shiftx.
+Using template $paramod$c5c783b17ab1d780abfad8cfe6563a0a7b47a3b0\_90_pmux for cells of type $pmux.
+Using extmapper simplemap for cells of type $lut.
+Using extmapper simplemap for cells of type $pos.
+Using extmapper simplemap for cells of type $xor.
+Using template $paramod\_90_fa\WIDTH=32'00000000000000000000000000000010 for cells of type $fa.
+Using template $paramod\_90_lcu_brent_kung\WIDTH=32'00000000000000000000000000000010 for cells of type $lcu.
+Using extmapper simplemap for cells of type $or.
+No more expansions possible.
+<suppressed ~695 debug messages>
+
+6.33. Executing OPT pass (performing simple optimizations).
+
+6.33.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module fpga.
+<suppressed ~365 debug messages>
+
+6.33.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\fpga'.
+Computing hashes of 612 cells of `\fpga'.
+Finding duplicate cells in `\fpga'.
+Computing hashes of 560 cells of `\fpga'.
+Finding duplicate cells in `\fpga'.
+Computing hashes of 559 cells of `\fpga'.
+Finding duplicate cells in `\fpga'.
+<suppressed ~159 debug messages>
+Removed a total of 53 cells.
+
+6.33.3. Executing OPT_DFF pass (perform DFF optimizations).
+
+6.33.4. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \fpga..
+Removed 94 unused cells and 298 unused wires.
+<suppressed ~95 debug messages>
+
+6.33.5. Finished fast OPT passes.
+
+6.34. Executing IOPADMAP pass (mapping inputs/outputs to IO-PAD cells).
+Mapping port fpga.eth_mdio[0] using CC_IOBUF.
+Mapping port fpga.eth_mdc using CC_OBUF.
+Mapping port fpga.eth_rst_n using CC_OBUF.
+Mapping port fpga.eth_rx_ctl using CC_IBUF.
+Mapping port fpga.eth_rxd using CC_IBUF.
+Mapping port fpga.eth_rx_clk using CC_IBUF.
+Mapping port fpga.eth_tx_ctl using CC_OBUF.
+Mapping port fpga.eth_txd using CC_OBUF.
+Mapping port fpga.eth_tx_clk using CC_OBUF.
+Mapping port fpga.uart_rx using CC_IBUF.
+Mapping port fpga.uart_tx using CC_OBUF.
+Mapping port fpga.led using CC_OBUF.
+Mapping port fpga.btn using CC_IBUF.
+Mapping port fpga.clk_25mhz using CC_IBUF.
+Removed 0 unused cells and 8 unused wires.
+
+6.35. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \fpga..
+
+6.36. Executing DFFLEGALIZE pass (convert FFs to types supported by the target).
+
+6.37. Executing TECHMAP pass (map to technology primitives).
+
+6.37.1. Executing Verilog-2005 frontend: /home/klaudio/Programs/oss-cad-suite/lib/../share/yosys/gatemate/reg_map.v
+Parsing Verilog input from `/home/klaudio/Programs/oss-cad-suite/lib/../share/yosys/gatemate/reg_map.v' to AST representation.
+Generating RTLIL representation for module `$_DFFE_xxxx_'.
+Generating RTLIL representation for module `$_DLATCH_xxx_'.
+Successfully finished Verilog frontend.
+
+6.37.2. Continuing TECHMAP pass.
+Using template $paramod$0ea0c0ecb89aa8a394fc59f557ec4597a0d47f80$_DFFE_xxxx_ for cells of type $_DFFE_PP0P_.
+Using template $paramod$7b2151c3bb8e318976eb0e31a556e245b4d15ccd$_DFFE_xxxx_ for cells of type $_DFFE_PP0P_.
+Using template $paramod$9a4ad4a54b1b6358b2129881d1df050a261fd516$_DFFE_xxxx_ for cells of type $_DFFE_PN0P_.
+Using template $paramod$8f6dd86c87e72a6d3e400c7e47d40b95163c6390$_DFFE_xxxx_ for cells of type $_DFFE_PP0P_.
+No more expansions possible.
+<suppressed ~198 debug messages>
+
+6.38. Executing OPT_EXPR pass (perform const folding).
+Optimizing module fpga.
+<suppressed ~4 debug messages>
+
+6.39. Executing SIMPLEMAP pass (map simple cells to gate primitives).
+
+6.40. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \fpga..
+Removed 0 unused cells and 722 unused wires.
+<suppressed ~1 debug messages>
+
+6.41. Executing MUXCOVER pass (mapping to wider MUXes).
+Covering MUX trees in module fpga..
+  Treeifying 238 MUXes:
+    Found tree with 1 MUXes at root $auto$rtlil.cc:3443:MuxGate$2277.
+    Found tree with 2 MUXes at root $auto$rtlil.cc:3443:MuxGate$2275.
+    Found tree with 3 MUXes at root $auto$rtlil.cc:3443:MuxGate$2271.
+    Found tree with 1 MUXes at root $auto$rtlil.cc:3443:MuxGate$2267.
+    Found tree with 1 MUXes at root $auto$rtlil.cc:3443:MuxGate$2265.
+    Found tree with 3 MUXes at root $auto$rtlil.cc:3443:MuxGate$2263.
+    Found tree with 1 MUXes at root $auto$rtlil.cc:3443:MuxGate$2259.
+    Found tree with 3 MUXes at root $auto$rtlil.cc:3443:MuxGate$2257.
+    Found tree with 4 MUXes at root $auto$rtlil.cc:3443:MuxGate$2253.
+    Found tree with 4 MUXes at root $auto$rtlil.cc:3443:MuxGate$2249.
+    Found tree with 3 MUXes at root $auto$rtlil.cc:3443:MuxGate$2245.
+    Found tree with 3 MUXes at root $auto$rtlil.cc:3443:MuxGate$2241.
+    Found tree with 3 MUXes at root $auto$rtlil.cc:3443:MuxGate$2237.
+    Found tree with 3 MUXes at root $auto$rtlil.cc:3443:MuxGate$2233.
+    Found tree with 4 MUXes at root $auto$rtlil.cc:3443:MuxGate$2229.
+    Found tree with 4 MUXes at root $auto$rtlil.cc:3443:MuxGate$2225.
+    Found tree with 4 MUXes at root $auto$rtlil.cc:3443:MuxGate$2221.
+    Found tree with 4 MUXes at root $auto$rtlil.cc:3443:MuxGate$2217.
+    Found tree with 4 MUXes at root $auto$rtlil.cc:3443:MuxGate$2213.
+    Found tree with 4 MUXes at root $auto$rtlil.cc:3443:MuxGate$2209.
+    Found tree with 4 MUXes at root $auto$rtlil.cc:3443:MuxGate$2205.
+    Found tree with 4 MUXes at root $auto$rtlil.cc:3443:MuxGate$2201.
+    Found tree with 4 MUXes at root $auto$rtlil.cc:3443:MuxGate$2197.
+    Found tree with 4 MUXes at root $auto$rtlil.cc:3443:MuxGate$2193.
+    Found tree with 4 MUXes at root $auto$rtlil.cc:3443:MuxGate$2189.
+    Found tree with 4 MUXes at root $auto$rtlil.cc:3443:MuxGate$2185.
+    Found tree with 4 MUXes at root $auto$rtlil.cc:3443:MuxGate$2181.
+    Found tree with 4 MUXes at root $auto$rtlil.cc:3443:MuxGate$2177.
+    Found tree with 4 MUXes at root $auto$rtlil.cc:3443:MuxGate$2173.
+    Found tree with 4 MUXes at root $auto$rtlil.cc:3443:MuxGate$2169.
+    Found tree with 4 MUXes at root $auto$rtlil.cc:3443:MuxGate$2165.
+    Found tree with 3 MUXes at root $auto$rtlil.cc:3443:MuxGate$2161.
+    Found tree with 3 MUXes at root $auto$rtlil.cc:3443:MuxGate$2157.
+    Found tree with 1 MUXes at root $auto$rtlil.cc:3443:MuxGate$2153.
+    Found tree with 1 MUXes at root $auto$rtlil.cc:3443:MuxGate$2151.
+    Found tree with 1 MUXes at root $auto$rtlil.cc:3443:MuxGate$2149.
+    Found tree with 1 MUXes at root $auto$rtlil.cc:3443:MuxGate$2147.
+    Found tree with 1 MUXes at root $auto$rtlil.cc:3443:MuxGate$2145.
+    Found tree with 1 MUXes at root $auto$rtlil.cc:3443:MuxGate$2143.
+    Found tree with 1 MUXes at root $auto$rtlil.cc:3443:MuxGate$2141.
+    Found tree with 1 MUXes at root $auto$rtlil.cc:3443:MuxGate$2139.
+    Found tree with 1 MUXes at root $auto$rtlil.cc:3443:MuxGate$2137.
+    Found tree with 1 MUXes at root $auto$rtlil.cc:3443:MuxGate$2135.
+    Found tree with 1 MUXes at root $auto$rtlil.cc:3443:MuxGate$2133.
+    Found tree with 1 MUXes at root $auto$rtlil.cc:3443:MuxGate$2131.
+    Found tree with 1 MUXes at root $auto$rtlil.cc:3443:MuxGate$2129.
+    Found tree with 1 MUXes at root $auto$rtlil.cc:3443:MuxGate$2127.
+    Found tree with 1 MUXes at root $auto$rtlil.cc:3443:MuxGate$2125.
+    Found tree with 1 MUXes at root $auto$rtlil.cc:3443:MuxGate$2123.
+    Found tree with 1 MUXes at root $auto$rtlil.cc:3443:MuxGate$2121.
+    Found tree with 1 MUXes at root $auto$rtlil.cc:3443:MuxGate$2119.
+    Found tree with 1 MUXes at root $auto$rtlil.cc:3443:MuxGate$2117.
+    Found tree with 1 MUXes at root $auto$rtlil.cc:3443:MuxGate$2115.
+    Found tree with 1 MUXes at root $auto$rtlil.cc:3443:MuxGate$2113.
+    Found tree with 1 MUXes at root $auto$rtlil.cc:3443:MuxGate$2111.
+    Found tree with 1 MUXes at root $auto$rtlil.cc:3443:MuxGate$2109.
+    Found tree with 1 MUXes at root $auto$rtlil.cc:3443:MuxGate$2107.
+    Found tree with 1 MUXes at root $auto$rtlil.cc:3443:MuxGate$2105.
+    Found tree with 1 MUXes at root $auto$rtlil.cc:3443:MuxGate$2103.
+    Found tree with 3 MUXes at root $auto$rtlil.cc:3443:MuxGate$2101.
+    Found tree with 3 MUXes at root $auto$rtlil.cc:3443:MuxGate$2097.
+    Found tree with 3 MUXes at root $auto$rtlil.cc:3443:MuxGate$2093.
+    Found tree with 3 MUXes at root $auto$rtlil.cc:3443:MuxGate$2089.
+    Found tree with 3 MUXes at root $auto$rtlil.cc:3443:MuxGate$2085.
+    Found tree with 3 MUXes at root $auto$rtlil.cc:3443:MuxGate$2081.
+    Found tree with 3 MUXes at root $auto$rtlil.cc:3443:MuxGate$2077.
+    Found tree with 3 MUXes at root $auto$rtlil.cc:3443:MuxGate$2073.
+    Found tree with 3 MUXes at root $auto$rtlil.cc:3443:MuxGate$2069.
+    Found tree with 3 MUXes at root $auto$rtlil.cc:3443:MuxGate$2065.
+    Found tree with 3 MUXes at root $auto$rtlil.cc:3443:MuxGate$2061.
+    Found tree with 3 MUXes at root $auto$rtlil.cc:3443:MuxGate$2057.
+    Found tree with 3 MUXes at root $auto$rtlil.cc:3443:MuxGate$2053.
+    Found tree with 3 MUXes at root $auto$rtlil.cc:3443:MuxGate$2049.
+    Found tree with 3 MUXes at root $auto$rtlil.cc:3443:MuxGate$2045.
+    Found tree with 3 MUXes at root $auto$rtlil.cc:3443:MuxGate$2041.
+    Found tree with 3 MUXes at root $auto$rtlil.cc:3443:MuxGate$2037.
+    Found tree with 3 MUXes at root $auto$rtlil.cc:3443:MuxGate$2033.
+    Found tree with 3 MUXes at root $auto$rtlil.cc:3443:MuxGate$2029.
+    Found tree with 3 MUXes at root $auto$rtlil.cc:3443:MuxGate$2025.
+    Found tree with 3 MUXes at root $auto$rtlil.cc:3443:MuxGate$2021.
+    Found tree with 3 MUXes at root $auto$rtlil.cc:3443:MuxGate$2017.
+    Found tree with 3 MUXes at root $auto$rtlil.cc:3443:MuxGate$2013.
+    Found tree with 1 MUXes at root $auto$rtlil.cc:3443:MuxGate$2009.
+    Found tree with 1 MUXes at root $auto$rtlil.cc:3443:MuxGate$2007.
+    Found tree with 1 MUXes at root $auto$rtlil.cc:3443:MuxGate$2005.
+    Found tree with 1 MUXes at root $auto$rtlil.cc:3443:MuxGate$2003.
+    Found tree with 1 MUXes at root $auto$rtlil.cc:3443:MuxGate$2001.
+    Found tree with 1 MUXes at root $auto$rtlil.cc:3443:MuxGate$1999.
+    Found tree with 1 MUXes at root $auto$rtlil.cc:3443:MuxGate$1997.
+    Found tree with 1 MUXes at root $auto$rtlil.cc:3443:MuxGate$1995.
+    Found tree with 1 MUXes at root $auto$rtlil.cc:3443:MuxGate$1993.
+    Found tree with 1 MUXes at root $auto$rtlil.cc:3443:MuxGate$1991.
+    Found tree with 1 MUXes at root $auto$rtlil.cc:3443:MuxGate$1989.
+    Found tree with 1 MUXes at root $auto$rtlil.cc:3443:MuxGate$1987.
+    Found tree with 1 MUXes at root $auto$rtlil.cc:3443:MuxGate$1985.
+    Found tree with 1 MUXes at root $auto$rtlil.cc:3443:MuxGate$1983.
+    Found tree with 1 MUXes at root $auto$rtlil.cc:3443:MuxGate$1981.
+    Found tree with 1 MUXes at root $auto$rtlil.cc:3443:MuxGate$1979.
+    Found tree with 1 MUXes at root $auto$rtlil.cc:3443:MuxGate$1977.
+    Found tree with 1 MUXes at root $auto$rtlil.cc:3443:MuxGate$1975.
+    Found tree with 1 MUXes at root $auto$rtlil.cc:3443:MuxGate$1973.
+    Found tree with 1 MUXes at root $auto$rtlil.cc:3443:MuxGate$1971.
+    Found tree with 1 MUXes at root $auto$rtlil.cc:3443:MuxGate$1969.
+    Found tree with 1 MUXes at root $auto$rtlil.cc:3443:MuxGate$1967.
+    Found tree with 1 MUXes at root $auto$rtlil.cc:3443:MuxGate$1965.
+    Found tree with 1 MUXes at root $auto$rtlil.cc:3443:MuxGate$1963.
+    Found tree with 2 MUXes at root $auto$rtlil.cc:3443:MuxGate$1961.
+    Found tree with 6 MUXes at root $flatten\uart_inst.$shiftx$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:79$126.Y.
+    Found tree with 2 MUXes at root $techmap673$flatten\uart_inst.$lt$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:84$129.Y.
+    Finished treeification: Found 109 trees.
+  Covering trees:
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2277: 1 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2275: 2 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2271: 3 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2267: 1 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2265: 1 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2263: 3 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2259: 1 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2257: 3 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2253: 4 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2249: 4 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2245: 3 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2241: 3 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2237: 3 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2233: 3 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2229: 4 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2225: 4 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2221: 4 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2217: 4 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2213: 4 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2209: 4 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2205: 4 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2201: 4 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2197: 4 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2193: 4 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2189: 4 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2185: 4 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2181: 4 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2177: 4 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2173: 4 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2169: 4 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2165: 4 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2161: 3 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2157: 3 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2153: 1 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2151: 1 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2149: 1 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2147: 1 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2145: 1 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2143: 1 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2141: 1 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2139: 1 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2137: 1 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2135: 1 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2133: 1 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2131: 1 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2129: 1 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2127: 1 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2125: 1 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2123: 1 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2121: 1 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2119: 1 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2117: 1 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2115: 1 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2113: 1 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2111: 1 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2109: 1 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2107: 1 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2105: 1 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2103: 1 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2101: 3 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2097: 3 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2093: 3 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2089: 3 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2085: 3 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2081: 3 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2077: 3 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2073: 3 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2069: 3 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2065: 3 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2061: 3 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2057: 3 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2053: 3 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2049: 3 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2045: 3 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2041: 3 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2037: 3 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2033: 3 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2029: 3 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2025: 3 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2021: 3 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2017: 3 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2013: 3 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2009: 1 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2007: 1 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2005: 1 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2003: 1 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$2001: 1 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$1999: 1 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$1997: 1 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$1995: 1 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$1993: 1 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$1991: 1 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$1989: 1 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$1987: 1 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$1985: 1 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$1983: 1 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$1981: 1 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$1979: 1 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$1977: 1 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$1975: 1 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$1973: 1 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$1971: 1 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$1969: 1 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$1967: 1 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$1965: 1 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$1963: 1 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $auto$rtlil.cc:3443:MuxGate$1961: 2 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $flatten\uart_inst.$shiftx$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:79$126.Y: 3 MUX2, 1 MUX4, 0 MUX8, 0 MUX16
+    Replaced tree at $techmap673$flatten\uart_inst.$lt$/home/klaudio/app/ksz9031-gatemate/rtl/uart.v:84$129.Y: 2 MUX2, 0 MUX4, 0 MUX8, 0 MUX16
+  Added a total of 0 decoder MUXes.
+<suppressed ~4132 debug messages>
+
+6.42. Executing OPT pass (performing simple optimizations).
+
+6.42.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module fpga.
+<suppressed ~129 debug messages>
+
+6.42.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\fpga'.
+Computing hashes of 649 cells of `\fpga'.
+Finding duplicate cells in `\fpga'.
+Removed a total of 0 cells.
+
+6.42.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \fpga..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Removed 0 multiplexer ports.
+
+6.42.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \fpga.
+Performed a total of 0 changes.
+
+6.42.5. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\fpga'.
+Computing hashes of 649 cells of `\fpga'.
+Finding duplicate cells in `\fpga'.
+Removed a total of 0 cells.
+
+6.42.6. Executing OPT_SHARE pass.
+
+6.42.7. Executing OPT_DFF pass (perform DFF optimizations).
+
+6.42.8. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \fpga..
+Removed 0 unused cells and 1 unused wires.
+<suppressed ~1 debug messages>
+
+6.42.9. Executing OPT_EXPR pass (perform const folding).
+Optimizing module fpga.
+
+6.42.10. Rerunning OPT passes. (Maybe there is more to do..)
+
+6.42.11. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \fpga..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Removed 0 multiplexer ports.
+
+6.42.12. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \fpga.
+Performed a total of 0 changes.
+
+6.42.13. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\fpga'.
+Computing hashes of 649 cells of `\fpga'.
+Finding duplicate cells in `\fpga'.
+Removed a total of 0 cells.
+
+6.42.14. Executing OPT_SHARE pass.
+
+6.42.15. Executing OPT_DFF pass (perform DFF optimizations).
+
+6.42.16. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \fpga..
+
+6.42.17. Executing OPT_EXPR pass (perform const folding).
+Optimizing module fpga.
+
+6.42.18. Finished fast OPT passes. (There is nothing left to do.)
+
+6.43. Executing SIMPLEMAP pass (map simple cells to gate primitives).
+
+6.44. Executing TECHMAP pass (map to technology primitives).
+
+6.44.1. Executing Verilog-2005 frontend: /home/klaudio/Programs/oss-cad-suite/lib/../share/yosys/gatemate/mux_map.v
+Parsing Verilog input from `/home/klaudio/Programs/oss-cad-suite/lib/../share/yosys/gatemate/mux_map.v' to AST representation.
+Generating RTLIL representation for module `$_MUX8_'.
+Generating RTLIL representation for module `$_MUX4_'.
+Successfully finished Verilog frontend.
+
+6.44.2. Continuing TECHMAP pass.
+Using template $_MUX4_ for cells of type $_MUX4_.
+No more expansions possible.
+<suppressed ~5 debug messages>
+
+6.45. Executing ABC pass (technology mapping using ABC).
+
+6.45.1. Extracting gate netlist of module `\fpga' to `<abc-temp-dir>/input.blif'..
+
+6.45.1.1. Executed ABC.
+Extracted 384 gates and 575 wires to a netlist network with 189 inputs and 117 outputs.
+Running ABC script: <abc-temp-dir>/abc.script
+ABC: UC Berkeley, ABC 1.01 (compiled Mar 12 2026 03:32:42)
+ABC: abc 01> empty
+ABC: abc 01> source <abc-temp-dir>/abc.script
+ABC: + read_blif <abc-temp-dir>/input.blif 
+ABC: + read_library <yosys-exe-dir>/../share/yosys/gatemate/lut_tree_cells.genlib 
+ABC: + strash 
+ABC: + &get -n 
+ABC: + &fraig -x 
+ABC: + &put 
+ABC: + scorr 
+ABC: Warning: The network is combinational (run "fraig" or "fraig_sweep").
+ABC: + dc2 
+ABC: + dretime 
+ABC: + strash 
+ABC: + &get -n 
+ABC: + &dch -f 
+ABC: + &nf 
+ABC: + &put 
+ABC: + write_blif <abc-temp-dir>/output.blif 
+ABC: 
+ABC: YOSYS_ABC_DONE 
+
+6.45.1.2. Re-integrating ABC results.
+ABC RESULTS:          $__CC2_A cells:       55
+ABC RESULTS:          $__CC2_O cells:       12
+ABC RESULTS:          $__CC2_X cells:        1
+ABC RESULTS:         $__CC3_AA cells:        4
+ABC RESULTS:         $__CC3_AO cells:        3
+ABC RESULTS:         $__CC3_OA cells:       30
+ABC RESULTS:         $__CC3_OO cells:       15
+ABC RESULTS:        $__CC4_AAA cells:       23
+ABC RESULTS:        $__CC4_AAO cells:       10
+ABC RESULTS:       $__CC4_AA_O cells:        1
+ABC RESULTS:        $__CC4_AOA cells:        1
+ABC RESULTS:       $__CC4_AO_A cells:        2
+ABC RESULTS:       $__CC4_OO_A cells:        2
+ABC RESULTS:      $__CC5_AAA_A cells:        3
+ABC RESULTS:      $__CC5_AAO_O cells:        1
+ABC RESULTS:      $__CC5_AOA_A cells:        3
+ABC RESULTS:         $__CC_MUX cells:        2
+ABC RESULTS:         $__CC_NOT cells:       34
+ABC RESULTS:        internal signals:      269
+ABC RESULTS:           input signals:      189
+ABC RESULTS:          output signals:      117
+Removing temp directory.
+Removing global temp directory.
+
+6.46. Executing TECHMAP pass (map to technology primitives).
+
+6.46.1. Executing Verilog-2005 frontend: /home/klaudio/Programs/oss-cad-suite/lib/../share/yosys/gatemate/lut_tree_map.v
+Parsing Verilog input from `/home/klaudio/Programs/oss-cad-suite/lib/../share/yosys/gatemate/lut_tree_map.v' to AST representation.
+Generating RTLIL representation for module `$__ZERO'.
+Generating RTLIL representation for module `$__ONE'.
+Generating RTLIL representation for module `$__CC_BUF'.
+Generating RTLIL representation for module `$__CC_MUX'.
+Generating RTLIL representation for module `$__CC2_A'.
+Generating RTLIL representation for module `$__CC3_A_O'.
+Generating RTLIL representation for module `$__CC3_A_X'.
+Generating RTLIL representation for module `$__CC2_O'.
+Generating RTLIL representation for module `$__CC3_O_A'.
+Generating RTLIL representation for module `$__CC3_O_X'.
+Generating RTLIL representation for module `$__CC2_X'.
+Generating RTLIL representation for module `$__CC3_X_A'.
+Generating RTLIL representation for module `$__CC3_X_O'.
+Generating RTLIL representation for module `$__CC3_AA'.
+Generating RTLIL representation for module `$__CC4_AA_O'.
+Generating RTLIL representation for module `$__CC4_AA_X'.
+Generating RTLIL representation for module `$__CC3_OO'.
+Generating RTLIL representation for module `$__CC4_OO_A'.
+Generating RTLIL representation for module `$__CC4_OO_X'.
+Generating RTLIL representation for module `$__CC3_XX'.
+Generating RTLIL representation for module `$__CC4_XX_A'.
+Generating RTLIL representation for module `$__CC4_XX_O'.
+Generating RTLIL representation for module `$__CC3_AO'.
+Generating RTLIL representation for module `$__CC4_AO_A'.
+Generating RTLIL representation for module `$__CC4_AO_O'.
+Generating RTLIL representation for module `$__CC4_AO_X'.
+Generating RTLIL representation for module `$__CC3_OA'.
+Generating RTLIL representation for module `$__CC4_OA_A'.
+Generating RTLIL representation for module `$__CC4_OA_O'.
+Generating RTLIL representation for module `$__CC4_OA_X'.
+Generating RTLIL representation for module `$__CC3_AX'.
+Generating RTLIL representation for module `$__CC4_AX_A'.
+Generating RTLIL representation for module `$__CC4_AX_O'.
+Generating RTLIL representation for module `$__CC4_AX_X'.
+Generating RTLIL representation for module `$__CC3_XA'.
+Generating RTLIL representation for module `$__CC4_XA_A'.
+Generating RTLIL representation for module `$__CC4_XA_O'.
+Generating RTLIL representation for module `$__CC4_XA_X'.
+Generating RTLIL representation for module `$__CC4_AAA'.
+Generating RTLIL representation for module `$__CC5_AAA_A'.
+Generating RTLIL representation for module `$__CC5_AAA_O'.
+Generating RTLIL representation for module `$__CC5_AAA_X'.
+Generating RTLIL representation for module `$__CC4_AXA'.
+Generating RTLIL representation for module `$__CC5_AXA_A'.
+Generating RTLIL representation for module `$__CC5_AXA_O'.
+Generating RTLIL representation for module `$__CC5_AXA_X'.
+Generating RTLIL representation for module `$__CC4_XAX'.
+Generating RTLIL representation for module `$__CC5_XAX_A'.
+Generating RTLIL representation for module `$__CC5_XAX_O'.
+Generating RTLIL representation for module `$__CC5_XAX_X'.
+Generating RTLIL representation for module `$__CC4_AAX'.
+Generating RTLIL representation for module `$__CC5_AAX_A'.
+Generating RTLIL representation for module `$__CC5_AAX_O'.
+Generating RTLIL representation for module `$__CC5_AAX_X'.
+Generating RTLIL representation for module `$__CC4_AXX'.
+Generating RTLIL representation for module `$__CC5_AXX_A'.
+Generating RTLIL representation for module `$__CC5_AXX_O'.
+Generating RTLIL representation for module `$__CC5_AXX_X'.
+Generating RTLIL representation for module `$__CC4_XXX'.
+Generating RTLIL representation for module `$__CC5_XXX_A'.
+Generating RTLIL representation for module `$__CC5_XXX_O'.
+Generating RTLIL representation for module `$__CC5_XXX_X'.
+Generating RTLIL representation for module `$__CC4_AAO'.
+Generating RTLIL representation for module `$__CC5_AAO_A'.
+Generating RTLIL representation for module `$__CC5_AAO_O'.
+Generating RTLIL representation for module `$__CC5_AAO_X'.
+Generating RTLIL representation for module `$__CC4_AOA'.
+Generating RTLIL representation for module `$__CC5_AOA_A'.
+Generating RTLIL representation for module `$__CC5_AOA_O'.
+Generating RTLIL representation for module `$__CC5_AOA_X'.
+Generating RTLIL representation for module `$__CC4_AOX'.
+Generating RTLIL representation for module `$__CC5_AOX_A'.
+Generating RTLIL representation for module `$__CC5_AOX_O'.
+Generating RTLIL representation for module `$__CC5_AOX_X'.
+Successfully finished Verilog frontend.
+
+6.46.2. Continuing TECHMAP pass.
+Using template $__CC2_O for cells of type $__CC2_O.
+Using template $__CC4_AAA for cells of type $__CC4_AAA.
+Using template $__CC3_AA for cells of type $__CC3_AA.
+Using template $__CC3_OO for cells of type $__CC3_OO.
+Using template $__CC3_AO for cells of type $__CC3_AO.
+Using template $__CC5_AAO_O for cells of type $__CC5_AAO_O.
+Using template $__CC4_AAO for cells of type $__CC4_AAO.
+Using template $__CC2_X for cells of type $__CC2_X.
+Using template $__CC2_A for cells of type $__CC2_A.
+Using template $__CC3_OA for cells of type $__CC3_OA.
+Using template $__CC4_OO_A for cells of type $__CC4_OO_A.
+Using template $__CC5_AAA_A for cells of type $__CC5_AAA_A.
+Using template $__CC_MUX for cells of type $__CC_MUX.
+Using template $__CC5_AOA_A for cells of type $__CC5_AOA_A.
+Using template $__CC4_AO_A for cells of type $__CC4_AO_A.
+Using template $__CC4_AOA for cells of type $__CC4_AOA.
+Using template $__CC4_AA_O for cells of type $__CC4_AA_O.
+No more expansions possible.
+<suppressed ~244 debug messages>
+
+6.47. Executing GATEMATE_FOLDINV pass (folding LUT tree inverters).
+
+6.48. Executing TECHMAP pass (map to technology primitives).
+
+6.48.1. Executing Verilog-2005 frontend: /home/klaudio/Programs/oss-cad-suite/lib/../share/yosys/gatemate/inv_map.v
+Parsing Verilog input from `/home/klaudio/Programs/oss-cad-suite/lib/../share/yosys/gatemate/inv_map.v' to AST representation.
+Generating RTLIL representation for module `$__CC_NOT'.
+Successfully finished Verilog frontend.
+
+6.48.2. Continuing TECHMAP pass.
+Using template $__CC_NOT for cells of type $__CC_NOT.
+No more expansions possible.
+<suppressed ~37 debug messages>
+Removed 42 unused cells and 1233 unused wires.
+
+6.49. Executing TECHMAP pass (map to technology primitives).
+
+6.49.1. Executing Verilog-2005 frontend: /home/klaudio/Programs/oss-cad-suite/lib/../share/yosys/gatemate/lut_map.v
+Parsing Verilog input from `/home/klaudio/Programs/oss-cad-suite/lib/../share/yosys/gatemate/lut_map.v' to AST representation.
+Generating RTLIL representation for module `$lut'.
+Successfully finished Verilog frontend.
+
+6.49.2. Continuing TECHMAP pass.
+No more expansions possible.
+<suppressed ~3 debug messages>
+
+6.50. Executing CLKBUFMAP pass (inserting clock buffers).
+Inserting CC_BUFG on fpga.clk_125[0].
+
+6.51. Executing HIERARCHY pass (managing design hierarchy).
+Attribute `top' found on module `fpga'. Setting top module to fpga.
+
+6.51.1. Analyzing design hierarchy..
+Top module:  \fpga
+
+6.51.2. Analyzing design hierarchy..
+Top module:  \fpga
+Removed 0 unused modules.
+
+6.52. Printing statistics.
+
+=== fpga ===
+
+        +----------Local Count, excluding submodules.
+        | 
+      251 wires
+      705 wire bits
+       58 public wires
+      198 public wire bits
+       14 ports
+       29 port bits
+      434 cells
+        5   $scopeinfo
+      109   CC_ADDF
+        1   CC_BUFG
+      120   CC_DFF
+       11   CC_IBUF
+        1   CC_IOBUF
+       86   CC_L2T4
+       12   CC_L2T5
+       68   CC_LUT2
+        2   CC_MX2
+        1   CC_MX4
+       17   CC_OBUF
+        1   CC_PLL
+
+6.53. Executing CHECK pass (checking for obvious problems).
+Checking module fpga...
+Found and reported 0 problems.
+
+6.54. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \fpga..
+Removed 5 unused cells and 20 unused wires.
+<suppressed ~25 debug messages>
+
+6.55. Executing JSON backend.
+
+Warnings: 1 unique messages, 1 total
+End of script. Logfile hash: e4fc528de7, CPU: user 0.36s system 0.02s, MEM: 28.75 MB peak
+Yosys 0.63+95 (git sha1 4716f4410, clang++ 18.1.8 -fPIC -O3)
+Time spent: 28% 1x abc (0 sec), 21% 23x read_verilog (0 sec), ...

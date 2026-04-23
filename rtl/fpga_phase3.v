@@ -72,15 +72,31 @@ pll pll_inst (
 wire clk_sys = clk_25mhz;
 
 // ============================================================
-// Reset — 2-FF reset_sync. async_rst_n gated by pll_locked so
-// logic holds in reset until PLL has a valid 125 MHz out (even
-// though we don't use it here, this matches Phase 2 exactly
-// and ensures power-up is stable and deterministic).
+// Reset — PLL-gated sync reset (same as Phase 2). Holds system
+// in reset until the PLL has locked; prevents random edges on
+// clk_sys while the pad clock is unstable.
 // ============================================================
+// PLL-lock deglitch: require pll_locked to be high for >=16 consecutive
+// clk_sys cycles before treating as stable. Filters out brief lock
+// dropouts caused by metastability during calibration that were making
+// rst_sync (and hence the whole reset tree) oscillate every ~1.5 s.
+reg [3:0] pll_lock_cnt    = 4'd0;
+reg       pll_lock_stable = 1'b0;
+always @(posedge clk_25mhz) begin
+    if (!pll_locked) begin
+        pll_lock_cnt    <= 4'd0;
+        // Once stable, stay stable — one-shot startup, no mid-run resets.
+    end else if (pll_lock_cnt != 4'd15) begin
+        pll_lock_cnt <= pll_lock_cnt + 4'd1;
+    end else begin
+        pll_lock_stable <= 1'b1;
+    end
+end
+
 wire rst_sync;
 reset_sync rst_sync_inst (
     .clk         (clk_sys),
-    .async_rst_n (pll_locked),
+    .async_rst_n (pll_lock_stable),
     .rst_sync    (rst_sync)
 );
 
@@ -92,33 +108,37 @@ reset_sync rst_sync_inst (
 // ============================================================
 reg        rst_sync_d = 1'b1;
 reg [7:0]  rst_count  = 8'd0;
+reg [3:0]  phy_rst_falls = 4'd0;    // # of phy_rst_release 1->0 since POR
+reg        phy_rst_rel_d_free = 1'b0;
 always @(posedge clk_sys) begin
     rst_sync_d <= rst_sync;
+    phy_rst_rel_d_free <= phy_rst_release;
     if (rst_sync && !rst_sync_d) begin
         rst_count <= rst_count + 8'd1;
+    end
+    // 1->0 on phy_rst_release (POR-only, not cleared by rst_sync)
+    if (phy_rst_rel_d_free && !phy_rst_release) begin
+        phy_rst_falls <= phy_rst_falls + 4'd1;
     end
 end
 // one-cycle pulse when leaving reset (boot event)
 wire boot_edge = (!rst_sync) && rst_sync_d;
 
 // ============================================================
-// PHY reset: hold eth_rst_n low for ~100 ms after sys-reset
-// deasserts, then release and keep high.
+// PHY reset: hold eth_rst_n low for ~100 ms after power-on,
+// then release and keep high FOREVER. Decoupled from rst_sync
+// so PLL-chatter on sys reset does not toggle PHY reset and
+// destabilise KSZ9031 internal PLL. KSZ9031 datasheet: needs
+// 10ms stable after RST_N rising before MDIO is responsive.
 // ============================================================
-reg [23:0] phy_rst_cnt;
-reg        phy_rst_release;
-reg        phy_rst_release_d;
+reg [23:0] phy_rst_cnt       = 24'd0;       // POR-initialized, never cleared
+reg        phy_rst_release   = 1'b0;        // sticky-high once set
+reg        phy_rst_release_d = 1'b0;
 always @(posedge clk_sys) begin
-    if (rst_sync) begin
-        phy_rst_cnt       <= 24'd0;
-        phy_rst_release   <= 1'b0;
-        phy_rst_release_d <= 1'b0;
-    end else begin
-        phy_rst_release_d <= phy_rst_release;
-        if (phy_rst_release) begin
-            // stay high
-        end else if (phy_rst_cnt == 24'd2_500_000) begin  // 100 ms @ 25 MHz
-            phy_rst_release <= 1'b1;
+    phy_rst_release_d <= phy_rst_release;
+    if (!phy_rst_release) begin
+        if (phy_rst_cnt == 24'd2_500_000) begin  // 100 ms @ 25 MHz
+            phy_rst_release <= 1'b1;              // latch HIGH — never drops
         end else begin
             phy_rst_cnt <= phy_rst_cnt + 24'd1;
         end
@@ -164,6 +184,7 @@ wire        init_error;
 wire [15:0] phy_id;
 wire [4:0]  phy_addr_found;
 wire [4:0]  mdio_state_dbg;
+wire [4:0]  scan_addr_dbg;
 mdio_init #(
     .SETTLE_CYCLES(23'd1_250_000),  // 50 ms @ 25 MHz
     .RETRY_CYCLES (23'd250_000)     // 10 ms @ 25 MHz
@@ -183,7 +204,8 @@ mdio_init #(
     .init_error    (init_error),
     .phy_id        (phy_id),
     .phy_addr_found(phy_addr_found),
-    .state_dbg     (mdio_state_dbg)
+    .state_dbg     (mdio_state_dbg),
+    .scan_addr_dbg (scan_addr_dbg)
 );
 
 reg init_done_d, init_error_d;
@@ -304,11 +326,11 @@ always @(posedge clk_sys) begin
     end
 end
 
-// alternate PHYID / ADDR on successive hb_ticks
-reg hb_toggle;
+// cycle 0..3 through PHYID / ADDR / SCAN / RSTN on successive hb_ticks
+reg [1:0] hb_rot;
 always @(posedge clk_sys) begin
-    if (rst_sync) hb_toggle <= 1'b0;
-    else if (hb_tick) hb_toggle <= ~hb_toggle;
+    if (rst_sync) hb_rot <= 2'd0;
+    else if (hb_tick) hb_rot <= hb_rot + 2'd1;
 end
 
 // ============================================================
@@ -321,17 +343,21 @@ localparam K_ADDR   = 4'd3;   // "A=XX\r\n"
 localparam K_RDY    = 4'd4;   // "RDY\r\n"
 localparam K_DONE   = 4'd5;   // "INIT_DONE\r\n"
 localparam K_ERR    = 4'd6;   // "INIT_ERROR\r\n"
+localparam K_SCAN   = 4'd7;   // "S=HH\r\n"   current scan_addr
+localparam K_RSTN   = 4'd8;   // "N=H F=H\r\n" phy_rst_release + falls
 
 function [5:0] w_len;
     input [3:0] k;
     case (k)
         K_BOOT : w_len = 6'd13; // \r\n B O O T ' ' R = H L \r\n  -> 13
         K_STATE: w_len = 6'd3;  // H L ' '
-        K_PHYID: w_len = 6'd9;  // P = H H H H \r \n + "P" already included
+        K_PHYID: w_len = 6'd9;  // P = H H H H \r \n
         K_ADDR : w_len = 6'd7;  // A = H H \r \n
         K_RDY  : w_len = 6'd5;  // R D Y \r \n
         K_DONE : w_len = 6'd11; // I N I T _ D O N E \r \n
         K_ERR  : w_len = 6'd12; // I N I T _ E R R O R \r \n
+        K_SCAN : w_len = 6'd7;  // S = H H \r \n
+        K_RSTN : w_len = 6'd10; // N = H   F = H \r \n
         default: w_len = 6'd0;
     endcase
 endfunction
@@ -342,7 +368,9 @@ function [7:0] w_char;
     input [15:0] snap_id;
     input [4:0]  snap_state;
     input [4:0]  snap_addr;
-    input [7:0]  snap_rstn;
+    input [7:0]  snap_rstn;    // rst_count for K_BOOT
+    input [3:0]  snap_falls;   // phy_rst_falls for K_RSTN
+    input        snap_r;       // phy_rst_release for K_RSTN
     case (k)
     K_BOOT: case (i)
         6'd0 : w_char = 8'h0D;
@@ -423,25 +451,50 @@ function [7:0] w_char;
         6'd11: w_char = 8'h0A;
         default: w_char = " ";
     endcase
+    K_SCAN: case (i)
+        6'd0 : w_char = "S";
+        6'd1 : w_char = "=";
+        6'd2 : w_char = nib2hex({3'b000, snap_addr[4]});
+        6'd3 : w_char = nib2hex(snap_addr[3:0]);
+        6'd4 : w_char = 8'h0D;
+        6'd5 : w_char = 8'h0A;
+        default: w_char = " ";
+    endcase
+    K_RSTN: case (i)
+        6'd0 : w_char = "N";
+        6'd1 : w_char = "=";
+        6'd2 : w_char = snap_r ? "1" : "0";
+        6'd3 : w_char = " ";
+        6'd4 : w_char = "F";
+        6'd5 : w_char = "=";
+        6'd6 : w_char = nib2hex(snap_falls);
+        6'd7 : w_char = " ";
+        6'd8 : w_char = 8'h0D;
+        6'd9 : w_char = 8'h0A;
+        default: w_char = " ";
+    endcase
     default: w_char = "?";
     endcase
 endfunction
 
 // ============================================================
-// Event queue — 16 deep, each stores (kind, id, state, addr, rstn)
+// Event queue — 16 deep, each stores (kind, id, state, addr, rstn,
+// falls, r).
 // ============================================================
 reg [3:0]  evq_kind  [0:15];
 reg [15:0] evq_id    [0:15];
 reg [4:0]  evq_state [0:15];
-reg [4:0]  evq_addr  [0:15];
-reg [7:0]  evq_rstn  [0:15];
+reg [4:0]  evq_addr  [0:15];   // phy_addr_found (K_ADDR) or scan_addr_dbg (K_SCAN)
+reg [7:0]  evq_rstn  [0:15];   // rst_count (K_BOOT)
+reg [3:0]  evq_falls [0:15];   // phy_rst_falls (K_RSTN)
+reg        evq_r     [0:15];   // phy_rst_release (K_RSTN)
 reg [4:0]  evq_wptr, evq_rptr;
 
 wire evq_empty = (evq_wptr == evq_rptr);
 wire evq_full  = ((evq_wptr[3:0] == evq_rptr[3:0]) &&
                   (evq_wptr[4]   != evq_rptr[4]));
 
-// Enqueue priority: boot > rdy > done > err > state > phyid > addr
+// Enqueue priority: boot > rdy > done > err > state > rotating 1-Hz events
 reg        evq_push;
 reg [3:0]  evq_push_kind;
 always @(*) begin
@@ -452,9 +505,20 @@ always @(*) begin
     else if (init_done_edge)           begin evq_push=1; evq_push_kind=K_DONE ; end
     else if (init_error_edge)          begin evq_push=1; evq_push_kind=K_ERR  ; end
     else if (state_changed)            begin evq_push=1; evq_push_kind=K_STATE; end
-    else if (hb_tick && hb_toggle)     begin evq_push=1; evq_push_kind=K_PHYID; end
-    else if (hb_tick)                  begin evq_push=1; evq_push_kind=K_ADDR ; end
+    else if (hb_tick)
+        case (hb_rot)
+            2'd0: begin evq_push=1; evq_push_kind=K_PHYID; end
+            2'd1: begin evq_push=1; evq_push_kind=K_ADDR ; end
+            2'd2: begin evq_push=1; evq_push_kind=K_SCAN ; end
+            2'd3: begin evq_push=1; evq_push_kind=K_RSTN ; end
+        endcase
 end
+
+// Snap scan_addr_dbg when K_SCAN is the reason for this push, else
+// phy_addr_found. This lets a single evq_addr field serve both K_ADDR
+// and K_SCAN.
+wire [4:0] snap_addr_wr = (evq_push_kind == K_SCAN) ? scan_addr_dbg
+                                                    : phy_addr_found;
 
 always @(posedge clk_sys) begin
     if (rst_sync) begin
@@ -463,8 +527,10 @@ always @(posedge clk_sys) begin
         evq_kind [evq_wptr[3:0]] <= evq_push_kind;
         evq_id   [evq_wptr[3:0]] <= phy_id;
         evq_state[evq_wptr[3:0]] <= mdio_state_dbg;
-        evq_addr [evq_wptr[3:0]] <= phy_addr_found;
+        evq_addr [evq_wptr[3:0]] <= snap_addr_wr;
         evq_rstn [evq_wptr[3:0]] <= rst_count;
+        evq_falls[evq_wptr[3:0]] <= phy_rst_falls;
+        evq_r    [evq_wptr[3:0]] <= phy_rst_release;
         evq_wptr <= evq_wptr + 5'd1;
     end
 end
@@ -479,6 +545,8 @@ reg [15:0] w_snap_id;
 reg [4:0]  w_snap_state;
 reg [4:0]  w_snap_addr;
 reg [7:0]  w_snap_rstn;
+reg [3:0]  w_snap_falls;
+reg        w_snap_r;
 
 localparam W_IDLE = 5'd0;
 localparam W_EMIT = 5'd1;
@@ -492,6 +560,8 @@ always @(posedge clk_sys) begin
         w_snap_state <= 5'd0;
         w_snap_addr  <= 5'd0;
         w_snap_rstn  <= 8'd0;
+        w_snap_falls <= 4'd0;
+        w_snap_r     <= 1'b0;
         wr_byte      <= 8'd0;
         wr_en        <= 1'b0;
         evq_rptr     <= 0;
@@ -505,6 +575,8 @@ always @(posedge clk_sys) begin
                     w_snap_state <= evq_state[evq_rptr[3:0]];
                     w_snap_addr  <= evq_addr [evq_rptr[3:0]];
                     w_snap_rstn  <= evq_rstn [evq_rptr[3:0]];
+                    w_snap_falls <= evq_falls[evq_rptr[3:0]];
+                    w_snap_r     <= evq_r    [evq_rptr[3:0]];
                     w_idx        <= 6'd0;
                     evq_rptr     <= evq_rptr + 5'd1;
                     w_state      <= W_EMIT;
@@ -513,7 +585,8 @@ always @(posedge clk_sys) begin
             W_EMIT: begin
                 if (!fifo_full) begin
                     wr_byte <= w_char(w_kind, w_idx, w_snap_id,
-                                      w_snap_state, w_snap_addr, w_snap_rstn);
+                                      w_snap_state, w_snap_addr, w_snap_rstn,
+                                      w_snap_falls, w_snap_r);
                     wr_en   <= 1'b1;
                     if (w_idx == w_len(w_kind) - 6'd1) begin
                         w_state <= W_IDLE;
@@ -528,19 +601,19 @@ always @(posedge clk_sys) begin
 end
 
 // ============================================================
-// LEDs
+// LEDs (free-running blink, not reset by rst_sync so we can see
+// whether the clock is alive even while held in reset)
 // ============================================================
 reg [24:0] blink_cnt;
 always @(posedge clk_sys) begin
-    if (rst_sync) blink_cnt <= 25'd0;
-    else          blink_cnt <= blink_cnt + 25'd1;
+    blink_cnt <= blink_cnt + 25'd1;
 end
-assign led[0] = blink_cnt[24];          // alive
-assign led[1] = phy_rst_release;        // PHY released
+assign led[0] = blink_cnt[24];          // alive heartbeat
+assign led[1] = phy_rst_release;        // <-- what we drive to eth_rst_n
 assign led[2] = init_done;              // init complete
 assign led[3] = init_error;             // error latched
-assign led[4] = mdio_state_dbg[0];
-assign led[5] = mdio_state_dbg[1];
+assign led[4] = pll_locked;             // PLL locked (stays dim/off if PLL chatters)
+assign led[5] = rst_sync;               // rst_sync active (bright = stuck in reset)
 assign led[6] = mdio_state_dbg[2];
 assign led[7] = mdio_state_dbg[3];
 

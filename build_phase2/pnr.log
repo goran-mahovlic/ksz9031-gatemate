@@ -1,0 +1,258 @@
+Info: Using uarch 'gatemate' for device 'CCGM1A1'
+Info: Using timing mode 'WORST'.
+Info: Using performance mode 'SPEED'.
+Info: constraining clock net 'clk_25mhz' to 25.00 MHz
+Info: constraining clock net 'eth_rx_clk' to 125.00 MHz
+
+Info: Detected regions..
+Info:     top pll_inst pll125
+Info:     top
+Info: Parsing CCF file..
+Info: Assign cell region based on attributes..
+Info: Packing constants..
+Info: Running cleanups..
+Info: Packing IOs..
+Info:     Constraining '$iopadmap$fpga.uart_tx' to pad 'IO_NA_A4'.
+Info:     Constraining '$iopadmap$fpga.uart_rx' to pad 'IO_NA_B4'.
+Info:     Constraining '$iopadmap$fpga.led_7' to pad 'IO_SB_A3'.
+Info:     Constraining '$iopadmap$fpga.led_6' to pad 'IO_SB_B3'.
+Info:     Constraining '$iopadmap$fpga.led_5' to pad 'IO_SB_A2'.
+Info:     Constraining '$iopadmap$fpga.led_4' to pad 'IO_SB_B2'.
+Info:     Constraining '$iopadmap$fpga.led_3' to pad 'IO_SB_B1'.
+Info:     Constraining '$iopadmap$fpga.led_2' to pad 'IO_SB_A1'.
+Info:     Constraining '$iopadmap$fpga.led_1' to pad 'IO_SB_B0'.
+Info:     Constraining '$iopadmap$fpga.led' to pad 'IO_SB_A0'.
+Info:     Constraining '$iopadmap$fpga.eth_txd_3' to pad 'IO_EB_A4'.
+Info:     Constraining '$iopadmap$fpga.eth_txd_2' to pad 'IO_EB_B4'.
+Info:     Constraining '$iopadmap$fpga.eth_txd_1' to pad 'IO_EB_A5'.
+Info:     Constraining '$iopadmap$fpga.eth_txd' to pad 'IO_EB_B5'.
+Info:     Constraining '$iopadmap$fpga.eth_tx_ctl' to pad 'IO_EB_A2'.
+Info:     Constraining '$iopadmap$fpga.eth_tx_clk' to pad 'IO_EB_B2'.
+Warning: Removing unsupported parameter 'SLEW' for type 'CC_IBUF'.
+Info:     Constraining '$iopadmap$fpga.eth_rxd_3' to pad 'IO_EB_B1'.
+Warning: Removing unsupported parameter 'SLEW' for type 'CC_IBUF'.
+Info:     Constraining '$iopadmap$fpga.eth_rxd_2' to pad 'IO_EB_A1'.
+Warning: Removing unsupported parameter 'SLEW' for type 'CC_IBUF'.
+Info:     Constraining '$iopadmap$fpga.eth_rxd_1' to pad 'IO_EB_B0'.
+Warning: Removing unsupported parameter 'SLEW' for type 'CC_IBUF'.
+Info:     Constraining '$iopadmap$fpga.eth_rxd' to pad 'IO_EB_A0'.
+Warning: Removing unsupported parameter 'SLEW' for type 'CC_IBUF'.
+Info:     Constraining '$iopadmap$fpga.eth_rx_ctl' to pad 'IO_EB_A8'.
+Warning: Removing unsupported parameter 'SLEW' for type 'CC_IBUF'.
+Info:     Constraining '$iopadmap$fpga.eth_rx_clk' to pad 'IO_EB_A7'.
+Info:     Constraining '$iopadmap$fpga.eth_rst_n' to pad 'IO_EB_B3'.
+Info:     Constraining '$iopadmap$fpga.eth_mdio[0]' to pad 'IO_EB_A6'.
+Info:     Constraining '$iopadmap$fpga.eth_mdc' to pad 'IO_EB_B6'.
+Info:     Constraining '$iopadmap$fpga.clk_25mhz' to pad 'IO_SB_A8'.
+Info:     Constraining '$iopadmap$fpga.btn_2' to pad 'IO_EA_B3'.
+Info:     Constraining '$iopadmap$fpga.btn_1' to pad 'IO_EA_A4'.
+Info:     Constraining '$iopadmap$fpga.btn' to pad 'IO_EA_B4'.
+Info: Insert clocking cells..
+Info: Packing PLLs..
+Info:     PLL fout= 125.0000 MHz (fout error 0.00000% of requested 125.0000 MHz)
+Info: constraining clock net '$auto$clkbufmap.cc:262:execute$3049' to 125.00 MHz
+Info: Sort BUFGs..
+Info: Packing BUFGs..
+Info: Packing IO SELs..
+Info: Packing misc..
+Info: Packing RAMs..
+Info: Packing SERDES..
+Info: Packing multipliers...
+Info: Packing ADDFs..
+Info: Packing CPEs..
+Info: Removing unused constants..
+Info:     Removed unused VCC cell.
+Info:     Removed unused GND cell.
+Info: Fix cell assigned regions..
+Info: Checksum: 0x6aa78928
+
+Info: Device utilisation:
+Info: 	            USR_RSTN:       0/      1     0%
+Info: 	            CPE_COMP:       0/  20480     0%
+Info: 	         CPE_CPLINES:       6/  20480     0%
+Info: 	               IOSEL:      29/    162    17%
+Info: 	                GPIO:      29/    162    17%
+Info: 	               CLKIN:       1/      1   100%
+Info: 	              GLBOUT:       1/      1   100%
+Info: 	                 PLL:       1/      4    25%
+Info: 	            CFG_CTRL:       0/      1     0%
+Info: 	              SERDES:       0/      1     0%
+Info: 	              CPE_LT:     318/  40960     0%
+Info: 	              CPE_FF:     120/  40960     0%
+Info: 	           CPE_RAMIO:      11/  40960     0%
+Info: 	            RAM_HALF:       0/     64     0%
+
+Info: Placed 0 cells based on constraints.
+Info: Creating initial analytic placement for 182 cells, random placement wirelen = 34351.
+Info:     at initial placer iter 0, wirelen = 971
+Info:     at initial placer iter 1, wirelen = 781
+Info:     at initial placer iter 2, wirelen = 767
+Info:     at initial placer iter 3, wirelen = 769
+Info: Running main analytical placer, max placement attempts per cell = 34322.
+Info:     at iteration #1, type ALL: wirelen solved = 774, spread = 3582, legal = 3679; time = 0.02s
+Info:     at iteration #2, type ALL: wirelen solved = 885, spread = 2441, legal = 2650; time = 0.02s
+Info:     at iteration #3, type ALL: wirelen solved = 883, spread = 2514, legal = 2802; time = 0.02s
+Info:     at iteration #4, type ALL: wirelen solved = 877, spread = 2638, legal = 2879; time = 0.02s
+Info:     at iteration #5, type ALL: wirelen solved = 875, spread = 2701, legal = 2961; time = 0.02s
+Info:     at iteration #6, type ALL: wirelen solved = 923, spread = 2332, legal = 2768; time = 0.01s
+Info:     at iteration #7, type ALL: wirelen solved = 922, spread = 2764, legal = 3113; time = 0.01s
+Info: HeAP Placer Time: 0.47s
+Info:   of which solving equations: 0.09s
+Info:   of which spreading cells: 0.04s
+Info:   of which strict legalisation: 0.01s
+
+Info: Running simulated annealing placer for refinement.
+Info:   at iteration #1: temp = 0.000000, timing cost = 29, wirelen = 2650
+Info:   at iteration #5: temp = 0.000000, timing cost = 27, wirelen = 1586
+Info:   at iteration #10: temp = 0.000000, timing cost = 25, wirelen = 1468
+Info:   at iteration #15: temp = 0.000000, timing cost = 25, wirelen = 1432
+Info:   at iteration #17: temp = 0.000000, timing cost = 23, wirelen = 1437 
+Info: SA placement time 0.65s
+
+Info: Max frequency for clock 'clk_125': 168.52 MHz (PASS at 125.00 MHz)
+
+Info: Slack histogram:
+Info:  legend: * represents 1 endpoint(s)
+Info:          + represents [1,1) endpoint(s)
+Info: [  2066,   2324) |******* 
+Info: [  2324,   2582) |***** 
+Info: [  2582,   2840) |************* 
+Info: [  2840,   3098) |*********************** 
+Info: [  3098,   3356) |****** 
+Info: [  3356,   3614) |*** 
+Info: [  3614,   3872) |** 
+Info: [  3872,   4130) |****** 
+Info: [  4130,   4388) |** 
+Info: [  4388,   4646) |***** 
+Info: [  4646,   4904) |******* 
+Info: [  4904,   5162) |**** 
+Info: [  5162,   5420) |***** 
+Info: [  5420,   5678) |********** 
+Info: [  5678,   5936) |****************** 
+Info: [  5936,   6194) | 
+Info: [  6194,   6452) | 
+Info: [  6452,   6710) |****** 
+Info: [  6710,   6968) | 
+Info: [  6968,   7226) |** 
+Info: Checksum: 0x7cca141d
+Info: Repacking RAMs..
+Info: Repacking CPEs..
+Info: Remove unused clocking cells..
+Info: Routing multipliers...
+Info: Routing clock nets...
+Info:     routing net 'clk_125' to 120 users
+Info: Clock router time 2.10s.
+Info: Running router2...
+Info: Setting up routing resources...
+Info: Running main router loop...
+Info:     iter=1 wires=8932 overused=439 overuse=451 archfail=NA
+Info:     iter=2 wires=9059 overused=178 overuse=178 archfail=NA
+Info:     iter=3 wires=9140 overused=51 overuse=51 archfail=NA
+Info:     iter=4 wires=9153 overused=27 overuse=27 archfail=NA
+Info:     iter=5 wires=9166 overused=21 overuse=21 archfail=NA
+Info:     iter=6 wires=9191 overused=10 overuse=10 archfail=NA
+Info:     iter=7 wires=9186 overused=10 overuse=10 archfail=NA
+Info:     iter=8 wires=9193 overused=6 overuse=6 archfail=NA
+Info:     iter=9 wires=9189 overused=3 overuse=3 archfail=NA
+Info:     iter=10 wires=9189 overused=3 overuse=3 archfail=NA
+Info:     iter=11 wires=9189 overused=3 overuse=3 archfail=NA
+Info:     iter=12 wires=9189 overused=3 overuse=3 archfail=NA
+Info:     iter=13 wires=9189 overused=3 overuse=3 archfail=NA
+Info:     iter=14 wires=9189 overused=3 overuse=3 archfail=NA
+Info:     iter=15 wires=9189 overused=3 overuse=3 archfail=NA
+Info:     iter=16 wires=9189 overused=3 overuse=3 archfail=NA
+Info:     iter=17 wires=9200 overused=2 overuse=2 archfail=NA
+Info:     iter=18 wires=9207 overused=1 overuse=1 archfail=NA
+Info:     iter=19 wires=9207 overused=1 overuse=1 archfail=NA
+Info:     iter=20 wires=9207 overused=1 overuse=1 archfail=NA
+Info:     iter=21 wires=9207 overused=1 overuse=1 archfail=NA
+Info:     iter=22 wires=9207 overused=1 overuse=1 archfail=NA
+Info:     iter=23 wires=9207 overused=1 overuse=1 archfail=NA
+Info:     iter=24 wires=9207 overused=1 overuse=1 archfail=NA
+Info:     iter=25 wires=9207 overused=1 overuse=1 archfail=NA
+Info:     iter=26 wires=9207 overused=1 overuse=1 archfail=NA
+Info:     iter=27 wires=9207 overused=1 overuse=1 archfail=NA
+Info:     iter=28 wires=9207 overused=1 overuse=1 archfail=NA
+Info:     iter=29 wires=9207 overused=1 overuse=1 archfail=NA
+Info:     iter=30 wires=9207 overused=1 overuse=1 archfail=NA
+Info:     iter=31 wires=9207 overused=1 overuse=1 archfail=NA
+Info:     iter=32 wires=9207 overused=1 overuse=1 archfail=NA
+Info:     iter=33 wires=9207 overused=1 overuse=1 archfail=NA
+Info:     iter=34 wires=9207 overused=1 overuse=1 archfail=NA
+Info:     iter=35 wires=9207 overused=1 overuse=1 archfail=NA
+Info:     iter=36 wires=9207 overused=1 overuse=1 archfail=NA
+Info:     iter=37 wires=9207 overused=1 overuse=1 archfail=NA
+Info:     iter=38 wires=9207 overused=1 overuse=1 archfail=NA
+Info:     iter=39 wires=9207 overused=1 overuse=1 archfail=NA
+Info:     iter=40 wires=9211 overused=0 overuse=0 archfail=0
+Info: Router2 time 3.34s
+Info: Running router1 to check that route is legal...
+
+Info: Routing..
+Info: Setting up routing queue.
+Info: Routing 0 arcs.
+Info:            |   (re-)routed arcs  |   delta    | remaining|       time spent     |
+Info:    IterCnt |  w/ripup   wo/ripup |  w/r  wo/r |      arcs| batch(sec) total(sec)|
+Info:          0 |        0          0 |    0     0 |         0|       0.02       0.02|
+Info: Routing complete.
+Info: Router1 time 0.02s
+Info: Checksum: 0x1cd9dc14
+
+Info: Critical path report for clock 'clk_125' (posedge -> posedge):
+Info:       type curr  total name
+Info:   clk-skew -0.43 -0.43 Net clk_125 (5,86) -> (3,86)
+Info:                          Sink $auto$ff.cc:337:slice$997.CLK_INT
+Info:                          Defined in:
+Info:                               /home/klaudio/app/ksz9031-gatemate/rtl/fpga_phase2.v:48.6-48.13
+Info:   clk-to-q  0.59  0.16 Source $auto$ff.cc:337:slice$978.DOUT
+Info:    routing  1.94  2.10 Net hb_led_cnt[4] (5,86) -> (5,85)
+Info:                          Sink $abc$2635$auto$blifparse.cc:397:parse_blif$2684.D0_10
+Info:                          Defined in:
+Info:                               /home/klaudio/app/ksz9031-gatemate/rtl/fpga_phase2.v:120.12-120.22
+Info:      logic  0.61  2.71 Source $abc$2635$auto$blifparse.cc:397:parse_blif$2684.OUT
+Info:    routing  1.34  4.05 Net $abc$2635$new_n355 (5,85) -> (4,85)
+Info:                          Sink $abc$2635$auto$blifparse.cc:397:parse_blif$2687.D0_01
+Info:      logic  0.56  4.61 Source $abc$2635$auto$blifparse.cc:397:parse_blif$2687.OUT
+Info:    routing  1.76  6.37 Net $abc$2635$new_n358 (4,85) -> (4,83)
+Info:                          Sink $abc$2635$auto$blifparse.cc:397:parse_blif$2691.D0_00
+Info:      logic  0.61  6.98 Source $abc$2635$auto$blifparse.cc:397:parse_blif$2691.OUT
+Info:    routing  1.78  8.76 Net $abc$2635$new_n362 (4,83) -> (5,82)
+Info:                          Sink $abc$2635$auto$blifparse.cc:397:parse_blif$2699.D1_00
+Info:      logic  0.57  9.33 Source $abc$2635$auto$blifparse.cc:397:parse_blif$2699.OUT
+Info:    routing  4.41  13.74 Net $abc$2635$new_n370 (5,82) -> (3,86)
+Info:                          Sink $abc$2635$auto$blifparse.cc:397:parse_blif$2834.D0_01
+Info:      logic  0.47  14.21 Source $abc$2635$auto$blifparse.cc:397:parse_blif$2834.OUT
+Info:    routing  0.00  14.21 Net $abc$2635$auto$rtlil.cc:3443:MuxGate$2271 (3,86) -> (3,86)
+Info:                          Sink $auto$ff.cc:337:slice$997.DIN
+Info:      setup  0.10  14.31 Source $auto$ff.cc:337:slice$997.DIN
+Info: 3.52 ns logic, 10.79 ns routing
+
+Warning: Max frequency for clock 'clk_125': 69.88 MHz (FAIL at 125.00 MHz)
+
+Info: Slack histogram:
+Info:  legend: * represents 1 endpoint(s)
+Info:          + represents [1,1) endpoint(s)
+Info: [ -6311,  -5691) |*** 
+Info: [ -5691,  -5071) |* 
+Info: [ -5071,  -4451) |****** 
+Info: [ -4451,  -3831) |********** 
+Info: [ -3831,  -3211) |************** 
+Info: [ -3211,  -2591) |********** 
+Info: [ -2591,  -1971) |****** 
+Info: [ -1971,  -1351) |*** 
+Info: [ -1351,   -731) | 
+Info: [  -731,   -111) | 
+Info: [  -111,    509) |**** 
+Info: [   509,   1129) |**** 
+Info: [  1129,   1749) |******** 
+Info: [  1749,   2369) |****** 
+Info: [  2369,   2989) |************* 
+Info: [  2989,   3609) |*************** 
+Info: [  3609,   4229) |********* 
+Info: [  4229,   4849) |****** 
+Info: [  4849,   5469) |** 
+Info: [  5469,   6089) |**** 
+Info: Update configuration based on routing..
+7 warnings, 0 errors
+
+Info: Program finished normally.
