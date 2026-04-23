@@ -21,8 +21,8 @@ Net "led[6]" Loc = "IO_SB_B3";
 Net "led[7]" Loc = "IO_SB_A3";
 
 ## UART (v0.3 pinout)
-Net "uart_tx" Loc = "IO_NA_A4";
-Net  "uart_rx" Loc = "IO_NA_B4";
+Net "uart_tx" Loc = "IO_NA_A4" | SLEW=fast;
+Net  "uart_rx" Loc = "IO_NA_B4" | SCHMITT_TRIGGER=true;
 
 ## EtherNet RGMII — TX
 Net "eth_txd[0]" Loc = "IO_EB_B5" | SLEW=fast;
