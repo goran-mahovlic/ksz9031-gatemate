@@ -16,7 +16,7 @@ CCF="$PROJ_DIR/constraints/ulx5m_gs.ccf"
 
 DEVICE="CCGM1A1"
 TOP="fpga"
-SEED=${SEED:-256}
+SEED=256
 
 rm -r "$BUILD_DIR"
 mkdir -p "$BUILD_DIR"

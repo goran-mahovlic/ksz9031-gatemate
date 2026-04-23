@@ -908,11 +908,11 @@ wire [15:0] init_mdio_wdata;
 wire        init_done;
 wire        init_error;
 wire [15:0] phy_id_debug;
-wire [4:0]  phy_addr_found;
-wire [4:0]  init_state_dbg;
 
 
-mdio_init mdio_init_inst (
+mdio_init #(
+    .PHY_ADDR(5'd0)
+) mdio_init_inst (
     .clk(clk),
     .rst(rst),
     .phy_ready(~rst),
@@ -926,9 +926,7 @@ mdio_init mdio_init_inst (
     .mdio_rvalid(mdio_rvalid),
     .init_done(init_done),
     .init_error(init_error),
-    .phy_id(phy_id_debug),
-    .phy_addr_found(phy_addr_found),
-    .state_dbg(init_state_dbg)
+    .phy_id(phy_id_debug)
 );
 
 // MDIO bus mux: init FSM has priority until init_done
@@ -1020,19 +1018,37 @@ end
 /*------------------*/
 reg mdio_start;
 
+// DIAGNOSTIC: auto-trigger MDIO read every ~1s after init completes.
+// Emits register value over UART on each read so we can see what PHY returns
+// without needing host-side RX commands. Disable by setting AUTO_POLL=0.
+reg [26:0] auto_poll_cnt = 27'd0;
+wire       auto_poll_tick = (auto_poll_cnt == 27'd125_000_000);  // 1s @ 125 MHz
+
 always @(posedge clk) begin
     if (rst) begin
-        mdio_start <= 0;
+        mdio_start    <= 1'b0;
+        auto_poll_cnt <= 27'd0;
     end else begin
-        if (rx_data_reg == 8'h73) begin //s
-				mdio_start <= 1; //pulse with a single s
-        end else if (mdio_start == 1) begin
-				mdio_start <= 0;
-		  end else begin
-				mdio_start <= mdio_start;
-		  end
+        // Free-running 1-Hz counter
+        if (auto_poll_tick) auto_poll_cnt <= 27'd0;
+        else                auto_poll_cnt <= auto_poll_cnt + 27'd1;
+
+        // Pulse mdio_start on auto-poll tick OR on user 's' command
+        // NOTE: don't gate on init_done — we want to see reads even if init FSM
+        // is still scanning. The bus mux will block us during init, but the counter
+        // still runs so we'll catch any interval where init releases control.
+        if (auto_poll_tick && init_done && !mdio_busy) begin
+            mdio_start <= 1'b1;
+        end else if (rx_data_reg == 8'h73) begin // 's'
+            mdio_start <= 1'b1;
+        end else if (mdio_start) begin
+            mdio_start <= 1'b0;
+        end
     end
 end
+
+// Force user-MDIO registers to a known read: addr 0, reg 2 (PHY ID1) when auto-polling
+// (user's UART 'r/w/d/s' command path still works for explicit register access)
 
 /*------------------*/
 wire mdio_busy;
@@ -1180,24 +1196,18 @@ end
 //assign led[7] = rst_int;
 
 
-// LEDs (active-HIGH, 1=ON):
-//   [0] init_done  — MDIO init finished (ON solid once PHY configured)
-//   [1] init_error — Scanning failed to find KSZ9031 (ON solid, check MDIO wiring)
-//   [2] rx_activity — RGMII RX data pulses
-//   [3] tx_activity — RGMII TX data pulses
-//   [4] phy_addr[0] — LSB of found PHY address (slow-blink if not found yet)
-//   [5] state_dbg[0]
-//   [6] state_dbg[1]
-//   [7] state_dbg[2]  — three LEDs encode the MDIO FSM state % 8, so user sees
-//                        state advance during scan
-assign led[0] = init_done;
-assign led[1] = init_error;
-assign led[2] = rx_activity;
-assign led[3] = tx_activity;
-assign led[4] = init_done ? phy_addr_found[0] : blink_counter[24];
-assign led[5] = init_state_dbg[0];
-assign led[6] = init_state_dbg[1];
-assign led[7] = init_state_dbg[2];
+// Active-HIGH: drive 1 to turn LED ON
+//assign led[0] = ~rst;             // ON when running (rst=0)
+//assign led[1] = phy0_reset_n;     // ON when PHY out of reset
+assign led[0] = init_done;        // ON when MDIO init complete
+assign led[1] = init_error;       // ON when MDIO init error
+assign led[2] = rx_activity;      // ON during ETH RX activity
+assign led[3] = tx_activity;      // ON during ETH TX activity
+assign led[4] = rx_loopb;         // ON when loopback mode active
+assign led[5] = mdio_busy;        // ON when MDIO busy
+assign led[6] = blink_counter[24];
+assign led[7] = tx_ena;
+//assign led[7] = rst_int;
 
 endmodule
 `resetall
