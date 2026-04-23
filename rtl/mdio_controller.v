@@ -30,11 +30,11 @@ module mdio_controller #(
     output            busy,       // Controller is busy
     output reg        rvalid,     // Read data is valid
 
-    // PHY Interface — split IO (top-level instantiates CC_IOBUF)
+    // PHY Interface — split MDIO (top instantiates CC_IOBUF for pullup)
     output            mdc,        // MDIO Clock
-    output            mdio_out,   // to IOBUF .A
-    output            mdio_oe,    // 1 = drive pad, 0 = Hi-Z (top inverts for T)
-    input             mdio_i      // from IOBUF .Y (pad readback)
+    output            mdio_out,   // data out to pad
+    output            mdio_oe,    // 1 = drive pad, 0 = Hi-Z
+    input             mdio_i      // pad readback
 );
 
 //----------------------------------------------------------------
@@ -86,11 +86,9 @@ always @(posedge clk) begin
 end
 assign mdc = mdc_reg;
 
-// MDIO tri-state — expose split signals, let top-level instantiate
-// CC_IOBUF with PULLUP=1. Using explicit CC_IOBUF at the top avoids
-// "multiple input buffer" errors and guarantees internal soft pull-up.
+// Expose split MDIO signals — top module instantiates CC_IOBUF with PULLUP=1.
 assign mdio_out = mdio_out_reg;
-assign mdio_oe  = mdio_en_reg;       // 1 = drive, 0 = Hi-Z
+assign mdio_oe  = mdio_en_reg;   // 1 = drive, 0 = Hi-Z
 wire mdio_in_raw = mdio_i;
 
 // Input synchronizer for mdio_in_raw (async to clk domain)
