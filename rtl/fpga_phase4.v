@@ -45,16 +45,20 @@ assign eth_txd    = 4'd0;
 assign eth_tx_ctl = 1'b0;
 
 // ============================================================
-// Clocking
+// Clocking — run main logic at 25 MHz (from the pad directly).
+// Avoids tight timing on big shift-register concatenation while
+// keeping UART (115200 baud) and MDIO (2.5 MHz MDC) both in spec.
+// PLL still instantiated so `pll_locked` gates reset; clock_5x is
+// unused here.
 // ============================================================
-wire clk_125, clk_125_90, pll_locked;
+wire clk_125_unused, clk_125_90_unused, pll_locked;
 pll pll_inst (
-    .clock_in      (clk_25mhz),
-    .clock_5x_out  (clk_125),
-    .clock_5x_90_out(clk_125_90),
-    .lock_out      (pll_locked)
+    .clock_in       (clk_25mhz),
+    .clock_5x_out   (clk_125_unused),
+    .clock_5x_90_out(clk_125_90_unused),
+    .lock_out       (pll_locked)
 );
-wire clk = clk_125;
+wire clk = clk_25mhz;
 
 // ============================================================
 // Reset — CC_USR_RSTN + btn[2] + power-on counter. Matches
@@ -78,7 +82,7 @@ always @(posedge clk) begin
 end
 wire rst = rst_int;
 
-// PHY reset — hold low ~33 ms after rst release (sticky high once set)
+// PHY reset — hold low ~167 ms at 25 MHz (sticky high once set)
 reg [21:0] phy_rst_cnt       = 22'h3FFFFF;
 reg        phy_rst_n_reg     = 1'b0;
 always @(posedge clk) begin
@@ -102,22 +106,39 @@ wire [15:0] mdio_rdata;
 wire        mdio_busy;
 wire        mdio_rvalid;
 
+wire mdio_out_w, mdio_oe_w, mdio_in_w;
 mdio_controller #(
-    .SYS_CLK_FREQ(125_000_000),
+    .SYS_CLK_FREQ(25_000_000),
     .MDC_FREQ    (2_500_000)
 ) mdio_ctrl_inst (
-    .clk     (clk),
-    .rst     (rst),
-    .start   (mdio_start),
-    .rw      (mdio_rw),
-    .phy_addr(mdio_phy),
-    .reg_addr(mdio_reg),
-    .wdata   (mdio_wdata),
-    .rdata   (mdio_rdata),
-    .busy    (mdio_busy),
-    .rvalid  (mdio_rvalid),
-    .mdc     (eth_mdc),
-    .mdio    (eth_mdio)
+    .clk      (clk),
+    .rst      (rst),
+    .start    (mdio_start),
+    .rw       (mdio_rw),
+    .phy_addr (mdio_phy),
+    .reg_addr (mdio_reg),
+    .wdata    (mdio_wdata),
+    .rdata    (mdio_rdata),
+    .busy     (mdio_busy),
+    .rvalid   (mdio_rvalid),
+    .mdc      (eth_mdc),
+    .mdio_out (mdio_out_w),
+    .mdio_oe  (mdio_oe_w),
+    .mdio_i   (mdio_in_w)
+);
+
+// Top-level CC_IOBUF with explicit PULLUP=1 (so idle bus floats HIGH).
+CC_IOBUF #(
+    .PIN_NAME("UNPLACED"),
+    .DRIVE("12"),
+    .PULLUP(1'b1),
+    .PULLDOWN(1'b0),
+    .SLEW("FAST")
+) mdio_iobuf (
+    .A(mdio_out_w),
+    .T(~mdio_oe_w),        // T=0 = drive pad; T=1 = Hi-Z
+    .Y(mdio_in_w),
+    .IO(eth_mdio)
 );
 
 // Latch last successful read (and snap the conditions for the UART print)
@@ -136,10 +157,11 @@ always @(posedge clk) begin
     end
 end
 
-// Expose MDIO line for status print (2-FF sync)
+// Expose MDIO line for status print (2-FF sync) — sample IOBUF output,
+// NOT the inout pad directly (avoids "multiple input buffer" synth error).
 reg mdio_pin_s0, mdio_pin_s1;
 always @(posedge clk) begin
-    mdio_pin_s0 <= eth_mdio;
+    mdio_pin_s0 <= mdio_in_w;
     mdio_pin_s1 <= mdio_pin_s0;
 end
 wire mdio_pin_level = mdio_pin_s1;
@@ -149,7 +171,7 @@ wire mdio_pin_level = mdio_pin_s1;
 // ============================================================
 reg [26:0] sec_cnt = 27'd0;
 reg [15:0] uptime  = 16'd0;
-wire tick_1hz = (sec_cnt == 27'd125_000_000 - 1);
+wire tick_1hz = (sec_cnt == 27'd25_000_000 - 1);
 always @(posedge clk) begin
     if (rst) begin
         sec_cnt <= 27'd0;
@@ -200,7 +222,7 @@ reg  [7:0] uart_wr_d  = 8'd0;
 wire       uart_busy;
 
 uart #(
-    .CLK_FREQ (125_000_000),
+    .CLK_FREQ (25_000_000),
     .BAUD_RATE(115_200)
 ) uart_inst (
     .clk     (clk),
@@ -216,101 +238,45 @@ uart #(
 );
 
 // ============================================================
-// Message emitter — print one full status line per second,
-// triggered by mdio_rvalid pulse. Line is PRE-COMPUTED into a
-// 58-byte register array when the read completes; emitter simply
-// indexes the array → no giant combinational mux → timing closes.
+// Message emitter — SHIFT REGISTER approach.
+// Previously used reg[7:0] line_buf[0:57] which yosys inferred as
+// memory with a SINGLE write port — writing 58 slots in one cycle
+// silently dropped most writes, producing garbage UART output.
+// Flat register vector has one FF per bit, all writable in one cycle.
 //
-// Format (58 bytes incl CRLF):
+// Format (57 bytes incl CRLF):
 //   "t=XXXX rst=X pll=X prst=X mdio=X phy=XX reg=XX val=XXXX\r\n"
 // ============================================================
-localparam integer LINE_LEN = 58;
-reg [7:0]  line_buf [0:LINE_LEN-1];
-reg [5:0]  tx_idx     = 6'd0;
-reg        tx_active  = 1'b0;
+localparam integer LINE_LEN = 57;
+reg [LINE_LEN*8-1:0] line_sr = {(LINE_LEN*8){1'b0}};
+reg [6:0]            tx_cnt  = 7'd0;  // remaining bytes, 0..LINE_LEN
 
 function [7:0] nib_hex;
     input [3:0] n;
     nib_hex = (n < 4'd10) ? (8'h30 + {4'd0, n}) : (8'h41 + {4'd0, n} - 8'd10);
 endfunction
 
-// Uptime displayed as 4 hex digits (0000..FFFF = up to ~18 hours)
-// — avoids division/modulo that would blow up timing.
+wire tx_active = (tx_cnt != 7'd0);
 
+// DEBUG: instead of dynamic line, emit a known fixed test pattern every
+// time mdio_rvalid fires. If THIS comes out clean on UART, the emitter
+// pipeline works and the bug is in the dynamic concat. If even this is
+// garbled, UART TX or the shift-register itself is broken.
 always @(posedge clk) begin
     if (rst) begin
-        tx_idx    <= 6'd0;
-        tx_active <= 1'b0;
+        tx_cnt  <= 7'd0;
     end else if (!tx_active && mdio_rvalid) begin
-        // Pre-fill entire line in parallel — each slot is a single-cycle
-        // register assignment, no deep mux to the UART output register.
-        line_buf[0]  <= "t";
-        line_buf[1]  <= "=";
-        line_buf[2]  <= nib_hex(uptime[15:12]);
-        line_buf[3]  <= nib_hex(uptime[11:8]);
-        line_buf[4]  <= nib_hex(uptime[7:4]);
-        line_buf[5]  <= nib_hex(uptime[3:0]);
-        line_buf[6]  <= " ";
-        line_buf[7]  <= "r";
-        line_buf[8]  <= "s";
-        line_buf[9]  <= "t";
-        line_buf[10] <= "=";
-        line_buf[11] <= rst ? "1" : "0";
-        line_buf[12] <= " ";
-        line_buf[13] <= "p";
-        line_buf[14] <= "l";
-        line_buf[15] <= "l";
-        line_buf[16] <= "=";
-        line_buf[17] <= pll_locked ? "1" : "0";
-        line_buf[18] <= " ";
-        line_buf[19] <= "p";
-        line_buf[20] <= "r";
-        line_buf[21] <= "s";
-        line_buf[22] <= "t";
-        line_buf[23] <= "=";
-        line_buf[24] <= phy_rst_n_reg ? "1" : "0";
-        line_buf[25] <= " ";
-        line_buf[26] <= "m";
-        line_buf[27] <= "d";
-        line_buf[28] <= "i";
-        line_buf[29] <= "o";
-        line_buf[30] <= "=";
-        line_buf[31] <= mdio_pin_level ? "1" : "0";
-        line_buf[32] <= " ";
-        line_buf[33] <= "p";
-        line_buf[34] <= "h";
-        line_buf[35] <= "y";
-        line_buf[36] <= "=";
-        line_buf[37] <= nib_hex({3'd0, mdio_phy[4]});
-        line_buf[38] <= nib_hex(mdio_phy[3:0]);
-        line_buf[39] <= " ";
-        line_buf[40] <= "r";
-        line_buf[41] <= "e";
-        line_buf[42] <= "g";
-        line_buf[43] <= "=";
-        line_buf[44] <= nib_hex({3'd0, mdio_reg[4]});
-        line_buf[45] <= nib_hex(mdio_reg[3:0]);
-        line_buf[46] <= " ";
-        line_buf[47] <= "v";
-        line_buf[48] <= "a";
-        line_buf[49] <= "l";
-        line_buf[50] <= "=";
-        line_buf[51] <= nib_hex(mdio_rdata[15:12]);
-        line_buf[52] <= nib_hex(mdio_rdata[11:8]);
-        line_buf[53] <= nib_hex(mdio_rdata[7:4]);
-        line_buf[54] <= nib_hex(mdio_rdata[3:0]);
-        line_buf[55] <= 8'h0D;  // \r
-        line_buf[56] <= 8'h0A;  // \n
-        line_buf[57] <= 8'h00;  // pad
-        tx_idx       <= 6'd0;
-        tx_active    <= 1'b1;
+        // Hard-coded 57-byte pattern (0-9 repeated + CRLF).
+        line_sr <= { "0123456789012345678901234567890123456789012345678901234",
+                     8'h0D, 8'h0A };
+        tx_cnt  <= 7'd57;
     end else if (tx_active && !uart_busy && !uart_wr_en) begin
-        uart_wr_d  <= line_buf[tx_idx];
+        uart_wr_d  <= line_sr[LINE_LEN*8-1 -: 8];
         uart_wr_en <= 1'b1;
     end else if (uart_wr_en) begin
         uart_wr_en <= 1'b0;
-        if (tx_idx == 6'd56) tx_active <= 1'b0;
-        else                 tx_idx    <= tx_idx + 6'd1;
+        line_sr    <= {line_sr[LINE_LEN*8-9:0], 8'h00};
+        tx_cnt     <= tx_cnt - 7'd1;
     end
 end
 

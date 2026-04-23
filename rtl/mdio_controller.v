@@ -30,9 +30,11 @@ module mdio_controller #(
     output            busy,       // Controller is busy
     output reg        rvalid,     // Read data is valid
 
-    // PHY Interface
+    // PHY Interface — split IO (top-level instantiates CC_IOBUF)
     output            mdc,        // MDIO Clock
-    inout             mdio        // MDIO Data
+    output            mdio_out,   // to IOBUF .A
+    output            mdio_oe,    // 1 = drive pad, 0 = Hi-Z (top inverts for T)
+    input             mdio_i      // from IOBUF .Y (pad readback)
 );
 
 //----------------------------------------------------------------
@@ -84,13 +86,12 @@ always @(posedge clk) begin
 end
 assign mdc = mdc_reg;
 
-// MDIO Tri-state — simple Verilog form, matches upstream working version.
-// Yosys+GateMate synthesizer infers the correct CC_IOBUF from this idiom,
-// with the correct T polarity inferred automatically — avoids the
-// "T=~en vs T=en" ambiguity that gave us 0x0000 reads with explicit CC_IOBUF.
-// Pullup/slew are set via the ccf constraint on net "eth_mdio".
-wire mdio_in_raw = mdio;
-assign mdio = mdio_en_reg ? mdio_out_reg : 1'bz;
+// MDIO tri-state — expose split signals, let top-level instantiate
+// CC_IOBUF with PULLUP=1. Using explicit CC_IOBUF at the top avoids
+// "multiple input buffer" errors and guarantees internal soft pull-up.
+assign mdio_out = mdio_out_reg;
+assign mdio_oe  = mdio_en_reg;       // 1 = drive, 0 = Hi-Z
+wire mdio_in_raw = mdio_i;
 
 // Input synchronizer for mdio_in_raw (async to clk domain)
 reg mdio_in_s0, mdio_in_s1;

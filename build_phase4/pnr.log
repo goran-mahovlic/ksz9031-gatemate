@@ -11,6 +11,7 @@ Info: Assign cell region based on attributes..
 Info: Packing constants..
 Info: Running cleanups..
 Info: Packing IOs..
+Info:     Constraining 'mdio_iobuf' to pad 'IO_EB_A6'.
 Info:     Constraining '$iopadmap$fpga.uart_tx' to pad 'IO_NA_A4'.
 Info:     Constraining '$iopadmap$fpga.uart_rx' to pad 'IO_NA_B4'.
 Info:     Constraining '$iopadmap$fpga.led_7' to pad 'IO_SB_A3'.
@@ -40,7 +41,6 @@ Info:     Constraining '$iopadmap$fpga.eth_rx_ctl' to pad 'IO_EB_A8'.
 Warning: Removing unsupported parameter 'SLEW' for type 'CC_IBUF'.
 Info:     Constraining '$iopadmap$fpga.eth_rx_clk' to pad 'IO_EB_A7'.
 Info:     Constraining '$iopadmap$fpga.eth_rst_n' to pad 'IO_EB_B3'.
-Info:     Constraining '$iopadmap$fpga.eth_mdio[0]' to pad 'IO_EB_A6'.
 Info:     Constraining '$iopadmap$fpga.eth_mdc' to pad 'IO_EB_B6'.
 Info:     Constraining '$iopadmap$fpga.clk_25mhz' to pad 'IO_SB_A8'.
 Info:     Constraining '$iopadmap$fpga.btn_2' to pad 'IO_EA_B3'.
@@ -49,7 +49,7 @@ Info:     Constraining '$iopadmap$fpga.btn' to pad 'IO_EA_B4'.
 Info: Insert clocking cells..
 Info: Packing PLLs..
 Info:     PLL fout= 125.0000 MHz (fout error 0.00000% of requested 125.0000 MHz)
-Info: constraining clock net '$auto$clkbufmap.cc:262:execute$11428' to 125.00 MHz
+Info: constraining clock net '$auto$clkbufmap.cc:262:execute$8205' to 125.00 MHz
 Info: Sort BUFGs..
 Info: Packing BUFGs..
 Info: Packing IO SELs..
@@ -63,12 +63,12 @@ Info: Removing unused constants..
 Info:     Removed unused VCC cell.
 Info:     Removed unused GND cell.
 Info: Fix cell assigned regions..
-Info: Checksum: 0x7e293e73
+Info: Checksum: 0xf3b5cfd3
 
 Info: Device utilisation:
 Info: 	            USR_RSTN:       1/      1   100%
 Info: 	            CPE_COMP:       0/  20480     0%
-Info: 	         CPE_CPLINES:      20/  20480     0%
+Info: 	         CPE_CPLINES:      11/  20480     0%
 Info: 	               IOSEL:      29/    162    17%
 Info: 	                GPIO:      29/    162    17%
 Info: 	               CLKIN:       1/      1   100%
@@ -76,109 +76,105 @@ Info: 	              GLBOUT:       1/      1   100%
 Info: 	                 PLL:       1/      4    25%
 Info: 	            CFG_CTRL:       0/      1     0%
 Info: 	              SERDES:       0/      1     0%
-Info: 	              CPE_LT:     892/  40960     2%
-Info: 	              CPE_FF:     265/  40960     0%
+Info: 	              CPE_LT:     741/  40960     1%
+Info: 	              CPE_FF:     442/  40960     1%
 Info: 	           CPE_RAMIO:      15/  40960     0%
 Info: 	            RAM_HALF:       0/     64     0%
 
 Info: Placed 0 cells based on constraints.
-Info: Creating initial analytic placement for 590 cells, random placement wirelen = 94452.
-Info:     at initial placer iter 0, wirelen = 3190
-Info:     at initial placer iter 1, wirelen = 2559
-Info:     at initial placer iter 2, wirelen = 2392
-Info:     at initial placer iter 3, wirelen = 2290
-Info: Running main analytical placer, max placement attempts per cell = 204160.
-Info:     at iteration #1, type ALL: wirelen solved = 2295, spread = 9889, legal = 10174; time = 0.05s
-Info:     at iteration #2, type ALL: wirelen solved = 2591, spread = 8127, legal = 8469; time = 0.05s
-Info:     at iteration #3, type ALL: wirelen solved = 2651, spread = 7400, legal = 7843; time = 0.04s
-Info:     at iteration #4, type ALL: wirelen solved = 2787, spread = 6615, legal = 7041; time = 0.05s
-Info:     at iteration #5, type ALL: wirelen solved = 2908, spread = 6452, legal = 6838; time = 0.04s
-Info:     at iteration #6, type ALL: wirelen solved = 3045, spread = 6471, legal = 6988; time = 0.04s
-Info:     at iteration #7, type ALL: wirelen solved = 3186, spread = 6388, legal = 6882; time = 0.04s
-Info:     at iteration #8, type ALL: wirelen solved = 3425, spread = 6425, legal = 6763; time = 0.04s
-Info:     at iteration #9, type ALL: wirelen solved = 3598, spread = 6492, legal = 6904; time = 0.04s
-Info:     at iteration #10, type ALL: wirelen solved = 3663, spread = 6900, legal = 7272; time = 0.04s
-Info:     at iteration #11, type ALL: wirelen solved = 3847, spread = 6621, legal = 7233; time = 0.03s
-Info:     at iteration #12, type ALL: wirelen solved = 3960, spread = 6710, legal = 7199; time = 0.05s
-Info:     at iteration #13, type ALL: wirelen solved = 4113, spread = 6937, legal = 7304; time = 0.04s
-Info: HeAP Placer Time: 1.06s
-Info:   of which solving equations: 0.43s
-Info:   of which spreading cells: 0.16s
+Info: Creating initial analytic placement for 587 cells, random placement wirelen = 81305.
+Info:     at initial placer iter 0, wirelen = 2647
+Info:     at initial placer iter 1, wirelen = 2400
+Info:     at initial placer iter 2, wirelen = 2241
+Info:     at initial placer iter 3, wirelen = 2211
+Info: Running main analytical placer, max placement attempts per cell = 206403.
+Info:     at iteration #1, type ALL: wirelen solved = 2165, spread = 5910, legal = 6161; time = 0.05s
+Info:     at iteration #2, type ALL: wirelen solved = 2441, spread = 4773, legal = 5492; time = 0.04s
+Info:     at iteration #3, type ALL: wirelen solved = 2575, spread = 4865, legal = 5269; time = 0.04s
+Info:     at iteration #4, type ALL: wirelen solved = 2601, spread = 4422, legal = 4766; time = 0.03s
+Info:     at iteration #5, type ALL: wirelen solved = 2695, spread = 4239, legal = 4765; time = 0.04s
+Info:     at iteration #6, type ALL: wirelen solved = 2719, spread = 4030, legal = 4399; time = 0.04s
+Info:     at iteration #7, type ALL: wirelen solved = 2756, spread = 3997, legal = 4462; time = 0.03s
+Info:     at iteration #8, type ALL: wirelen solved = 2820, spread = 3918, legal = 4262; time = 0.04s
+Info:     at iteration #9, type ALL: wirelen solved = 2880, spread = 3991, legal = 4240; time = 0.04s
+Info:     at iteration #10, type ALL: wirelen solved = 2953, spread = 4153, legal = 4452; time = 0.03s
+Info:     at iteration #11, type ALL: wirelen solved = 3066, spread = 4020, legal = 4393; time = 0.03s
+Info:     at iteration #12, type ALL: wirelen solved = 3025, spread = 4092, legal = 4602; time = 0.03s
+Info:     at iteration #13, type ALL: wirelen solved = 3138, spread = 4199, legal = 4648; time = 0.04s
+Info:     at iteration #14, type ALL: wirelen solved = 3169, spread = 4208, legal = 4758; time = 0.04s
+Info: HeAP Placer Time: 1.01s
+Info:   of which solving equations: 0.40s
+Info:   of which spreading cells: 0.14s
 Info:   of which strict legalisation: 0.03s
 
 Info: Running simulated annealing placer for refinement.
-Info:   at iteration #1: temp = 0.000000, timing cost = 44, wirelen = 6586
-Info:   at iteration #5: temp = 0.000000, timing cost = 49, wirelen = 5583
-Info:   at iteration #10: temp = 0.000000, timing cost = 69, wirelen = 5348
-Info:   at iteration #15: temp = 0.000000, timing cost = 66, wirelen = 5285
-Info:   at iteration #17: temp = 0.000000, timing cost = 63, wirelen = 5285 
-Info: SA placement time 1.56s
+Info:   at iteration #1: temp = 0.000000, timing cost = 173, wirelen = 4036
+Info:   at iteration #3: temp = 0.000000, timing cost = 122, wirelen = 3768 
+Info: SA placement time 0.21s
 
-Info: Max frequency for clock 'clk': 127.45 MHz (PASS at 125.00 MHz)
+Info: Max frequency for clock 'clk_125_unused': 665.34 MHz (PASS at 125.00 MHz)
+Info: Max frequency for clock            'clk': 84.68 MHz (PASS at 25.00 MHz)
 
-Info: Max delay <async> -> posedge clk: 13.97 ns
+Info: Max delay <async>                -> posedge clk: 14.28 ns
+Info: Max delay posedge clk_125_unused -> posedge clk: 2.46 ns
 
 Info: Slack histogram:
-Info:  legend: * represents 1 endpoint(s)
-Info:          + represents [1,1) endpoint(s)
-Info: [   154,    475) |****+
-Info: [   475,    796) | 
-Info: [   796,   1117) |****+
-Info: [  1117,   1438) |****+
-Info: [  1438,   1759) |*********+
-Info: [  1759,   2080) |********+
-Info: [  2080,   2401) |****+
-Info: [  2401,   2722) |************+
-Info: [  2722,   3043) |***********+
-Info: [  3043,   3364) |*********************+
-Info: [  3364,   3685) |******************+
-Info: [  3685,   4006) |********+
-Info: [  4006,   4327) |***********************+
-Info: [  4327,   4648) |*********+
-Info: [  4648,   4969) |*****************+
-Info: [  4969,   5290) |**************+
-Info: [  5290,   5611) |**********************+
-Info: [  5611,   5932) |************************************************************ 
-Info: [  5932,   6253) |****+
-Info: [  6253,   6574) |**********************************************+
-Info: Checksum: 0x84b7ab41
+Info:  legend: * represents 6 endpoint(s)
+Info:          + represents [1,6) endpoint(s)
+Info: [  6497,   8101) |+
+Info: [  8101,   9705) | 
+Info: [  9705,  11309) | 
+Info: [ 11309,  12913) | 
+Info: [ 12913,  14517) | 
+Info: [ 14517,  16121) | 
+Info: [ 16121,  17725) | 
+Info: [ 17725,  19329) | 
+Info: [ 19329,  20933) | 
+Info: [ 20933,  22537) | 
+Info: [ 22537,  24141) | 
+Info: [ 24141,  25745) | 
+Info: [ 25745,  27349) | 
+Info: [ 27349,  28953) |*+
+Info: [ 28953,  30557) |**********************+
+Info: [ 30557,  32161) |************************************************************ 
+Info: [ 32161,  33765) |**+
+Info: [ 33765,  35369) |********+
+Info: [ 35369,  36973) |*******+
+Info: [ 36973,  38577) |**********+
+Info: Checksum: 0x80f7205d
 Info: Repacking RAMs..
 Info: Repacking CPEs..
 Info: Remove unused clocking cells..
 Info: Routing multipliers...
 Info: Routing clock nets...
-Info:     routing net 'clk' to 265 users
-Info: Clock router time 3.63s.
+Info:     routing net 'clk' to 440 users
+Info:     routing net 'clk_125_unused' to 2 users
+Info: Clock router time 8.43s.
 Info: Running router2...
 Info: Setting up routing resources...
 Info: Running main router loop...
-Info:     iter=1 wires=29597 overused=2274 overuse=2382 archfail=NA
-Info:     iter=2 wires=30958 overused=996 overuse=1002 archfail=NA
-Info:     iter=3 wires=31314 overused=519 overuse=519 archfail=NA
-Info:     iter=4 wires=31561 overused=294 overuse=294 archfail=NA
-Info:     iter=5 wires=31770 overused=156 overuse=156 archfail=NA
-Info:     iter=6 wires=31830 overused=104 overuse=104 archfail=NA
-Info:     iter=7 wires=31900 overused=70 overuse=70 archfail=NA
-Info:     iter=8 wires=31973 overused=38 overuse=38 archfail=NA
-Info:     iter=9 wires=31990 overused=24 overuse=24 archfail=NA
-Info:     iter=10 wires=32015 overused=10 overuse=10 archfail=NA
-Info:     iter=11 wires=32063 overused=5 overuse=5 archfail=NA
-Info:     iter=12 wires=32073 overused=4 overuse=4 archfail=NA
-Info:     iter=13 wires=32063 overused=2 overuse=2 archfail=NA
-Info:     iter=14 wires=32064 overused=3 overuse=3 archfail=NA
-Info:     iter=15 wires=32073 overused=4 overuse=4 archfail=NA
-Info:     iter=16 wires=32068 overused=2 overuse=2 archfail=NA
-Info:     iter=17 wires=32073 overused=4 overuse=4 archfail=NA
-Info:     iter=18 wires=32068 overused=2 overuse=2 archfail=NA
-Info:     iter=19 wires=32073 overused=4 overuse=4 archfail=NA
-Info:     iter=20 wires=32084 overused=2 overuse=2 archfail=NA
-Info:     iter=21 wires=32085 overused=4 overuse=4 archfail=NA
-Info:     iter=22 wires=32077 overused=4 overuse=4 archfail=NA
-Info:     iter=23 wires=32085 overused=7 overuse=7 archfail=NA
-Info:     iter=24 wires=32089 overused=2 overuse=2 archfail=NA
-Info:     iter=25 wires=32093 overused=1 overuse=1 archfail=NA
-Info:     iter=26 wires=32096 overused=0 overuse=0 archfail=0
-Info: Router2 time 5.21s
+Info:     iter=1 wires=25357 overused=1452 overuse=1480 archfail=NA
+Info:     iter=2 wires=26133 overused=695 overuse=697 archfail=NA
+Info:     iter=3 wires=26428 overused=326 overuse=326 archfail=NA
+Info:     iter=4 wires=26559 overused=192 overuse=192 archfail=NA
+Info:     iter=5 wires=26777 overused=81 overuse=81 archfail=NA
+Info:     iter=6 wires=26854 overused=34 overuse=34 archfail=NA
+Info:     iter=7 wires=26921 overused=27 overuse=27 archfail=NA
+Info:     iter=8 wires=26962 overused=13 overuse=13 archfail=NA
+Info:     iter=9 wires=26966 overused=9 overuse=9 archfail=NA
+Info:     iter=10 wires=26968 overused=7 overuse=7 archfail=NA
+Info:     iter=11 wires=26997 overused=5 overuse=5 archfail=NA
+Info:     iter=12 wires=27004 overused=5 overuse=5 archfail=NA
+Info:     iter=13 wires=27004 overused=4 overuse=4 archfail=NA
+Info:     iter=14 wires=27004 overused=4 overuse=4 archfail=NA
+Info:     iter=15 wires=27004 overused=4 overuse=4 archfail=NA
+Info:     iter=16 wires=27004 overused=4 overuse=4 archfail=NA
+Info:     iter=17 wires=27004 overused=4 overuse=4 archfail=NA
+Info:     iter=18 wires=27004 overused=4 overuse=4 archfail=NA
+Info:     iter=19 wires=27004 overused=4 overuse=4 archfail=NA
+Info:     iter=20 wires=27009 overused=2 overuse=2 archfail=NA
+Info:     iter=21 wires=27011 overused=0 overuse=0 archfail=0
+Info: Router2 time 4.32s
 Info: Running router1 to check that route is legal...
 
 Info: Routing..
@@ -189,45 +185,52 @@ Info:    IterCnt |  w/ripup   wo/ripup |  w/r  wo/r |      arcs| batch(sec) tota
 Info:          0 |        0          0 |    0     0 |         0|       0.06       0.06|
 Info: Routing complete.
 Info: Router1 time 0.06s
-Info: Checksum: 0x99987470
+Info: Checksum: 0x4e43eb92
+
+Info: Critical path report for clock 'clk_125_unused' (posedge -> posedge):
+Info:       type curr  total name
+Info:   clk-to-q  0.59  0.59 Source $auto$ff.cc:337:slice$2689.DOUT
+Info:    routing  0.66  1.26 Net pll_inst.locked_s1 (5,82) -> (5,82)
+Info:                          Sink $auto$ff.cc:337:slice$2690$lt.D0_10
+Info:                          Defined in:
+Info:                               /home/klaudio/app/ksz9031-gatemate/rtl/gatemate_25MHz_125MHz_pll.v:61.5-61.14
+Info:      logic  0.61  1.87 Source $auto$ff.cc:337:slice$2690$lt.OUT
+Info:    routing  0.00  1.87 Net $auto$ff.cc:337:slice$2690$di (5,82) -> (5,82)
+Info:                          Sink $auto$ff.cc:337:slice$2690.DIN
+Info:      setup  0.10  1.97 Source $auto$ff.cc:337:slice$2690.DIN
+Info: 1.30 ns logic, 0.66 ns routing
 
 Info: Critical path report for clock 'clk' (posedge -> posedge):
 Info:       type curr  total name
-Info:   clk-skew -0.34 -0.34 Net clk (6,90) -> (6,84)
-Info:                          Sink $auto$ff.cc:337:slice$3461.CLK_INT
+Info:   clk-skew  0.00  0.00 Net clk (8,79) -> (8,81)
+Info:                          Sink $auto$ff.cc:337:slice$2291.CLK_INT
 Info:                          Defined in:
-Info:                               /home/klaudio/app/ksz9031-gatemate/rtl/fpga_phase4.v:57.6-57.9
-Info:   clk-to-q  0.59  0.26 Source $auto$ff.cc:337:slice$3453.DOUT
-Info:    routing  3.38  3.63 Net tx_idx[4] (6,90) -> (6,90)
-Info:                          Sink $abc$9798$auto$blifparse.cc:397:parse_blif$9949.D0_10
+Info:                               /home/klaudio/app/ksz9031-gatemate/rtl/fpga_phase4.v:61.6-61.9
+Info:   clk-to-q  0.59  0.60 Source $auto$ff.cc:337:slice$2289.DOUT
+Info:    routing  2.85  3.45 Net mdio_ctrl_inst.bit_cnt[1] (8,79) -> (10,82)
+Info:                          Sink $abc$6778$auto$blifparse.cc:397:parse_blif$7044.D0_10
 Info:                          Defined in:
-Info:                               /home/klaudio/app/ksz9031-gatemate/rtl/fpga_phase4.v:229.12-229.18
-Info:      logic  0.61  4.24 Source $abc$9798$auto$blifparse.cc:397:parse_blif$9949.OUT
-Info:    routing  1.48  5.72 Net $abc$9798$new_n788 (6,90) -> (5,89)
-Info:                          Sink $abc$9798$auto$blifparse.cc:397:parse_blif$10153.D1_01
-Info:      logic  0.50  6.22 Source $abc$9798$auto$blifparse.cc:397:parse_blif$10153.OUT
-Info:    routing  2.78  9.00 Net $abc$9798$new_n992 (5,89) -> (5,80)
-Info:                          Sink $abc$9798$auto$blifparse.cc:397:parse_blif$10394.D1_00
-Info:      logic  0.64  9.64 Source $abc$9798$auto$blifparse.cc:397:parse_blif$10394.OUT
-Info:    routing  1.35  10.99 Net $abc$9798$new_n1233 (5,80) -> (5,80)
-Info:                          Sink $abc$9798$auto$blifparse.cc:397:parse_blif$10395.D0_01
-Info:      logic  0.47  11.46 Source $abc$9798$auto$blifparse.cc:397:parse_blif$10395.OUT
-Info:    routing  1.91  13.38 Net $abc$9798$new_n1234 (5,80) -> (6,81)
-Info:                          Sink $abc$9798$auto$blifparse.cc:397:parse_blif$10402.D0_00
-Info:      logic  0.61  13.99 Source $abc$9798$auto$blifparse.cc:397:parse_blif$10402.OUT
-Info:    routing  1.85  15.84 Net $abc$9798$new_n1241 (6,81) -> (6,84)
-Info:                          Sink $abc$9798$auto$blifparse.cc:397:parse_blif$10406.D1_00
-Info:      logic  0.64  16.48 Source $abc$9798$auto$blifparse.cc:397:parse_blif$10406.OUT
-Info:    routing  1.65  18.13 Net $abc$9798$new_n1245 (6,84) -> (6,84)
-Info:                          Sink $abc$9798$auto$blifparse.cc:397:parse_blif$10407.D0_01
-Info:      logic  0.47  18.60 Source $abc$9798$auto$blifparse.cc:397:parse_blif$10407.OUT
-Info:    routing  0.00  18.60 Net $procmux$1160.Y[0] (6,84) -> (6,84)
-Info:                          Sink $auto$ff.cc:337:slice$3461.DIN
-Info:                          Defined in:
-Info:                               /home/klaudio/app/ksz9031-gatemate/rtl/fpga_phase4.v:308.23-308.31
-Info:                               /home/klaudio/Programs/oss-cad-suite/lib/../share/yosys/techmap.v:583.21-583.22
-Info:      setup  0.10  18.70 Source $auto$ff.cc:337:slice$3461.DIN
-Info: 4.64 ns logic, 14.06 ns routing
+Info:                               /home/klaudio/app/ksz9031-gatemate/rtl/mdio_controller.v:57.11-57.18
+Info:      logic  0.61  4.06 Source $abc$6778$auto$blifparse.cc:397:parse_blif$7044.OUT
+Info:    routing  1.35  5.41 Net $abc$6778$new_n1185 (10,82) -> (7,81)
+Info:                          Sink $abc$6778$auto$blifparse.cc:397:parse_blif$7096.D1_00
+Info:      logic  0.64  6.05 Source $abc$6778$auto$blifparse.cc:397:parse_blif$7096.OUT
+Info:    routing  1.64  7.69 Net $abc$6778$new_n1237 (7,81) -> (7,81)
+Info:                          Sink $abc$6778$auto$blifparse.cc:397:parse_blif$7100.D0_01
+Info:      logic  0.47  8.16 Source $abc$6778$auto$blifparse.cc:397:parse_blif$7100.OUT
+Info:    routing  0.90  9.06 Net $abc$6778$new_n1241 (7,81) -> (8,79)
+Info:                          Sink $abc$6778$auto$blifparse.cc:397:parse_blif$7104.D1_00
+Info:      logic  0.64  9.70 Source $abc$6778$auto$blifparse.cc:397:parse_blif$7104.OUT
+Info:    routing  2.86  12.56 Net $abc$6778$new_n1245 (8,79) -> (8,81)
+Info:                          Sink $abc$6778$auto$blifparse.cc:397:parse_blif$7277.D1_00
+Info:      logic  0.64  13.19 Source $abc$6778$auto$blifparse.cc:397:parse_blif$7277.OUT
+Info:    routing  1.38  14.58 Net $abc$6778$new_n1418 (8,81) -> (8,81)
+Info:                          Sink $abc$6778$auto$blifparse.cc:397:parse_blif$7278.D1_00
+Info:      logic  0.57  15.15 Source $abc$6778$auto$blifparse.cc:397:parse_blif$7278.OUT
+Info:    routing  0.00  15.15 Net $abc$6778$auto$rtlil.cc:3443:MuxGate$4967 (8,81) -> (8,81)
+Info:                          Sink $auto$ff.cc:337:slice$2291.DIN
+Info:      setup  0.10  15.25 Source $auto$ff.cc:337:slice$2291.DIN
+Info: 4.27 ns logic, 10.98 ns routing
 
 Info: Critical path report for cross-domain path '<async>' -> 'posedge clk':
 Info:       type curr  total name
@@ -235,45 +238,63 @@ Info:     source  0.00  0.00 Source $iopadmap$fpga.btn_2.Y
 Info:    routing  0.00  0.00 Net $iopadmap$fpga.btn_2$conn$Y (73,133) -> (73,133)
 Info:                          Sink $iopadmap$fpga.btn_2$iosel.GPIO_IN
 Info:      logic  0.38  0.38 Source $iopadmap$fpga.btn_2$iosel.IN1
-Info:    routing  7.75  8.13 Net $iopadmap$btn[2] (73,133) -> (4,100)
-Info:                          Sink $abc$9798$auto$blifparse.cc:397:parse_blif$9955.D1_00
-Info:      logic  0.64  8.77 Source $abc$9798$auto$blifparse.cc:397:parse_blif$9955.OUT
-Info:    routing  2.37  11.14 Net $abc$9798$new_n794 (4,100) -> (7,86)
-Info:                          Sink $abc$9798$auto$blifparse.cc:397:parse_blif$9958.D0_10
-Info:      logic  0.55  11.69 Source $abc$9798$auto$blifparse.cc:397:parse_blif$9958.OUT
-Info:    routing  0.00  11.69 Net $abc$9798$auto$rtlil.cc:3443:MuxGate$9061 (7,86) -> (7,86)
-Info:                          Sink $auto$ff.cc:337:slice$3327.DIN
-Info:      setup  0.10  11.79 Source $auto$ff.cc:337:slice$3327.DIN
-Info: 1.67 ns logic, 10.12 ns routing
+Info:    routing  7.83  8.21 Net $iopadmap$btn[2] (73,133) -> (5,80)
+Info:                          Sink $abc$6778$auto$blifparse.cc:397:parse_blif$6973.D1_00
+Info:      logic  0.64  8.85 Source $abc$6778$auto$blifparse.cc:397:parse_blif$6973.OUT
+Info:    routing  2.01  10.86 Net $abc$6778$new_n1114 (5,80) -> (4,80)
+Info:                          Sink $abc$6778$auto$blifparse.cc:397:parse_blif$7122.D0_01
+Info:      logic  0.47  11.33 Source $abc$6778$auto$blifparse.cc:397:parse_blif$7122.OUT
+Info:    routing  0.00  11.33 Net $abc$6778$auto$rtlil.cc:3443:MuxGate$5725 (4,80) -> (4,80)
+Info:                          Sink $auto$ff.cc:337:slice$2328.DIN
+Info:      setup  0.10  11.43 Source $auto$ff.cc:337:slice$2328.DIN
+Info: 1.59 ns logic, 9.84 ns routing
 
-Warning: Max frequency for clock 'clk': 53.46 MHz (FAIL at 125.00 MHz)
+Info: Critical path report for cross-domain path 'posedge clk_125_unused' -> 'posedge clk':
+Info:       type curr  total name
+Info:   clk-to-q  0.59  0.59 Source $auto$ff.cc:337:slice$2690.DOUT
+Info:    routing  1.11  1.71 Net pll_inst.lock_out (5,82) -> (5,80)
+Info:                          Sink $abc$6778$auto$blifparse.cc:397:parse_blif$6973.D0_00
+Info:                          Defined in:
+Info:                               /home/klaudio/app/ksz9031-gatemate/rtl/gatemate_25MHz_125MHz_pll.v:41.14-41.22
+Info:      logic  0.61  2.32 Source $abc$6778$auto$blifparse.cc:397:parse_blif$6973.OUT
+Info:    routing  2.01  4.33 Net $abc$6778$new_n1114 (5,80) -> (4,80)
+Info:                          Sink $abc$6778$auto$blifparse.cc:397:parse_blif$7122.D0_01
+Info:      logic  0.47  4.80 Source $abc$6778$auto$blifparse.cc:397:parse_blif$7122.OUT
+Info:    routing  0.00  4.80 Net $abc$6778$auto$rtlil.cc:3443:MuxGate$5725 (4,80) -> (4,80)
+Info:                          Sink $auto$ff.cc:337:slice$2328.DIN
+Info:      setup  0.10  4.90 Source $auto$ff.cc:337:slice$2328.DIN
+Info: 1.78 ns logic, 3.12 ns routing
 
-Info: Max delay <async> -> posedge clk: 11.79 ns
+Info: Max frequency for clock 'clk_125_unused': 508.91 MHz (PASS at 125.00 MHz)
+Info: Max frequency for clock            'clk': 65.58 MHz (PASS at 25.00 MHz)
+
+Info: Max delay <async>                -> posedge clk: 11.43 ns
+Info: Max delay posedge clk_125_unused -> posedge clk: 4.90 ns
 
 Info: Slack histogram:
-Info:  legend: * represents 1 endpoint(s)
-Info:          + represents [1,1) endpoint(s)
-Info: [-10705,  -9863) |*****+
-Info: [ -9863,  -9021) |****+
-Info: [ -9021,  -8179) |*+
-Info: [ -8179,  -7337) |**+
-Info: [ -7337,  -6495) |**+
-Info: [ -6495,  -5653) |******+
-Info: [ -5653,  -4811) |***********+
-Info: [ -4811,  -3969) |*************+
-Info: [ -3969,  -3127) |**************+
-Info: [ -3127,  -2285) |****************+
-Info: [ -2285,  -1443) |************************************************************ 
-Info: [ -1443,   -601) |**********************************+
-Info: [  -601,    241) |*******************************************+
-Info: [   241,   1083) |********************************************+
-Info: [  1083,   1925) |***********************+
-Info: [  1925,   2767) |************************+
-Info: [  2767,   3609) |***********+
-Info: [  3609,   4451) |***********************+
-Info: [  4451,   5293) |**********+
-Info: [  5293,   6135) |*****+
+Info:  legend: * represents 4 endpoint(s)
+Info:          + represents [1,4) endpoint(s)
+Info: [  6035,   7649) |+
+Info: [  7649,   9263) | 
+Info: [  9263,  10877) | 
+Info: [ 10877,  12491) | 
+Info: [ 12491,  14105) | 
+Info: [ 14105,  15719) | 
+Info: [ 15719,  17333) | 
+Info: [ 17333,  18947) | 
+Info: [ 18947,  20561) | 
+Info: [ 20561,  22175) | 
+Info: [ 22175,  23789) | 
+Info: [ 23789,  25403) |+
+Info: [ 25403,  27017) |****+
+Info: [ 27017,  28631) |***********************************+
+Info: [ 28631,  30245) |************************************************************ 
+Info: [ 30245,  31859) |******************************************+
+Info: [ 31859,  33473) |******+
+Info: [ 33473,  35087) |*******+
+Info: [ 35087,  36701) |**+
+Info: [ 36701,  38315) |*****+
 Info: Update configuration based on routing..
-7 warnings, 0 errors
+6 warnings, 0 errors
 
 Info: Program finished normally.
