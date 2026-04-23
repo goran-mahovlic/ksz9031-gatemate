@@ -45,12 +45,16 @@ assign eth_txd    = 4'd0;
 assign eth_tx_ctl = 1'b0;
 
 // ============================================================
-// Clocking — DIRECTLY off the 25 MHz pad (no PLL).
-// Rules out PLL frequency / lock issues as a source of UART corruption.
-// UART at 25 MHz / 115200 = 217 cycles/bit — exact-enough baud.
+// Clocking
 // ============================================================
-wire pll_locked = 1'b1;   // no PLL gate
-wire clk = clk_25mhz;
+wire clk_125, clk_125_90, pll_locked;
+pll pll_inst (
+    .clock_in      (clk_25mhz),
+    .clock_5x_out  (clk_125),
+    .clock_5x_90_out(clk_125_90),
+    .lock_out      (pll_locked)
+);
+wire clk = clk_125;
 
 // ============================================================
 // Reset — CC_USR_RSTN + btn[2] + power-on counter. Matches
@@ -99,7 +103,7 @@ wire        mdio_busy;
 wire        mdio_rvalid;
 
 mdio_controller #(
-    .SYS_CLK_FREQ(25_000_000),
+    .SYS_CLK_FREQ(125_000_000),
     .MDC_FREQ    (2_500_000)
 ) mdio_ctrl_inst (
     .clk     (clk),
@@ -145,7 +149,7 @@ wire mdio_pin_level = mdio_pin_s1;
 // ============================================================
 reg [26:0] sec_cnt = 27'd0;
 reg [15:0] uptime  = 16'd0;
-wire tick_1hz = (sec_cnt == 27'd25_000_000 - 1);
+wire tick_1hz = (sec_cnt == 27'd125_000_000 - 1);
 always @(posedge clk) begin
     if (rst) begin
         sec_cnt <= 27'd0;
@@ -196,7 +200,7 @@ reg  [7:0] uart_wr_d  = 8'd0;
 wire       uart_busy;
 
 uart #(
-    .CLK_FREQ (25_000_000),
+    .CLK_FREQ (125_000_000),
     .BAUD_RATE(115_200)
 ) uart_inst (
     .clk     (clk),
