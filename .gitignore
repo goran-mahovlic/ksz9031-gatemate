@@ -1,0 +1,6 @@
+build/
+*.bit
+*.cfg
+__pycache__/
+build_*/
+*.json.bak
