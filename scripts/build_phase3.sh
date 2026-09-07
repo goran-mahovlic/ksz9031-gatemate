@@ -4,7 +4,8 @@
 
 set -e
 
-export PATH=/home/klaudio/Programs/oss-cad-suite/bin:$PATH
+# Toolchain location: override with OSS_CAD_SUITE=/path/to/oss-cad-suite
+export PATH="${OSS_CAD_SUITE:-$HOME/Programs/oss-cad-suite}/bin:$PATH"
 
 PROJ_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 BUILD_DIR="$PROJ_DIR/build_phase3"

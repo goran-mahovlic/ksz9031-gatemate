@@ -1,17 +1,21 @@
 #!/bin/bash
-# Flash bitstream to ULX5M-GS via RPi
+# Flash bitstream to ULX5M-GS via the JTAG host
 # Usage: ./flash.sh [bitstream.bit]
 #
-# NOTE (TASK-4737): no sudo, no password.
-# USB access to the DirtyJTAG dongle is granted by a udev rule on the RPi:
-#   /etc/udev/rules.d/60-dirtyjtag.rules  -> 04b4:0008 MODE=0660 GROUP=plugdev
-# and fpga-klaudio is a member of plugdev. If openFPGALoader ever needs root
-# again, a NOPASSWD sudoers entry exists (/etc/sudoers.d/011_fpga-klaudio-nopasswd)
-# so a password must NEVER be embedded in this script.
+# Connection settings come from scripts/lab.env (see scripts/lab.env.example)
+# or from the RPI_HOST / RPI_DIR environment variables.
+#
+# No sudo and no password belong in this script. USB access to the DirtyJTAG
+# dongle should be granted by a udev rule on the JTAG host, e.g. a rule that
+# matches the dongle and assigns it to a group your login account is in.
+# If openFPGALoader ever needs root, configure that on the host itself —
+# a credential must NEVER be embedded here.
 
-RPI="fpga-klaudio@192.168.10.14"
-RPI_DIR="/home/fpga-klaudio/FPGA"
+. "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lab_env.sh"
+
 BITSTREAM="${1:-build/fpga.bit}"
+
+lab_env_banner
 
 if [ ! -f "$BITSTREAM" ]; then
     echo "ERROR: Bitstream not found: $BITSTREAM"
@@ -19,17 +23,17 @@ if [ ! -f "$BITSTREAM" ]; then
     exit 1
 fi
 
-echo "=== Copying bitstream to RPi ==="
-if ! scp "$BITSTREAM" "$RPI:$RPI_DIR/fpga.bit"; then
-    echo "ERROR: scp to $RPI failed"
+echo "=== Copying bitstream to $RPI_HOST ==="
+if ! scp "$BITSTREAM" "$RPI_HOST:$RPI_DIR/fpga.bit"; then
+    echo "ERROR: scp to $RPI_HOST failed"
     exit 1
 fi
 
 echo "=== Flashing via openFPGALoader ==="
-if ! ssh "$RPI" "openFPGALoader -c dirtyJtag $RPI_DIR/fpga.bit"; then
+if ! ssh "$RPI_HOST" "openFPGALoader -c dirtyJtag $RPI_DIR/fpga.bit"; then
     echo "ERROR: openFPGALoader failed"
     echo "Hint: if it reports 'DirtyJtag: fails to open device', check that the"
-    echo "      dongle enumerated (lsusb -d 04b4:0008); it may need a physical replug."
+    echo "      dongle enumerated (lsusb); it may need a physical replug."
     exit 1
 fi
 
