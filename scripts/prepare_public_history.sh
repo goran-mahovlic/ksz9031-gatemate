@@ -43,8 +43,10 @@ work="$(mktemp -d)"; trap 'rm -rf "$work"' EXIT
 # Longest strings first: a short rule would otherwise chop up a longer one
 # (replacing the account name first would mangle the sudoers path around it).
 {
-    grep -oE '"[^"]+"' "$here/lab.env" | tr -d '"' | grep -E '[0-9]|@' |
-        awk '{ print length, $0 }' | sort -rn | cut -d' ' -f2- |
+    # Every quoted value in lab.env is private by definition, so all of them are
+    # scrubbed. Very short strings are skipped: they would match innocent text.
+    grep -oE '"[^"]+"' "$here/lab.env" | tr -d '"' |
+        awk 'length($0) >= 5 { print length, $0 }' | sort -rn | cut -d' ' -f2- |
         while read -r v; do echo "$v==><redacted-lab-value>"; done
     # bare host part of any user@host entry, and the account name on its own
     grep -oE '"[^"]+@[^"]+"' "$here/lab.env" | tr -d '"' |
