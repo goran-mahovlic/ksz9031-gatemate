@@ -21,11 +21,24 @@ echo "[1] placeholder defaults apply with no lab.env and nothing preset"
 out=$(unset RPI_HOST TEST_RPI_HOST RPI_DIR FPGA_IP FPGA_MAC; . "$LOADER"; triple)
 check "default host/ip/source" "fpga@raspberrypi.local|192.168.1.150|defaults" "$out"
 
-echo "[2] defaults expose no lab-internal 192.168.10.x address"
-out=$(unset RPI_HOST TEST_RPI_HOST FPGA_IP RPI_DIR; . "$LOADER"
-      printf '%s %s %s %s' "${RPI_HOST}" "${TEST_RPI_HOST}" "${FPGA_IP}" "${RPI_DIR}" |
-      grep -c '192\.168\.10\.')
-check "no 10.x in defaults" "0" "$out"
+# The real bench values live only in scripts/lab.env, which is git-ignored.
+# This test reads them from there instead of repeating them, so the addresses
+# it forbids never enter the repository themselves.
+secrets_from_lab_env() {
+    [ -f "$here/lab.env" ] || return 1
+    grep -oE '"[^"]+"' "$here/lab.env" | tr -d '"' | grep -E '[0-9]|@' | sort -u
+}
+
+echo "[2] defaults reuse none of the real bench values"
+if secrets_from_lab_env > "$tmp/secrets.txt"; then
+    out=$(unset RPI_HOST TEST_RPI_HOST FPGA_IP RPI_DIR FPGA_MAC; . "$LOADER"
+          printf '%s %s %s %s %s' "${RPI_HOST}" "${TEST_RPI_HOST}" "${FPGA_IP}" \
+                 "${RPI_DIR}" "${FPGA_MAC}" |
+          grep -oFf "$tmp/secrets.txt" | wc -l)
+    check "real values absent from defaults" "0" "$out"
+else
+    PASS=$((PASS+1)); echo "  ok   skipped (no scripts/lab.env on this machine)"
+fi
 
 echo "[3] a preset variable overrides the default"
 out=$(unset FPGA_IP; RPI_HOST="me@box"; . "$LOADER"; printf '%s' "${RPI_HOST}")
@@ -53,9 +66,13 @@ if git -C "$repo" check-ignore -q scripts/lab.env; then
     PASS=$((PASS+1)); echo "  ok   lab.env ignored"
 else FAIL=$((FAIL+1)); echo "  FAIL lab.env is NOT git-ignored"; fi
 
-echo "[9] no bench topology left in any tracked source file"
-hits=$(git -C "$repo" grep -lE '192\.168\.10\.(14|18|150)|fpga-klaudio' -- . ':!build*' 2>/dev/null | wc -l)
-check "tracked files leaking bench topology" "0" "$hits"
+echo "[9] no real bench value appears in any tracked source file"
+if [ -s "$tmp/secrets.txt" ]; then
+    hits=$(git -C "$repo" grep -lFf "$tmp/secrets.txt" -- . ':!build*' ':!scripts/lab.env' 2>/dev/null | wc -l)
+    check "tracked files leaking bench topology" "0" "$hits"
+else
+    PASS=$((PASS+1)); echo "  ok   skipped (no scripts/lab.env on this machine)"
+fi
 
 echo "[10] flash.sh and test.sh parse"
 if bash -n "$here/flash.sh" && bash -n "$here/test.sh"; then
