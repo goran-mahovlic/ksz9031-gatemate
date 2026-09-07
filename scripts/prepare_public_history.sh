@@ -43,8 +43,6 @@ work="$(mktemp -d)"; trap 'rm -rf "$work"' EXIT
 # Longest strings first: a short rule would otherwise chop up a longer one
 # (replacing the account name first would mangle the sudoers path around it).
 {
-    echo '/etc/sudoers.d/011_fpga-klaudio-nopasswd==><a NOPASSWD sudoers entry on that host>'
-    echo '/etc/udev/rules.d/60-dirtyjtag.rules==><a udev rule on that host>'
     grep -oE '"[^"]+"' "$here/lab.env" | tr -d '"' | grep -E '[0-9]|@' |
         awk '{ print length, $0 }' | sort -rn | cut -d' ' -f2- |
         while read -r v; do echo "$v==><redacted-lab-value>"; done
