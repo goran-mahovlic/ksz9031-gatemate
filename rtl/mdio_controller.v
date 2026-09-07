@@ -30,9 +30,22 @@ module mdio_controller #(
     output            busy,       // Controller is busy
     output reg        rvalid,     // Read data is valid
 
-    // PHY Interface
+    // PHY Interface — split into 3 signals so the IO pad lives at top-level.
+    // This is required because yosys/nextpnr-himbaechel mis-handle CC_IOBUF
+    // when T is a constant (which is what yosys produces for the simple
+    // `assign mdio = en ? out : 1'bz;` idiom). See tristate_repro/ for the
+    // bitstream-level proof.
     output            mdc,        // MDIO Clock
-    inout             mdio        // MDIO Data
+    output            mdio_o,     // data to drive onto pad (when mdio_oe=1)
+    output            mdio_oe,    // 1 = drive mdio_o, 0 = release (Hi-Z)
+    input             mdio_i,     // sampled pad level (from external CC_IOBUF.Y)
+
+    // Debug probes for UART-ILA (not required — safe to leave unconnected)
+    output     [3:0]  dbg_state,  // current FSM state (low 4 bits)
+    output     [4:0]  dbg_bit_cnt,// bit counter within state
+    output            dbg_mdio_out, // what FPGA wants to drive
+    output            dbg_mdio_oe,  // 1 = FPGA drives, 0 = Hi-Z
+    output            dbg_mdio_in   // synced pad level
 );
 
 //----------------------------------------------------------------
@@ -84,22 +97,22 @@ always @(posedge clk) begin
 end
 assign mdc = mdc_reg;
 
-// MDIO Tri-state — simple Verilog form, matches upstream working version.
-// Yosys+GateMate synthesizer infers the correct CC_IOBUF from this idiom,
-// with the correct T polarity inferred automatically — avoids the
-// "T=~en vs T=en" ambiguity that gave us 0x0000 reads with explicit CC_IOBUF.
-// Pullup/slew are set via the ccf constraint on net "eth_mdio".
-wire mdio_in_raw = mdio;
-assign mdio = mdio_en_reg ? mdio_out_reg : 1'bz;
+// MDIO Tri-state — pad lives at top-level. We expose three signals and the
+// top instantiates an explicit CC_IOBUF whose T port is driven by a real
+// (non-constant) net; that avoids the nextpnr-himbaechel pack_io.cc bug
+// where a constant T port is rewritten into a LUT_INV_D0 cell with a
+// disconnected D0 input — leaving OE permanently asserted.
+assign mdio_o  = mdio_out_reg;
+assign mdio_oe = mdio_en_reg;
 
-// Input synchronizer for mdio_in_raw (async to clk domain)
+// Input synchronizer for mdio_i (async to clk domain)
 reg mdio_in_s0, mdio_in_s1;
 always @(posedge clk) begin
     if (rst) begin
         mdio_in_s0 <= 1'b1;
         mdio_in_s1 <= 1'b1;
     end else begin
-        mdio_in_s0 <= mdio_in_raw;
+        mdio_in_s0 <= mdio_i;
         mdio_in_s1 <= mdio_in_s0;
     end
 end
@@ -107,6 +120,13 @@ wire mdio_sync = mdio_in_s1;
 
 // Busy Signal
 assign busy = (current_state != S_IDLE);
+
+// Debug probes (for in-system UART-ILA)
+assign dbg_state    = current_state;
+assign dbg_bit_cnt  = bit_cnt;
+assign dbg_mdio_out = mdio_out_reg;
+assign dbg_mdio_oe  = mdio_en_reg;
+assign dbg_mdio_in  = mdio_sync;
 
 //----------------------------------------------------------------
 // Sequential Logic (Registers)
