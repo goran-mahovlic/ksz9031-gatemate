@@ -93,23 +93,44 @@ every commit message, against passwords, private keys, PATs, AWS keys, bearer
 tokens, the bench addresses, the account name, the sudoers entry, the udev rule
 and the developer home path — **0 hits**.
 
-## The one remaining decision
+## Decision: publish the rewritten history (option A)
 
-Both remaining options are the owner's to make, and neither can be taken back
-once the push happens.
-
-**A. Publish the rewritten history** (run `scripts/prepare_public_history.sh`,
-review, force-push). Public repo is ~872 KiB, carries no bench topology at any
-revision, and is usable by anyone who clones it. Cost: the SHAs change, so the
-public `main` needs a force push and anyone holding an old clone must re-clone.
-GitHub `main` is currently `fde1de2`, which no one is likely to be tracking.
-
-**B. Publish as-is.** Keeps the existing SHAs and needs no rewrite. Cost: ~42 MB
-of generated output and the internal topology become permanent and public,
+The owner chose **A** on 2026-10-08: GitHub `main` gets the rewritten history
+produced by `scripts/prepare_public_history.sh`, not the local SHAs. The
+rejected alternative was publishing as-is, which would have made ~42 MB of
+generated output and the internal bench topology permanent and public,
 recoverable with `git log -p` regardless of what the tip looks like.
 
-Recommendation: **A**. B trades a permanent, unfixable disclosure for the
-convenience of not force-pushing a branch that has no known downstream consumers.
+Consequences:
+
+- The public SHAs differ from this repository's. GitHub `main` (`fde1de2`) is
+  an ancestor of local `main` and holds no commit that exists only there, so the
+  force push loses no work; anyone holding an old clone has to re-clone.
+- The private GitLab mirror keeps the original, unrewritten history.
+- This working repository keeps its own history. After the push it no longer
+  shares commits with GitHub `main`, so do not `git pull` from GitHub here:
+  regenerate the public copy from this repository instead.
+
+## Publishing (owner, from the host)
+
+Pushing is the owner's job; the agents only add and commit. The public copy is
+written to `~/app/ksz9031-gatemate-public`, which the host sees too:
+
+    ./scripts/prepare_public_history.sh ~/app/ksz9031-gatemate-public
+    git -C ~/app/ksz9031-gatemate-public log --stat | less
+    git -C ~/app/ksz9031-gatemate-public remote add gh \
+        https://github.com/goran-mahovlic/ksz9031-gatemate.git
+    git -C ~/app/ksz9031-gatemate-public push \
+        --force-with-lease=main:fde1de2710d9ec6bc677d8f2e3df286a589407b2 gh HEAD:main
+
+`--force-with-lease` with the expected SHA refuses to overwrite `main` if
+anything was pushed to GitHub after `fde1de2`; a plain `--force` would discard it
+silently. Check the result with
+`git ls-remote https://github.com/goran-mahovlic/ksz9031-gatemate.git main`,
+which must print the HEAD of the public copy.
+
+The script needs `git-filter-repo`; if it is not on `PATH`, `pip install
+git-filter-repo` provides it.
 
 ## Phase 5 material — now committed
 
