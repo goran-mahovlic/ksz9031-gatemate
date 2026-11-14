@@ -9,6 +9,7 @@
  * RXC    : RXC edges/1024 per second, hex (25 MHz -> 05F5E, 125 MHz -> 1DCD6, 2.5 MHz -> 00989)
  * RX/BAD : MAC frames received good / bad FCS;  TX: frames sent
  * ICMP   : echo replies sent;  UDP: UDP echo replies;  TRY: MDIO ID retries
+ * EXT=1 adds DRP (TX frames dropped), BST (TX bursts done), RD (RX frames dropped), FL (RX pairing flips)
  */
 
 `resetall
@@ -17,7 +18,8 @@
 
 module uart_status #(
     parameter CLK_HZ = 50_000_000,
-    parameter BAUD   = 115_200
+    parameter BAUD   = 115_200,
+    parameter EXT    = 0             // 1: append " DRP=.... BST=.... RD=.. FL=.." (gbe_top)
 )(
     input  wire        clk,
     input  wire        rst,
@@ -26,15 +28,19 @@ module uart_status #(
     input  wire [19:0] rxcf_i,
     input  wire [15:0] rxf_i, bad_i, txf_i, icmp_i, udp_i,
     input  wire [7:0]  tries_i,
+    input  wire [15:0] drp_i, bst_i,  // EXT: TX frames dropped (no space), TX bursts completed
+    input  wire [7:0]  rdr_i, flp_i,  // EXT: RX frames dropped, RX nibble pairing changes
     output reg         txd
 );
 
-localparam LEN = 94;
+localparam LEN = EXT ? 124 : 94;
 localparam DIV = CLK_HZ / BAUD;
 
 reg [15:0] id1, id2, bmsr, phyctl, rxf, bad, txf, icmp, udp;
 reg [19:0] rxcf;
 reg [7:0]  tries;
+reg [15:0] drp, bst;
+reg [7:0]  rdr, flp;
 
 function [7:0] hex;
     input [3:0] v;
@@ -67,9 +73,138 @@ always @(posedge clk) begin
             id1 <= id1_i; id2 <= id2_i; bmsr <= bmsr_i; phyctl <= phyctl_i;
             rxcf <= rxcf_i; rxf <= rxf_i; bad <= bad_i; txf <= txf_i;
             icmp <= icmp_i; udp <= udp_i; tries <= tries_i;
+            drp <= drp_i; bst <= bst_i; rdr <= rdr_i; flp <= flp_i;
             load <= 1'b1;
         end
         if (load) begin
+            if (EXT) begin
+    msg <= {
+            8'h49,
+            8'h44,
+            8'h3D,
+            hex(id1[15:12]),
+            hex(id1[11:8]),
+            hex(id1[7:4]),
+            hex(id1[3:0]),
+            8'h3A,
+            hex(id2[15:12]),
+            hex(id2[11:8]),
+            hex(id2[7:4]),
+            hex(id2[3:0]),
+            8'h20,
+            8'h42,
+            8'h4D,
+            8'h53,
+            8'h52,
+            8'h3D,
+            hex(bmsr[15:12]),
+            hex(bmsr[11:8]),
+            hex(bmsr[7:4]),
+            hex(bmsr[3:0]),
+            8'h20,
+            8'h52,
+            8'h33,
+            8'h31,
+            8'h3D,
+            hex(phyctl[15:12]),
+            hex(phyctl[11:8]),
+            hex(phyctl[7:4]),
+            hex(phyctl[3:0]),
+            8'h20,
+            8'h52,
+            8'h58,
+            8'h43,
+            8'h3D,
+            hex(rxcf[19:16]),
+            hex(rxcf[15:12]),
+            hex(rxcf[11:8]),
+            hex(rxcf[7:4]),
+            hex(rxcf[3:0]),
+            8'h20,
+            8'h52,
+            8'h58,
+            8'h3D,
+            hex(rxf[15:12]),
+            hex(rxf[11:8]),
+            hex(rxf[7:4]),
+            hex(rxf[3:0]),
+            8'h20,
+            8'h42,
+            8'h41,
+            8'h44,
+            8'h3D,
+            hex(bad[15:12]),
+            hex(bad[11:8]),
+            hex(bad[7:4]),
+            hex(bad[3:0]),
+            8'h20,
+            8'h54,
+            8'h58,
+            8'h3D,
+            hex(txf[15:12]),
+            hex(txf[11:8]),
+            hex(txf[7:4]),
+            hex(txf[3:0]),
+            8'h20,
+            8'h49,
+            8'h43,
+            8'h4D,
+            8'h50,
+            8'h3D,
+            hex(icmp[15:12]),
+            hex(icmp[11:8]),
+            hex(icmp[7:4]),
+            hex(icmp[3:0]),
+            8'h20,
+            8'h55,
+            8'h44,
+            8'h50,
+            8'h3D,
+            hex(udp[15:12]),
+            hex(udp[11:8]),
+            hex(udp[7:4]),
+            hex(udp[3:0]),
+            8'h20,
+            8'h54,
+            8'h52,
+            8'h59,
+            8'h3D,
+            hex(tries[7:4]),
+            hex(tries[3:0]),
+            8'h20,
+            8'h44,
+            8'h52,
+            8'h50,
+            8'h3D,
+            hex(drp[15:12]),
+            hex(drp[11:8]),
+            hex(drp[7:4]),
+            hex(drp[3:0]),
+            8'h20,
+            8'h42,
+            8'h53,
+            8'h54,
+            8'h3D,
+            hex(bst[15:12]),
+            hex(bst[11:8]),
+            hex(bst[7:4]),
+            hex(bst[3:0]),
+            8'h20,
+            8'h52,
+            8'h44,
+            8'h3D,
+            hex(rdr[7:4]),
+            hex(rdr[3:0]),
+            8'h20,
+            8'h46,
+            8'h4C,
+            8'h3D,
+            hex(flp[7:4]),
+            hex(flp[3:0]),
+            8'h0D,
+            8'h0A
+            };
+            end else begin
             msg <= {
             8'h49,
             8'h44,
@@ -166,6 +301,7 @@ always @(posedge clk) begin
             8'h0D,
             8'h0A
             };
+            end
             busy <= 1'b1;
             idx  <= 8'd0;
             nbit <= 4'd0;

@@ -6,6 +6,7 @@
  * behind the MAC wrapper's asynchronous FIFOs.
  *
  * MII_SELECT = 1 (100 Mb/s): the MAC moves one nibble per enabled clock on gmii_*[3:0].
+ * MII_SELECT = 0 (GMII): one byte per enabled clock (gbe_top: a byte per clk towards gbe_rgmii).
  */
 
 `resetall
@@ -18,6 +19,7 @@ module eth_core #(
     parameter [31:0] GATEWAY_IP = {8'd192, 8'd168, 8'd10, 8'd1},
     parameter [31:0] SUBNET     = {8'd255, 8'd255, 8'd255, 8'd0},
     parameter [15:0] UDP_PORT   = 16'd1234,
+    parameter [15:0] UDP_PORT2  = 16'd0,      // second echo port (0 = off), e.g. the burst port of gbe_rgmii
     parameter        MII_SELECT = 1
 )(
     input  wire        clk,
@@ -286,7 +288,7 @@ icmp_echo icmp_inst (
 // ------------------------------------------------------------------ UDP echo (port UDP_PORT)
 // Same pattern as the verilog-ethernet example designs: header passes straight through,
 // payload goes through a FIFO so the RX side never waits on the TX header handshake.
-wire match_cond = rx_udp_dest_port == UDP_PORT;
+wire match_cond = (rx_udp_dest_port == UDP_PORT) || (UDP_PORT2 != 16'd0 && rx_udp_dest_port == UDP_PORT2);
 wire no_match   = !match_cond;
 reg  match_cond_reg, no_match_reg;
 
