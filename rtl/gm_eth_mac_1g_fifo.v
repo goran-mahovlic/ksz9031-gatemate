@@ -235,7 +235,10 @@ eth_mac_1g_inst (
 );
 
 // ====================================================================
-// TX FIFO: Sync FIFO (logic_clk == tx_clk, same domain)
+// TX FIFO: Async FIFO (logic_clk -> tx_clk CDC). It used to be a sync FIFO on logic_clk,
+// which silently required logic_clk == tx_clk; the 100M design runs the stack on 25 MHz
+// and only the MAC TX on 50 MHz. Not a frame FIFO: the MAC starts on the first byte, so
+// the writer must stay faster than the line (stack 25 MB/s vs. 12.5 MB/s at 100M).
 // Pack: {tuser, tlast, tdata[7:0]} = 10 bits
 // ====================================================================
 wire        tx_fifo_full;
@@ -247,11 +250,11 @@ assign tx_axis_tready = ~tx_fifo_full;
 
 // Read side: MAC pulls from FIFO
 // BRAM has 1-cycle read latency, so we track valid with a pipeline register
+reg tx_fifo_axis_tvalid_reg = 1'b0;
 wire tx_fifo_rd_en = (~tx_fifo_axis_tvalid_reg | tx_fifo_axis_tready) & ~tx_fifo_empty;
 
-reg tx_fifo_axis_tvalid_reg = 1'b0;
-always @(posedge logic_clk) begin
-    if (logic_rst)
+always @(posedge tx_clk) begin
+    if (tx_rst)
         tx_fifo_axis_tvalid_reg <= 1'b0;
     else if (tx_fifo_rd_en)
         tx_fifo_axis_tvalid_reg <= 1'b1;
@@ -264,19 +267,21 @@ assign tx_fifo_axis_tlast  = tx_fifo_rd_data[8];
 assign tx_fifo_axis_tuser  = tx_fifo_rd_data[9];
 assign tx_fifo_axis_tvalid = tx_fifo_axis_tvalid_reg;
 
-gm_sync_fifo #(
+gm_async_fifo #(
     .DEPTH(TX_FIFO_DEPTH),
     .DATA_WIDTH(10)
 )
 tx_fifo (
-    .clk(logic_clk),
-    .rst(logic_rst),
+    .wr_clk(logic_clk),
+    .wr_rst(logic_rst),
     .wr_data({tx_axis_tuser, tx_axis_tlast, tx_axis_tdata[7:0]}),
     .wr_en(tx_axis_tvalid & tx_axis_tready),
-    .full(tx_fifo_full),
+    .wr_full(tx_fifo_full),
+    .rd_clk(tx_clk),
+    .rd_rst(tx_rst),
     .rd_data(tx_fifo_rd_data),
     .rd_en(tx_fifo_rd_en),
-    .empty(tx_fifo_empty)
+    .rd_empty(tx_fifo_empty)
 );
 
 // ====================================================================
@@ -293,9 +298,9 @@ wire [9:0]  rx_fifo_rd_data;
 
 // Read side: user logic pulls from FIFO (logic_clk domain)
 // BRAM has 1-cycle read latency, so we track valid with a pipeline register
+reg rx_axis_tvalid_reg = 1'b0;
 wire rx_fifo_rd_en = (~rx_axis_tvalid_reg | rx_axis_tready) & ~rx_fifo_rd_empty;
 
-reg rx_axis_tvalid_reg = 1'b0;
 always @(posedge logic_clk) begin
     if (logic_rst)
         rx_axis_tvalid_reg <= 1'b0;

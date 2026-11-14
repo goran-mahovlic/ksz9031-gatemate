@@ -294,7 +294,10 @@ reg [47:0] arp_response_mac_reg = 48'd0, arp_response_mac_next;
 reg [5:0] arp_request_retry_cnt_reg = 6'd0, arp_request_retry_cnt_next;
 reg [35:0] arp_request_timer_reg = 36'd0, arp_request_timer_next;
 
-assign arp_request_ready = arp_request_ready_reg;
+reg req_pre_computed_valid;
+// Ready only once the request flags are settled: the requester (ip_eth_tx) drops valid
+// right after the handshake, so a handshake in the first cycle would lose the lookup.
+assign arp_request_ready = arp_request_ready_reg && req_pre_computed_valid;
 
 assign arp_response_valid = arp_response_valid_reg;
 assign arp_response_error = arp_response_error_reg;
@@ -359,7 +362,6 @@ always @(posedge clk) begin
 end
 
 // 1-cycle delay for ARP request acceptance: ensures flags are stable
-reg req_pre_computed_valid;
 always @(posedge clk) begin
     if (rst)
         req_pre_computed_valid <= 1'b0;
@@ -368,6 +370,19 @@ always @(posedge clk) begin
     else
         req_pre_computed_valid <= 1'b1;
 end
+
+// --- ARP request timer expiry ---
+// The 36-bit "timer == 0" compare fed the outgoing-frame muxes directly and was the
+// critical path at 50 MHz (22.9 ns). It is registered here: the hit comes one cycle
+// after the timer reaches zero (the timer wraps for that cycle and is reloaded on the
+// hit). op_d blocks a stale flag in the first cycle of a new lookup.
+reg arp_request_timer_zero_d = 1'b0;
+reg arp_request_operation_d  = 1'b0;
+always @(posedge clk) begin
+    arp_request_timer_zero_d <= (arp_request_timer_reg == 36'd0);
+    arp_request_operation_d  <= arp_request_operation_reg;
+end
+wire arp_request_timer_hit = arp_request_timer_zero_d && arp_request_operation_d;
 
 // =========================================================================
 // MAIN COMBINATIONAL LOGIC (max 2-3 LUT levels with pre-computed flags)
@@ -446,8 +461,8 @@ always @* begin
             arp_response_error_next = 1'b0;
             arp_response_mac_next = cache_query_response_mac;
         end
-        // timer timeout
-        if (arp_request_timer_reg == 0) begin
+        // timer timeout (registered compare, see arp_request_timer_hit)
+        if (arp_request_timer_hit) begin
             if (arp_request_retry_cnt_reg > 0) begin
                 // have more retries
                 // send ARP request frame

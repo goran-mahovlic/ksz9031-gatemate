@@ -79,7 +79,10 @@ end
 // 1 cycle read latency, but enables CC_BRAM mapping
 reg [DATA_WIDTH-1:0] rd_data_reg;
 always @(posedge clk) begin
-    rd_data_reg <= mem[rd_ptr[ADDR_W-1:0]];
+    // Only advance on a read: the consumer may hold rd_en low while the word is still
+    // presented (MAC tready low, e.g. every other cycle with the 100M clock enable).
+    if (rd_valid)
+        rd_data_reg <= mem[rd_ptr[ADDR_W-1:0]];
 end
 assign rd_data = rd_data_reg;
 
