@@ -7,7 +7,7 @@ AI port of https://github.com/Lampranthus/KSZ9031RNXCC-PCB to the **ULX5M-GS**
 
 | Design | Top | Speed | Hardware result |
 |---|---|---|---|
-| `eth100_top` (this README) | `rtl/eth100_top.v` | 100 Mb/s full duplex | **works**: MDIO ID read, link up 100FD, ARP + ping 0 % loss for every size up to `-s 1472`, UDP echo 20/20 (2026-11-14) |
+| `eth100_top` (this README) | `rtl/eth100_top.v` | 100 Mb/s full duplex | **works**: MDIO ID read, link up 100FD, ARP + ping 0 % loss for every size up to `-s 1472`, UDP echo 20/20, 3/3 loads (2026-11-14) |
 | `fpga` (original 1 Gb/s port, `scripts/build.sh`) | `rtl/fpga.v` + `rtl/fpga_core.v` | 1 Gb/s | never sent a frame on this board, kept for reference |
 
 1 Gb/s on this board is **not done here yet**; see "Next: 1 Gb/s" below.
@@ -89,7 +89,7 @@ yosys 0.70+145, nextpnr-himbaechel 0.11.1-63, gmpack v1.13-6. After routing: `cl
 ## Hardware test, 2026-11-14
 
 Board: ULX5M-GS on the CM5-IO-BASE-A carrier (HanRun RJ45). Bitstream sha256 `627a831469b41024…`,
-commit `df934ee`, one SRAM load, no power cycle:
+commit `df934ee`, three SRAM loads (`-r`, no power cycle), all PASS with the same numbers (first reply after load 4.22 / 4.34 / 4.32 s). Run 1:
 
 ```
 UART ID=0022:1622 BMSR=796D R31=0328 RXC=05F5E RX=0000 BAD=0000 TX=0000 ...
@@ -98,6 +98,8 @@ neigh: ... lladdr 10:e2:d5:00:00:00 REACHABLE
 ping -s 0/56/100/1000/1472: 10/10 each, rtt avg 0.34 / 0.36 / 0.71 / 0.88 ms
 UDP echo port 1234: 20/20
 ```
+
+After each run the UART counters matched the traffic exactly: `ICMP=005A` (90 = 40 + 5×10 pings), `UDP=0014` (20), `BAD=0000`.
 
 ## Next: 1 Gb/s
 
