@@ -20,7 +20,8 @@ module eth_core #(
     parameter [31:0] SUBNET     = {8'd255, 8'd255, 8'd255, 8'd0},
     parameter [15:0] UDP_PORT   = 16'd1234,
     parameter [15:0] UDP_PORT2  = 16'd0,      // second echo port (0 = off), e.g. the burst port of gbe_rgmii
-    parameter        MII_SELECT = 1
+    parameter        MII_SELECT = 1,
+    parameter        ARP_RETRY_INTERVAL = 25_000_000*2   // clk cycles between ARP request retries (2 s)
 )(
     input  wire        clk,
     input  wire        rst,
@@ -158,6 +159,9 @@ eth_axis_tx eth_axis_tx_inst (
 );
 
 // ------------------------------------------------------------------ IP / UDP
+// UDP echo header register (filled in the echo section below)
+reg [31:0] echo_ip;
+reg [15:0] echo_sport, echo_dport, echo_len;
 wire        rx_ip_hdr_valid, rx_ip_hdr_ready;
 wire [7:0]  rx_ip_protocol;
 wire [31:0] rx_ip_source_ip;
@@ -189,7 +193,7 @@ udp_complete #(
     .UDP_CHECKSUM_GEN_ENABLE(0),
     .ARP_CACHE_ADDR_WIDTH(2),
     // library defaults assume 125 MHz; the stack runs on 25 MHz
-    .ARP_REQUEST_RETRY_INTERVAL(25_000_000*2),
+    .ARP_REQUEST_RETRY_INTERVAL(ARP_RETRY_INTERVAL),
     .ARP_REQUEST_TIMEOUT(25_000_000*30)
 ) udp_complete_inst (
     .clk(clk), .rst(rst),
@@ -231,9 +235,9 @@ udp_complete #(
     // UDP in (echo replies)
     .s_udp_hdr_valid(tx_udp_hdr_valid), .s_udp_hdr_ready(tx_udp_hdr_ready),
     .s_udp_ip_dscp(6'd0), .s_udp_ip_ecn(2'd0), .s_udp_ip_ttl(8'd64),
-    .s_udp_ip_source_ip(LOCAL_IP), .s_udp_ip_dest_ip(rx_udp_ip_source_ip),
-    .s_udp_source_port(rx_udp_dest_port), .s_udp_dest_port(rx_udp_source_port),
-    .s_udp_length(rx_udp_length), .s_udp_checksum(16'd0),
+    .s_udp_ip_source_ip(LOCAL_IP), .s_udp_ip_dest_ip(echo_ip),
+    .s_udp_source_port(echo_sport), .s_udp_dest_port(echo_dport),
+    .s_udp_length(echo_len), .s_udp_checksum(16'd0),
     .s_udp_payload_axis_tdata(tx_udp_payload_axis_tdata),
     .s_udp_payload_axis_tvalid(tx_udp_payload_axis_tvalid),
     .s_udp_payload_axis_tready(tx_udp_payload_axis_tready),
@@ -286,41 +290,64 @@ icmp_echo icmp_inst (
 );
 
 // ------------------------------------------------------------------ UDP echo (port UDP_PORT)
-// Same pattern as the verilog-ethernet example designs: header passes straight through,
-// payload goes through a FIFO so the RX side never waits on the TX header handshake.
+// The RX side never waits on TX. The header of a datagram to be echoed is taken at once into one
+// register (tx header valid until the TX side takes it) and its payload goes into a FIFO. While
+// an echo header is still pending, e.g. while the ARP lookup for a new sender runs (up to
+// ARP_REQUEST_TIMEOUT), or when the FIFO has no room for the whole payload, the datagram is read
+// and dropped. Letting the RX header wait for the TX header instead (the verilog-ethernet example
+// pattern) deadlocks under load: the ARP reply the lookup waits for sits behind the stalled
+// datagram (seen on the board: a UDP flood from a host not yet in the ARP cache froze the stack).
+localparam [11:0] UDP_FIFO_DEPTH = 12'd2048;
+
 wire match_cond = (rx_udp_dest_port == UDP_PORT) || (UDP_PORT2 != 16'd0 && rx_udp_dest_port == UDP_PORT2);
-wire no_match   = !match_cond;
-reg  match_cond_reg, no_match_reg;
+
+reg        echo_pend = 1'b0;           // header register holds an echo not yet taken by TX
+reg        take_reg = 1'b0;            // payload of the current datagram goes to the FIFO
+reg [11:0] fifo_cnt = 12'd0;           // bytes in the payload FIFO
+reg [15:0] udp_drop = 16'd0;
+
+wire [15:0] rx_payload_len = rx_udp_length - 16'd8;
+wire        room  = {4'd0, fifo_cnt} + rx_payload_len < {4'd0, UDP_FIFO_DEPTH};
+wire        take  = match_cond && !echo_pend && room;
+
+wire       udp_fifo_in_tready;
+wire       fifo_wr = rx_udp_payload_axis_tvalid && rx_udp_payload_axis_tready && take_reg;
+wire       fifo_rd = tx_udp_payload_axis_tvalid && tx_udp_payload_axis_tready;
+
+assign rx_udp_hdr_ready = 1'b1;
+assign tx_udp_hdr_valid = echo_pend;
+assign rx_udp_payload_axis_tready = take_reg ? udp_fifo_in_tready : 1'b1;
 
 always @(posedge clk) begin
     if (rst) begin
-        match_cond_reg <= 1'b0;
-        no_match_reg   <= 1'b0;
-        udp_count      <= 16'd0;
+        echo_pend <= 1'b0;
+        take_reg  <= 1'b0;
+        fifo_cnt  <= 12'd0;
+        udp_count <= 16'd0;
+        udp_drop  <= 16'd0;
     end else begin
-        if (rx_udp_payload_axis_tvalid) begin
-            // decide on the first payload word (the port stays valid after the header)
-            if ((!match_cond_reg && !no_match_reg) ||
-                (rx_udp_payload_axis_tvalid && rx_udp_payload_axis_tready && rx_udp_payload_axis_tlast)) begin
-                match_cond_reg <= match_cond;
-                no_match_reg   <= no_match;
-            end
-        end else begin
-            match_cond_reg <= 1'b0;
-            no_match_reg   <= 1'b0;
-        end
-        if (tx_udp_hdr_valid && tx_udp_hdr_ready)
+        if (tx_udp_hdr_valid && tx_udp_hdr_ready) begin
+            echo_pend <= 1'b0;
             udp_count <= udp_count + 16'd1;
+        end
+        if (rx_udp_hdr_valid) begin              // rx_udp_hdr_ready = 1: taken this cycle
+            take_reg <= take;
+            if (take) begin
+                echo_pend  <= 1'b1;
+                echo_ip    <= rx_udp_ip_source_ip;
+                echo_sport <= rx_udp_dest_port;
+                echo_dport <= rx_udp_source_port;
+                echo_len   <= rx_udp_length;
+            end else if (match_cond) begin
+                udp_drop <= udp_drop + 16'd1;
+            end
+        end
+        fifo_cnt <= fifo_cnt + {11'd0, fifo_wr} - {11'd0, fifo_rd};
     end
 end
 
-assign tx_udp_hdr_valid = rx_udp_hdr_valid && match_cond;
-assign rx_udp_hdr_ready = (tx_udp_hdr_ready && match_cond) || no_match;
-
 wire [7:0] udp_fifo_in_tdata  = rx_udp_payload_axis_tdata;
-wire       udp_fifo_in_tvalid = rx_udp_payload_axis_tvalid && match_cond_reg;
-wire       udp_fifo_in_tready;
-assign rx_udp_payload_axis_tready = (udp_fifo_in_tready && match_cond_reg) || no_match_reg;
+wire       udp_fifo_in_tvalid = rx_udp_payload_axis_tvalid && take_reg;
 
 axis_fifo #(
     .DEPTH(2048),

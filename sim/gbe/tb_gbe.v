@@ -32,7 +32,8 @@ gbe_top #(
     .MDIO_POLL(24'd20000),
     .STATUS_TICKS(26'd60_000),
     .BURST_N(BURST_N),
-    .UART_BAUD(2_500_000)
+    .UART_BAUD(2_500_000),
+    .ARP_RETRY(20_000)                 // 0.8 ms instead of 2 s
 ) dut (
     .clk_25mhz(clk25), .led(led), .uart_tx(uart_tx), .uart_tx_alt(uart_tx_alt), .uart_rx(1'b1),
     .eth_tx_clk(eth_tx_clk), .eth_txd(eth_txd), .eth_tx_ctl(eth_tx_ctl),
@@ -147,10 +148,13 @@ function [15:0] csum(input integer start, input integer len);
     end
 endfunction
 
+integer   arp_req = 0, udp21_ok = 0, udp21_last = -1, k21, rxd_before = -1;
+reg [47:0] src_mac = 48'h02000000000e;
+reg [31:0] src_ip  = 32'hc0a80a0e;
 task put_hdr(input [15:0] etype);
     begin
         {fr[0],fr[1],fr[2],fr[3],fr[4],fr[5]}   = 48'h10e2d5000000;
-        {fr[6],fr[7],fr[8],fr[9],fr[10],fr[11]} = 48'h02000000000e;
+        {fr[6],fr[7],fr[8],fr[9],fr[10],fr[11]} = src_mac;
         {fr[12],fr[13]} = etype;
     end
 endtask
@@ -176,7 +180,7 @@ task build_ip(input [7:0] proto, input integer plen);  // plen = IP payload byte
         {fr[16],fr[17]} = 20 + plen;
         {fr[18],fr[19]} = 16'h1234; {fr[20],fr[21]} = 16'h4000;
         fr[22] = 8'd64; fr[23] = proto; {fr[24],fr[25]} = 16'h0000;
-        {fr[26],fr[27],fr[28],fr[29]} = 32'hc0a80a0e;
+        {fr[26],fr[27],fr[28],fr[29]} = src_ip;
         {fr[30],fr[31],fr[32],fr[33]} = 32'hc0a80a96;
         c = csum(14, 20); {fr[24],fr[25]} = c;
         flen = 34 + plen;
@@ -205,6 +209,41 @@ task build_udp;
         {fr[38],fr[39]} = 16'd8 + 16'd14; {fr[40],fr[41]} = 16'h0000;
         for (k = 0; k < 14; k = k + 1) fr[42+k] = udp_msg[8*(13-k) +: 8];
         build_ip(8'd17, 22);
+    end
+endtask
+
+task build_arp_reply;
+    begin
+        put_hdr(16'h0806);
+        {fr[14],fr[15],fr[16],fr[17],fr[18],fr[19],fr[20],fr[21]} = 64'h0001_0800_06_04_0002;
+        {fr[22],fr[23],fr[24],fr[25],fr[26],fr[27]} = src_mac;
+        {fr[28],fr[29],fr[30],fr[31]} = src_ip;
+        {fr[32],fr[33],fr[34],fr[35],fr[36],fr[37]} = 48'h10e2d5000000;
+        {fr[38],fr[39],fr[40],fr[41]} = 32'hc0a80a96;
+        flen = 42;
+    end
+endtask
+
+task build_udp_big(input [15:0] sport, input [15:0] seq);
+    integer k;
+    begin
+        {fr[34],fr[35]} = sport; {fr[36],fr[37]} = 16'd1234;
+        {fr[38],fr[39]} = 16'd8 + 16'd1472; {fr[40],fr[41]} = 16'h0000;
+        {fr[42],fr[43]} = seq;
+        for (k = 2; k < 1472; k = k + 1) fr[42+k] = 8'hA5;
+        build_ip(8'd17, 1480);
+    end
+endtask
+
+// reply to every ARP request the FPGA has sent for host .21 since the last call
+integer arp_replied = 0;
+task answer_arp;
+    begin
+        if (arp_req > arp_replied) begin
+            arp_replied = arp_req;
+            build_arp_reply; send_frame_ifg(12);
+            $display("%t RX ARP reply from .21 (request #%0d)", $time, arp_req);
+        end
     end
 endtask
 
@@ -369,6 +408,14 @@ task check_tx;
             prev_burst_start = frame_start;
             burst_t1 = $time;
             burst_ok = burst_ok + 1;
+        end else if (et == 16'h0806 && {tx[20],tx[21]} == 16'h0001) begin
+            arp_req = arp_req + 1;
+            $display("%t TX ARP request for %0d.%0d.%0d.%0d", $time, tx[38], tx[39], tx[40], tx[41]);
+        end else if (et == 16'h0800 && tx[23] == 8'd17 && {tx[36],tx[37]} == 16'd5557) begin
+            if ({tx[30],tx[31],tx[32],tx[33]} != 32'hc0a80a15 || {tx[0],tx[1],tx[2],tx[3],tx[4],tx[5]} != 48'h020000000015)
+                fail("echo to host .21: wrong IP/MAC");
+            udp21_ok = udp21_ok + 1;
+            udp21_last = {tx[42], tx[43]};
         end else if (et == 16'h0800 && tx[23] == 8'd17) begin
             if ({tx[34],tx[35]} != 16'd1234 || {tx[36],tx[37]} != 16'd5555) fail("UDP ports");
             for (k = 0; k < 14; k = k + 1) if (tx[42+k] != udp_msg[8*(13-k) +: 8]) fail("UDP payload");
@@ -410,6 +457,22 @@ initial begin
     #40000;
     build_udp_burst; send_frame;
     #500000;
+    // UDP flood from a host the FPGA has no ARP entry for (192.168.10.21): the first echo waits for
+    // ARP; the RX path must keep flowing so the ARP reply that arrives during the flood is seen.
+    rxd_before = dut.phy_inst.rx_drops;        // the flood itself overruns the 4 KiB RX buffer
+    src_mac = 48'h020000000015; src_ip = 32'hc0a80a15;
+    for (k21 = 0; k21 < 24; k21 = k21 + 1) begin
+        build_udp_big(16'd5557, k21[15:0]); send_frame_ifg(12);
+        answer_arp;                                 // in the middle of the flood (may be dropped)
+    end
+    if (arp_req == 0) fail("no ARP request for host .21");
+    #400000;
+    // the ARP module retries every ARP_RETRY cycles; answer each request (a quiet line now)
+    repeat (3) begin #900000; answer_arp; end
+    for (k21 = 100; k21 < 103; k21 = k21 + 1) begin build_udp_big(16'd5557, k21[15:0]); send_frame; #200000; end
+    src_mac = 48'h02000000000e; src_ip = 32'hc0a80a0e;
+    icmp_len = 64; build_icmp_request; send_frame;               // the first host still gets answers
+    #100000;
     wait (lines >= 1);
     #1000;
     $display("SUMMARY: mdio_writes=%0d mdio_reads=%0d arp=%0d icmp=%0d udp=%0d burst=%0d tx_frames=%0d",
@@ -417,16 +480,19 @@ initial begin
     $display("SUMMARY: txd setup=%0.2f ns hold=%0.2f ns, min IFG=%0d byte times, burst frame period=%0t (line rate %0.1f Mb/s payload)",
              min_setup, min_hold, min_ifg, burst_min_period,
              (burst_ok > 1) ? 1472.0 * 8.0 * 1000.0 / burst_min_period : 0.0);
+    $display("SUMMARY: arp_req=%0d udp21=%0d (last seq %0d)", arp_req, udp21_ok, udp21_last);
     $display("SUMMARY: rx_flips=%0d rx_drops=%0d tx_drops=%0d tx_bursts=%0d sel=%0d led=%b",
              dut.phy_inst.rx_flips, dut.phy_inst.rx_drops, dut.phy_inst.tx_drops, dut.phy_inst.tx_bursts,
              dut.phy_inst.sel, led);
     if (arp_ok != 1) fail("ARP reply count");
-    if (icmp_ok != 5) fail("ICMP reply count");
+    if (icmp_ok != 6) fail("ICMP reply count");
+    if (udp21_ok < 4) fail("echoes to host .21 after ARP-under-load < 4");
+    if (udp21_last != 102) fail("last echo to host .21 is not seq 102");
     if (udp_ok != 1) fail("UDP echo count");
     if (burst_ok != BURST_N + 1) fail("burst copy count");
     if (dut.phy_inst.tx_bursts != 1) fail("tx_bursts != 1");
     if (dut.phy_inst.rx_flips != RX_LATE) fail("rx_flips != expected pairing changes");
-    if (dut.phy_inst.rx_drops != 0) fail("rx_drops != 0");
+    if (rxd_before != 0) fail("rx_drops before the flood != 0");
     if (burst_min_period > (8 + 1514 + 4 + 16) * 8) fail("burst slower than line rate");
     if (min_ifg < 12) fail("IFG < 12 bytes");
     if (min_setup < 1.5 || min_hold < 1.5) fail("TXD/TX_CTL setup or hold < 1.5 ns around TXC");

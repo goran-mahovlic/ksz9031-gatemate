@@ -29,7 +29,8 @@ module gbe_top #(
     parameter [23:0] MDIO_POLL    = 24'd1_250_000,      // 50 ms between MDIO poll rounds
     parameter [25:0] STATUS_TICKS = 26'd24_999_999,     // one UART status line per second
     parameter [15:0] BURST_N      = 16'd50000,          // extra copies per burst datagram
-    parameter        UART_BAUD    = 115_200             // simulation uses a faster UART
+    parameter        UART_BAUD    = 115_200,            // simulation uses a faster UART
+    parameter        ARP_RETRY    = 25_000_000*2        // ARP request retry interval in clk cycles (2 s)
 ) (
     input  wire       clk_25mhz,
     output wire [7:0] led,
@@ -144,7 +145,8 @@ wire [15:0] rx_frames, rx_bad, tx_frames, icmp_count, udp_count;
 
 eth_core #(
     .MII_SELECT(0),
-    .UDP_PORT2(16'd1235)
+    .UDP_PORT2(16'd1235),
+    .ARP_RETRY_INTERVAL(ARP_RETRY)
 ) core_inst (
     .clk(clk),
     .rst(rst),
